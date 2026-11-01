@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* HARSHAL design tokens */
+    --obsidian: #090909;
+    --charcoal: #171719;
+    --crimson: #b51f32;
+    --crimson-light: #d33b4c;
+    --paper: #e7e2df;
+    --ink-muted: #a7a2a0;
+    --line: rgba(231, 226, 223, 0.08);
+    --line-strong: rgba(231, 226, 223, 0.16);
+
+    /* shadcn tokens (dark values) */
+    --background: 0 0% 3.5%;
+    --foreground: 24 8% 89%;
+    --card: 240 3% 9%;
+    --card-foreground: 24 8% 89%;
+    --popover: 240 3% 9%;
+    --popover-foreground: 24 8% 89%;
+    --primary: 352 71% 42%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3% 12%;
+    --secondary-foreground: 24 8% 89%;
+    --muted: 240 3% 12%;
+    --muted-foreground: 20 4% 64%;
+    --accent: 352 71% 42%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3% 14%;
+    --input: 240 3% 14%;
+    --ring: 352 71% 42%;
+    --radius: 0.25rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body,
+  #root {
+    background: var(--obsidian);
+  }
+
+  body {
+    margin: 0;
+    font-family: "DM Sans", system-ui, sans-serif;
+    color: var(--paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(181, 31, 50, 0.55);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(211, 59, 76, 0.85);
+    outline-offset: 3px;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ---------- Hello handwriting ---------- */
+.hello-path {
+  fill: transparent;
+  fill-opacity: 0;
+  stroke: var(--paper);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: fill-opacity 0.75s ease, stroke-opacity 0.75s ease;
+}
+.hello-svg.is-filled .hello-path {
+  fill: var(--paper);
+  fill-opacity: 1;
+  stroke-opacity: 0;
+}
+@keyframes hello-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---------- Film grain ---------- */
+.grain-overlay {
+  position: fixed;
+  inset: -120px;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  animation: grain-shift 1.4s steps(6) infinite;
+}
+@keyframes grain-shift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-26px, 14px);
+  }
+  40% {
+    transform: translate(16px, -22px);
+  }
+  60% {
+    transform: translate(-10px, 26px);
+  }
+  80% {
+    transform: translate(22px, -12px);
+  }
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0b0c;
+}
+::-webkit-scrollbar-thumb {
+  background: #26262a;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a40;
+}
+
+/* ---------- Custom cursor ---------- */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+.cursor-dot {
+  position: fixed;
+  top: -3px;
+  left: -3px;
+  z-index: 1002;
+  pointer-events: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--crimson-light);
+  box-shadow: 0 0 14px rgba(211, 59, 76, 0.85);
+  will-change: transform;
+}
+.cursor-ring {
+  position: fixed;
+  top: -17px;
+  left: -17px;
+  z-index: 1001;
+  pointer-events: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 1px solid rgba(211, 59, 76, 0.55);
+  will-change: transform;
+}
+.cursor-glow {
+  position: fixed;
+  top: -170px;
+  left: -170px;
+  z-index: 1;
+  pointer-events: none;
+  width: 340px;
+  height: 340px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    rgba(181, 31, 50, 0.14),
+    rgba(181, 31, 50, 0.05) 55%,
+    transparent 75%
+  );
+  filter: blur(24px);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

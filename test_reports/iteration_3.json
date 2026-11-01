@@ -1,0 +1,21 @@
+{
+  "summary": "Tested OFF-SCRIPT section (backend + frontend). Backend GET /api/offscript returns 4 scenes in order (movies/music/editing/acting), music has 2 stills, no _id leakage. Frontend renders section between Filmography (y=3240) and Footer (y=7871) with correct eyebrow/heading/subtitle, 4 scene rows with alternating flip layout (even=flip), SCENE tag chips and SVG props for each key. Clapper hover transitions transform (rotate -14deg to 0deg). Music stills show 'STILL 01/02 // PENDING' with captions 'The performance' and 'At the keys'. Mobile 390x844 stacks visual above text for all scenes with 0px horizontal overflow. Cursor dot z-index=1002. prefers-reduced-motion media query present in CSS. h2/h3 hierarchy correct (1 h2, 4 h3). No console errors/warnings. Filmography chapters still open. All checks pass.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_offscript.py",
+    "/app/test_reports/pytest/offscript_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "defaultOffScript fallback: if backend returns an empty scenes array, the current code (d.scenes.length truthy check) correctly falls back; OK.",
+    "Stills onError hides the img but keeps the pending badge — graceful degradation works as designed.",
+    "Section ordering + z-index for cursor-dot (1002) confirmed non-regressed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "seed_data_creation": "DB already seeded with 4 scenes (movies/music/editing/acting) via seed_offscript.py — verified via API.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "OFF-SCRIPT fully verified. Preview URL: https://mind-without-genre--9d6g62yr.preview.emergentagent.com. Flow: skip-intro-btn -> profile-card-* -> scroll to [data-testid='offscript-section']. Backend test file: /app/backend/tests/test_offscript.py (6/6 pass). Known-by-design: /offscript/stills/*.png are 404 placeholders that reveal pending state."
+}

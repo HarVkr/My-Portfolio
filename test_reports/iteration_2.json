@@ -1,0 +1,72 @@
+{
+  "summary": "Verified THE FILMOGRAPHY section + end-credits ContactFooter end-to-end on preview URL. Backend /api/filmography returns the expected 3 ordered chapters (spit/spjimr/bakerhughes) with correct metrics (SPJIMR 7+/20+/3/5+ · BH 180+/100+/×2/0) and highlights; all 6 static assets 200. Frontend: header 'THE FILMOGRAPHY.' with crimson period, three equal poster cards side by side on desktop (501×600, Δwidth<0.02px), hover zooms image (transform 1.001 → 1.053), opening SPJIMR shows 4 metrics + 4 highlights, SPIT shows 3 meta items + no metrics/highlights block, Baker Hughes shows the correct metric values and 4 highlights. Backdrop uses blur(14px), cursor-dot stays at z-index 1002 above the panel. ESC/back-button/backdrop-click all close the panel and scroll position is restored exactly (diff=0). Keyboard: cards focus and open with Enter. 'LET'S MAKE SOMETHING HAPPEN' scrolls to the #contact footer; footer shows H./tagline, mailto href, LinkedIn + GitHub links with target=_blank rel='noopener noreferrer'. Mobile 390: cards stack 1-col (w=354, no overflow), detail panel 370×820 with 2-col metric grid.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_filmography.py",
+    "/app/test_reports/pytest/filmography_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Filmography.js: ChapterCard uses role='button' + tabIndex=0 + Enter/Space keydown handler — good a11y. onClick wraps e in closure, originRect captured correctly.",
+    "ChapterDetail.js: FLIP via animate top/left/width/height on fixed element; onAnimationComplete gates onClose only when closing=true — correctly prevents premature unmount. document.body.style.overflow is reset in cleanup — scroll preserved (verified diff=0).",
+    "ContactFooter.js: mailto + external links correctly use rel='noopener noreferrer' and target='_blank'. No a11y issue.",
+    "Backend /api/filmography: excludes _id via projection ({_id:0}) and sorts by order — clean. No MongoDB _id leaked in payload (verified).",
+    "Minor: ChapterDetail recomputes target in useMemo([]) but doesn't recompute on resize — rotation/resize while a detail is open would leave stale target dimensions. Not in scope of current tests but worth noting."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "100% (10/10)", "frontend": "100%" },
+  "verified_checks": {
+    "api_chapters_count": 3,
+    "api_order": [1,2,3],
+    "api_keys": ["spit","spjimr","bakerhughes"],
+    "spjimr_metrics": ["7+","20+","3","5+"],
+    "bakerhughes_metrics": ["180+","100+","×2","0"],
+    "spit_meta_items": 3,
+    "spit_metrics_block_present": false,
+    "spit_highlights_block_present": false,
+    "header_text": "THE FILMOGRAPHY.",
+    "accent_char": ".",
+    "subtitle": "A few places, people and problems that shaped the story so far.",
+    "desktop_card_widths": [501.33, 501.33, 501.34],
+    "desktop_card_heights": [600, 600, 600],
+    "hover_media_transform_before": "matrix(1.001,...)",
+    "hover_media_transform_after": "matrix(1.05308,...)",
+    "backdrop_filter": "blur(14px)",
+    "cursor_dot_z_index": "1002 (above panel/backdrop)",
+    "esc_close_restores_scroll_diff": 0,
+    "enter_key_opens_card": true,
+    "back_btn_closes": true,
+    "backdrop_click_closes": true,
+    "final_title": "THE NEXT CHAPTER?",
+    "final_eyebrow": "AND NOW, THE MOST INTERESTING PART",
+    "final_primary": "I’m looking right at it.",
+    "contact_email": "mailto:harshal.v.official@gmail.com",
+    "contact_linkedin": {"href": "https://www.linkedin.com/in/harshal-vhatkar-372955258", "target": "_blank", "rel": "noopener noreferrer"},
+    "contact_github": {"href": "https://github.com/HarVkr/", "target": "_blank", "rel": "noopener noreferrer"},
+    "contact_wordmark": "H.",
+    "contact_tagline": "A MIND WITHOUT A GENRE",
+    "section_order_filmography_before_footer": true,
+    "desktop_horizontal_overflow": 0,
+    "mobile_horizontal_overflow": 0,
+    "mobile_card_widths": [354,354,354],
+    "mobile_cards_stacked": true,
+    "mobile_detail_bbox": {"x":10,"y":12,"w":370,"h":820},
+    "mobile_metrics_grid_template_columns": "157px 157px",
+    "static_assets_200": [
+      "/filmography/chapter-spit.jpg",
+      "/filmography/chapter-spjimr.jpg",
+      "/filmography/chapter-bakerhughes.jpg",
+      "/filmography/logos/spit.png",
+      "/filmography/logos/spjimr.png",
+      "/filmography/logos/baker-hughes.svg"
+    ]
+  },
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend tests live at /app/backend/tests/test_filmography.py (10 tests, all pass, 1.5s). Filmography desktop + mobile verified via Playwright against preview URL. Known non-blocking: ChapterDetail target dims not recomputed on viewport resize while open — flag only if a resize-related bug is reported."
+}

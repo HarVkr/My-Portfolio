@@ -1,0 +1,143 @@
+{
+  "project_name": "HARSHAL — CINEMATIC PERSONAL PORTFOLIO",
+  "app_type": "cinematic_portfolio",
+  "archetype": "Cinematic Film & Editorial Directing Archetype",
+  "theme": "dark",
+  "colors": {
+    "primary_background": "#090909",
+    "secondary_background": "#171719",
+    "primary_accent": "#B51F32",
+    "secondary_accent": "#D33B4C",
+    "primary_text": "#E7E2DF",
+    "secondary_text": "#A7A2A0",
+    "border_subtle": "#26262A",
+    "border_accent": "rgba(181, 31, 50, 0.35)",
+    "ambient_glow": "rgba(181, 31, 50, 0.18)",
+    "glass_overlay": "rgba(23, 23, 25, 0.75)"
+  },
+  "typography": {
+    "font_family_greeting": "'Dancing Script', cursive",
+    "font_family_display": "'Clash Display', sans-serif",
+    "font_family_body": "'DM Sans', sans-serif",
+    "google_fonts_embed_url": "https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap",
+    "font_loader_notes": "Clash Display loaded via CDN font-face (@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700,500&display=swap')) or local self-hosted standard font-face to avoid FLOU/FOUC.",
+    "hierarchy": {
+      "hello_greeting": "text-6xl sm:text-7xl lg:text-8xl font-bold font-script text-[#E7E2DF]",
+      "identity_hero_name": "text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight uppercase font-display text-[#E7E2DF]",
+      "headline_main": "text-3xl sm:text-5xl lg:text-6xl font-semibold font-display tracking-tight text-[#E7E2DF]",
+      "section_title": "text-2xl sm:text-4xl font-semibold font-display tracking-tight text-[#E7E2DF]",
+      "card_title": "text-xl sm:text-2xl font-medium font-display text-[#E7E2DF]",
+      "over_label": "text-xs sm:text-sm uppercase tracking-[0.25em] font-body text-[#D33B4C] font-semibold",
+      "body_text": "text-base sm:text-lg font-body leading-relaxed text-[#A7A2A0]",
+      "metadata": "text-xs sm:text-sm uppercase tracking-widest font-body text-[#A7A2A0]"
+    }
+  },
+  "layout_and_screens": {
+    "screen_1_hello": {
+      "title": "Hello Handwriting Entrance",
+      "background": "#090909 with radial crimson gradient ambient glow centered (opacity 0 to 0.6 over 0.5s)",
+      "film_grain": "CSS SVG noise filter texture overlay (pointer-events-none, opacity 0.04)",
+      "animation": "Dancing Script 'Hello.' rendered with SVG path stroke-dashoffset drawing animation (0.5s - 2.5s), followed by smooth fill fill-opacity fade-in (2.5s - 3.0s), then auto-transition to Screen 2 at 3.2s.",
+      "skip_button": "Unobtrusive fixed top-right Skip Intro button (data-testid='skip-intro-button')"
+    },
+    "screen_2_identity": {
+      "title": "Identity Reveal",
+      "hero_name": "'HARSHAL' in Clash Display Bold with masked upward split reveal and letter-spacing transition.",
+      "tagline": "'A mind without a genre.' in Clash Display Semibold.",
+      "roles": "Aspiring Product Manager · Software Engineer · Creative / Video Editor separated by crimson dot bullet",
+      "primary_cta": "EXPLORE button with crimson background (#B51F32), soft-white text (#E7E2DF), Lucide ArrowRight icon (shifts right 4px on hover), soft crimson glow ring on hover.",
+      "skip_option": "Discreet 'Skip Intro' button on top right to jump directly to profile selection (data-testid='skip-intro-button')"
+    },
+    "screen_3_whos_watching": {
+      "title": "Who's Watching? Profile Selection",
+      "heading": "'Who's Watching?' in Clash Display",
+      "subheading": "'Choose how you'd like to explore.' in DM Sans",
+      "profiles_grid": "3 profile cards laid out horizontally on desktop (grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto)",
+      "profile_cards": [
+        {
+          "id": "meet-harshal",
+          "number": "PROFILE 01",
+          "title": "MEET HARSHAL",
+          "description": "The complete story. The person behind the projects, ideas and ambitions.",
+          "placeholder_type": "Artistic monogram 'HV' portrait placeholder with subtle crimson geometry & radial lighting",
+          "testid": "profile-card-meet-harshal"
+        },
+        {
+          "id": "recruiter",
+          "number": "PROFILE 02",
+          "title": "RECRUITER",
+          "description": "Experience, education, skills, achievements and career highlights.",
+          "placeholder_type": "Refined typographic identity placeholder with crisp structural grid lines",
+          "testid": "profile-card-recruiter"
+        },
+        {
+          "id": "professional",
+          "number": "PROFILE 03",
+          "title": "PROFESSIONAL",
+          "description": "Product thinking, engineering, projects, technology and the creative side.",
+          "placeholder_type": "Abstract dark tech-creative visual composition with crimson accent nodes",
+          "testid": "profile-card-professional"
+        }
+      ],
+      "hover_effects": "Card scales up 1.03x, border darkens to crimson (#B51F32), box shadow adds crimson glow (0 12px 30px rgba(181,31,50,0.25)), description text opacity increases.",
+      "click_effect": "Selected card expands slightly while unselected cards fade opacity to 0.25, smooth transition into Screen 4 hero."
+    },
+    "screen_4_featured_hero": {
+      "title": "Featured Hero Experience",
+      "left_column": {
+        "over_title": "THE FEATURED STORY",
+        "headline": "A mind without a genre.",
+        "introduction": "Dynamic per-profile introduction paragraph tailored to the selected persona (Meet Harshal / Recruiter / Professional).",
+        "metadata_pills": "PRODUCT THINKING · SOFTWARE ENGINEERING · CREATIVE EXPLORATION",
+        "primary_cta": "EXPLORE MY WORK (data-testid='hero-explore-work-button')",
+        "secondary_cta": "VIEW RESUME (data-testid='hero-view-resume-button')"
+      },
+      "right_column": {
+        "portrait_area": "Large art-directed cinematic portrait frame with deep dark background blending, soft vignette gradient, and crimson rim lighting highlight effects (designed non-stock placeholder)."
+      },
+      "navigation_bar": "Discreet top navigation bar with 'Switch Profile' button (data-testid='nav-switch-profile'), 'Restart Intro' button (data-testid='nav-restart-intro'), and active profile indicator."
+    }
+  },
+  "visual_enhancers": {
+    "film_grain": "SVG feTurbulence filter overlay across background for high-end cinematic texture.",
+    "crimson_rim_light": "Subtle box-shadow/drop-shadow glowing borders using rgba(181, 31, 50, 0.4).",
+    "glassmorphism": "backdrop-blur-xl bg-[#171719]/80 border border-white/5",
+    "animations": {
+      "stagger_duration": 0.08,
+      "page_transition_duration": 0.6,
+      "ease_curve": "[0.16, 1, 0.3, 1]"
+    }
+  },
+  "accessibility_and_performance": {
+    "reduced_motion": "Detect prefers-reduced-motion via Framer Motion / window.matchMedia and bypass handwriting SVG & long delays for instant clean fade transitions.",
+    "keyboard_navigation": "All profiles, CTAs, and navigation controls are focusable with visible focus ring (ring-2 ring-[#B51F32] ring-offset-2 ring-offset-[#090909]).",
+    "browser_history": "Sync screen state with URL hash or HTML5 History API (#hello, #identity, #profiles, #hero?profile=recruiter) so browser Back/Forward works seamlessly.",
+    "font_loading": "Use font-display: swap and pre-calculated line heights to eliminate Cumulative Layout Shift (CLS)."
+  },
+  "image_urls": {
+    "film_grain_texture": "https://images.unsplash.com/photo-1602475063211-3d98d60e3b1f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHxfYXJrfGRhcmslMjBtb29keSUyMGZpbG0lMjBncmFpbiUyMHRleHR1cmUlMjBiYWNrZ3JvdW5kfGVufDB8fHxibGFja3wxNzkzMzQ4MDg0fDA&ixlib=rb-4.1.0&q=85"
+  },
+  "data_testid_manifest": [
+    "hello-screen-container",
+    "hello-svg-drawing",
+    "skip-intro-button",
+    "identity-screen-container",
+    "identity-explore-button",
+    "whos-watching-container",
+    "profile-card-meet-harshal",
+    "profile-card-recruiter",
+    "profile-card-professional",
+    "featured-hero-container",
+    "hero-explore-work-button",
+    "hero-view-resume-button",
+    "nav-switch-profile",
+    "nav-back-to-identity"
+  ],
+  "instructions_to_main_agent": [
+    "Implement the 4 screens as a single-page React app with continuous state or React Router integration.",
+    "Use Tailwind CSS and inline SVG for the handwriting animation using stroke-dasharray/stroke-dashoffset with exact SVG glyph paths for 'Hello.'",
+    "Strictly adhere to the dark crimson palette: #090909, #171719, #B51F32, #D33B4C, #E7E2DF, #A7A2A0.",
+    "Ensure all interactive elements have data-testid attributes as specified.",
+    "Do NOT use cartoon avatars, stock photos, or generic SaaS landing page layouts."
+  ]
+}

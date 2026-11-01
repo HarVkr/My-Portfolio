@@ -1,0 +1,3799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Next Watch — Harshal</title>
+
+<!-- DM Sans from Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+
+<!-- Clash Display from Fontshare official CDN -->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+
+<!-- Local Self-Hosted Clash Display @font-face with official CDN fallback -->
+<style>
+  @font-face {
+    font-family: 'Clash Display';
+    src: url('fonts/ClashDisplay-Bold.woff2') format('woff2'),
+         url('https://cdn.fontshare.com/wf/BFBSY7LX5W2U2EROCLVVTQP4VS7S4PC3/IIUX4FGTMD2LK2VWD3RVTAS4SSMUN7B5/53RZKGODFYDW3QHTIL7IPOWTBCSUEZK7.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Clash Display';
+    src: url('fonts/ClashDisplay-Semibold.woff2') format('woff2'),
+         url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Clash Display';
+    src: url('fonts/ClashDisplay-Medium.woff2') format('woff2'),
+         url('https://cdn.fontshare.com/wf/2GQIT54GKQY3JRFTSHS4ARTRNRQISSAA/3CIP5EBHRRHE5FVQU3VFROPUERNDSTDF/JTSL5QESUXATU47LCPUNHZQBDDIWDOSW.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
+
+<style>
+/* ================================================================
+   RESET & COLOR PALETTE VARIABLES
+   ================================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #090909;        /* obsidian black */
+  --bg-secondary: #171719;      /* charcoal */
+  --accent-primary: #B51F32;    /* deep crimson */
+  --accent-secondary: #D33B4C;  /* lighter crimson */
+  --text-primary: #E7E2DF;      /* soft white */
+  --text-secondary: #A7A2A0;    /* muted grey */
+  --border-subtle: #242428;     /* subtle charcoal-grey */
+  --frame-bg: #0c0c0e;
+  --perf-bg: #18181c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ================================================================
+   YOUR NEXT WATCH — SECTION
+   ================================================================ */
+.ynw-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px 70px;
+  overflow: hidden;
+}
+
+/* Atmospheric crimson ambient glow behind the section */
+.ynw-section::before {
+  content: '';
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 65%;
+  background: radial-gradient(ellipse at center,
+    rgba(181, 31, 50, 0.04) 0%,
+    rgba(181, 31, 50, 0.012) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Content Wrapper (Max Width Constraint) ─── */
+.ynw-container {
+  width: 100%;
+  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Section Header (Left Aligned as in Sketches) ─── */
+.ynw-header {
+  text-align: left;
+  margin-bottom: 44px;
+  padding-left: 4px;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: ynw-fadeUp 0.8s ease-out 0.15s forwards;
+}
+
+.ynw-header h2 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(38px, 4.6vw, 60px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.ynw-header .ynw-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  letter-spacing: 1.2px;
+  font-weight: 400;
+}
+
+/* ─── Reels Grid (Side-by-side) ─── */
+.ynw-reels {
+  display: flex;
+  gap: 36px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* ─── Individual Reel Column ─── */
+.ynw-reel {
+  flex: 1;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.ynw-reel:nth-child(1) {
+  animation: ynw-fadeUp 0.8s ease-out 0.35s forwards;
+}
+
+.ynw-reel:nth-child(2) {
+  animation: ynw-fadeUp 0.8s ease-out 0.5s forwards;
+}
+
+/* Atmospheric glow per reel */
+.ynw-reel::before {
+  content: '';
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 65%;
+  height: 45%;
+  background: radial-gradient(ellipse, rgba(181, 31, 50, 0.045) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ================================================================
+   CAROUSEL VIEWPORT & 3D CYLINDER
+   ================================================================ */
+.ynw-viewport {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  perspective: 900px;
+  perspective-origin: 50% 42%;
+  overflow: visible;
+  z-index: 1;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y; /* allow vertical page scroll if not dragging horizontally */
+}
+
+.ynw-viewport.is-dragging {
+  cursor: grabbing !important;
+}
+
+/* ─── Roll Top Curve (Prominent 3D Hint) ─── */
+.ynw-roll-top {
+  position: absolute;
+  top: -22px;
+  left: 3%;
+  right: 3%;
+  height: 40px;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.ynw-roll-top::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(180deg,
+    #212126 0%,
+    #18181b 36%,
+    rgba(23, 23, 25, 0.5) 72%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  border-top: 1.5px solid #3c3c43;
+  border-left: 1px solid rgba(60, 60, 67, 0.4);
+  border-right: 1px solid rgba(60, 60, 67, 0.4);
+}
+
+/* Specular sheen on roll top */
+.ynw-roll-top::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 15%;
+  right: 15%;
+  height: 60%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.015) 50%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* ─── Roll Bottom Curve ─── */
+.ynw-roll-bottom {
+  position: absolute;
+  bottom: -12px;
+  left: 6%;
+  right: 6%;
+  height: 20px;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.ynw-roll-bottom::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(0deg,
+    rgba(12, 12, 14, 0.95) 0%,
+    rgba(23, 23, 25, 0.3) 60%,
+    transparent 100%
+  );
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  border-bottom: 1.2px solid rgba(48, 48, 54, 0.6);
+}
+
+/* ─── 3D Scene ─── */
+.ynw-scene {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ynw-scene.is-transitioning {
+  transition: transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ================================================================
+   FILM FRAME (35mm Realistic Strip)
+   ================================================================ */
+.ynw-frame {
+  position: absolute;
+  width: 82%;
+  height: 290px;
+  left: 9%;
+  top: 20px;
+  backface-visibility: hidden;
+  transition: opacity 0.75s ease, filter 0.75s ease;
+  will-change: opacity, filter;
+  cursor: pointer;
+}
+
+.ynw-frame.is-active {
+  opacity: 1;
+  filter: brightness(1);
+  z-index: 5;
+}
+
+.ynw-frame.is-adjacent {
+  opacity: 0.42;
+  filter: brightness(0.48);
+  cursor: pointer;
+  z-index: 3;
+}
+
+.ynw-frame.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Film Strip ─── */
+.ynw-strip {
+  width: 100%;
+  height: 100%;
+  background: var(--frame-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 0 60px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.ynw-frame.is-active .ynw-strip {
+  border-color: rgba(60, 60, 68, 0.8);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(181, 31, 50, 0.05),
+    inset 0 0 50px rgba(0, 0, 0, 0.1);
+}
+
+.ynw-frame.is-active:hover .ynw-strip {
+  border-color: rgba(181, 31, 50, 0.45);
+  box-shadow:
+    0 8px 45px rgba(0, 0, 0, 0.8),
+    0 0 100px rgba(181, 31, 50, 0.1),
+    inset 0 0 50px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Perforations (Sprocket Holes) ─── */
+.ynw-perfs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 6px 12px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.ynw-perfs.ynw-perfs--bottom {
+  border-bottom: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.ynw-perf {
+  width: 11px;
+  height: 7px;
+  border-radius: 1.5px;
+  background: var(--perf-bg);
+  border: 1px solid #28282e;
+  flex-shrink: 0;
+}
+
+/* ─── Film Content Area ─── */
+.ynw-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  position: relative;
+  background: linear-gradient(145deg,
+    rgba(12, 12, 14, 1) 0%,
+    rgba(19, 19, 22, 0.95) 45%,
+    rgba(12, 12, 14, 1) 100%
+  );
+}
+
+/* Crimson ambient highlight inside active frame */
+.ynw-frame.is-active .ynw-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(181, 31, 50, 0.08) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.ynw-frame.is-active:hover .ynw-content::before {
+  background: radial-gradient(ellipse at center,
+    rgba(181, 31, 50, 0.13) 0%,
+    transparent 65%
+  );
+}
+
+/* ─── Typography Inside Frame ─── */
+.ynw-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: rgba(181, 31, 50, 0.1);
+  border: 1px solid rgba(181, 31, 50, 0.22);
+  padding: 3px 14px;
+  border-radius: 2px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.ynw-frame.is-active:hover .ynw-tag {
+  background: rgba(181, 31, 50, 0.18);
+  border-color: rgba(181, 31, 50, 0.4);
+}
+
+.ynw-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(28px, 3.2vw, 38px);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: 1.5px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.ynw-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.55;
+  max-width: 360px;
+  font-weight: 400;
+}
+
+/* ─── Expand Frame Hint on Hover ─── */
+.ynw-expand-hint {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.3s ease;
+}
+
+.ynw-frame.is-active:hover .ynw-expand-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ynw-expand-hint svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--accent-primary);
+  fill: none;
+  stroke-width: 2.2;
+}
+
+/* ─── Edge Markings ─── */
+.ynw-edge {
+  position: absolute;
+  bottom: 6px;
+  font-size: 7.5px;
+  letter-spacing: 2px;
+  color: rgba(167, 162, 160, 0.2);
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.ynw-edge--left { left: 14px; }
+.ynw-edge--right { right: 14px; }
+
+/* ================================================================
+   NAVIGATION & CONTROLS
+   ================================================================ */
+.ynw-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 24px;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.ynw-arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+}
+
+.ynw-arrow:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  background: rgba(181, 31, 50, 0.1);
+  box-shadow: 0 0 20px rgba(181, 31, 50, 0.12);
+}
+
+.ynw-arrow:active {
+  transform: scale(0.9);
+}
+
+/* ─── Dot Indicators ─── */
+.ynw-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.ynw-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-subtle);
+  transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
+
+.ynw-dot:hover {
+  background: var(--text-secondary);
+}
+
+.ynw-dot.is-active {
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(181, 31, 50, 0.55);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ─── Frame Counter ─── */
+.ynw-counter {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 10px;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+}
+
+.ynw-counter .ynw-counter-current {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ynw-counter .ynw-counter-name {
+  color: var(--text-secondary);
+  font-size: 11px;
+  opacity: 0.65;
+  margin-left: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* ================================================================
+   FILM GRAIN OVERLAY
+   ================================================================ */
+.ynw-viewport::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 10;
+}
+
+/* ================================================================
+   ENTRANCE ANIMATION
+   ================================================================ */
+@keyframes ynw-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================================================
+   RESPONSIVE DESIGN
+   ================================================================ */
+@media (max-width: 1050px) {
+  .ynw-reels {
+    gap: 28px;
+  }
+  .ynw-viewport {
+    height: 330px;
+  }
+  .ynw-frame {
+    height: 288px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ynw-section {
+    padding: 60px 20px 50px;
+  }
+  .ynw-reels {
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+  }
+  .ynw-reel {
+    width: 100%;
+    max-width: 600px;
+  }
+  .ynw-header {
+    margin-bottom: 36px;
+  }
+}
+
+@media (max-width: 540px) {
+  .ynw-section {
+    padding: 40px 14px 40px;
+  }
+  .ynw-viewport {
+    height: 295px;
+    perspective: 800px;
+  }
+  .ynw-frame {
+    height: 254px;
+    width: 90%;
+    left: 5%;
+  }
+  .ynw-title {
+    font-size: 24px;
+  }
+  .ynw-desc {
+    font-size: 12px;
+  }
+  .ynw-content {
+    padding: 12px 18px;
+  }
+  .ynw-perfs {
+    gap: 8px;
+  }
+  .ynw-perf {
+    width: 9px;
+    height: 6px;
+  }
+}
+
+/* ================================================================
+   CINEMATIC EXPANSION ANIMATION & PROJECT DETAIL EXPERIENCE
+   ================================================================ */
+
+/* Dual-cylinder container recedes & blurs in the background (depth of field) */
+.ynw-container.ynw-receding {
+  filter: blur(8px) brightness(0.48);
+  opacity: 0.55;
+  pointer-events: none;
+  transition: filter 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease;
+}
+
+/* Immediately concealed origin frame during shared-element animation */
+.ynw-frame.is-concealed {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: none !important;
+}
+
+/* Cinematic dark backdrop with radial crimson glow */
+.ynw-expansion-backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(181, 31, 50, 0.08) 0%, rgba(9, 9, 9, 0.94) 75%);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.ynw-expansion-backdrop.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Expanding film portal (shared-element bridge) */
+.ynw-expansion-portal {
+  position: fixed;
+  z-index: 100;
+  box-sizing: border-box;
+  background: var(--frame-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.88),
+    0 0 70px rgba(181, 31, 50, 0.12),
+    inset 0 0 60px rgba(0, 0, 0, 0.3);
+  transition:
+    top 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+    left 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+  will-change: top, left, width, height;
+}
+
+.ynw-expansion-portal.is-expanded {
+  border-color: rgba(181, 31, 50, 0.4);
+  box-shadow:
+    0 35px 100px rgba(0, 0, 0, 0.95),
+    0 0 110px rgba(181, 31, 50, 0.16),
+    inset 0 0 80px rgba(0, 0, 0, 0.25);
+}
+
+/* Top & bottom film strip perforations on the expanded surface */
+.ynw-portal-perfs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  flex-shrink: 0;
+  height: 20px;
+  box-sizing: border-box;
+  z-index: 5;
+  user-select: none;
+}
+
+.ynw-portal-perfs.ynw-portal-perfs--bottom {
+  border-bottom: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.ynw-portal-holes {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+}
+
+.ynw-portal-hole {
+  width: 11px;
+  height: 7px;
+  border-radius: 1.5px;
+  background: var(--perf-bg);
+  border: 1px solid #28282e;
+  flex-shrink: 0;
+}
+
+.ynw-portal-meta {
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(167, 162, 160, 0.28);
+  text-transform: uppercase;
+  margin-left: 16px;
+  white-space: nowrap;
+}
+
+/* Middle body between top and bottom perforations */
+.ynw-portal-body {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--frame-bg);
+}
+
+/* Initial preview surface inside portal body */
+.ynw-portal-preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 28px;
+  background: linear-gradient(145deg,
+    rgba(12, 12, 14, 1) 0%,
+    rgba(19, 19, 22, 0.95) 45%,
+    rgba(12, 12, 14, 1) 100%
+  );
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.ynw-expansion-portal.is-content-revealed .ynw-portal-preview {
+  opacity: 0;
+}
+
+/* Expanded project detail container inside portal body */
+.ynw-detail-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+  overflow: hidden;
+}
+
+.ynw-expansion-portal.is-content-revealed .ynw-detail-container {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Top bar with back button & collection status */
+.ynw-detail-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid rgba(42, 42, 46, 0.6);
+  background: rgba(14, 14, 16, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.ynw-detail-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.ynw-detail-back-btn:hover {
+  background: rgba(181, 31, 50, 0.12);
+  border-color: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(181, 31, 50, 0.15);
+}
+
+.ynw-detail-back-btn svg {
+  transition: transform 0.25s ease;
+}
+
+.ynw-detail-back-btn:hover svg {
+  transform: translateX(-3px);
+}
+
+.ynw-detail-kbd {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+.ynw-detail-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.ynw-detail-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 8px rgba(181, 31, 50, 0.8);
+}
+
+/* Scrollable case study body */
+.ynw-detail-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 36px 36px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e34 transparent;
+}
+
+.ynw-detail-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ynw-detail-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ynw-detail-scroll::-webkit-scrollbar-thumb {
+  background: #2e2e34;
+  border-radius: 3px;
+}
+
+.ynw-detail-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Hero section inside detail */
+.ynw-detail-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid rgba(42, 42, 46, 0.5);
+  padding-bottom: 28px;
+}
+
+.ynw-detail-hero-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: rgba(181, 31, 50, 0.12);
+  border: 1px solid rgba(181, 31, 50, 0.28);
+  padding: 4px 14px;
+  border-radius: 2px;
+}
+
+.ynw-detail-hero-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(36px, 4.5vw, 54px);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.ynw-detail-hero-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 760px;
+  font-weight: 400;
+}
+
+/* Main Visual / Case Study Media Canvas */
+.ynw-detail-canvas {
+  width: 100%;
+  min-height: 380px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(181, 31, 50, 0.05) 0%, rgba(16, 16, 18, 0.95) 60%);
+  border: 1px solid rgba(42, 42, 48, 0.8);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Technical grid background in media canvas */
+.ynw-detail-canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+/* Corner crop reticles */
+.ynw-detail-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 1px dashed rgba(167, 162, 160, 0.12);
+  pointer-events: none;
+}
+
+.ynw-detail-canvas-label {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.ynw-detail-canvas-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 440px;
+}
+
+/* Structured Wireframe Case Study Sections */
+.ynw-detail-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ynw-detail-card {
+  background: rgba(18, 18, 21, 0.75);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ynw-detail-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(42, 42, 46, 0.4);
+  padding-bottom: 12px;
+}
+
+.ynw-detail-card-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.ynw-detail-card-tag {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.ynw-detail-card-wireframe {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ynw-detail-wire-line {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 2px;
+}
+
+.ynw-detail-wire-line--long { width: 100%; }
+.ynw-detail-wire-line--med  { width: 85%; }
+.ynw-detail-wire-line--short{ width: 65%; }
+
+
+/* ================================================================
+   REVIFY CASE STUDY & INTERACTIVE SCREEN SHOWCASE STYLES
+   ================================================================ */
+
+/* Top bar actions & links */
+.ynw-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ynw-detail-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.ynw-detail-link-btn:hover {
+  background: rgba(181, 31, 50, 0.12);
+  border-color: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(181, 31, 50, 0.15);
+}
+
+.ynw-detail-link-btn--primary {
+  background: rgba(181, 31, 50, 0.18);
+  border-color: rgba(181, 31, 50, 0.45);
+  color: #fff;
+}
+
+.ynw-detail-link-btn--primary:hover {
+  background: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(181, 31, 50, 0.4);
+}
+
+.ynw-live-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+  animation: ynw-pulse 2s infinite ease-in-out;
+}
+
+@keyframes ynw-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+/* Metric Badges Grid */
+.ynw-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: 100%;
+  margin-top: 14px;
+}
+
+.ynw-metric-card {
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid rgba(42, 42, 48, 0.8);
+  border-radius: 4px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.ynw-metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--border-subtle);
+  transition: background 0.25s ease;
+}
+
+.ynw-metric-card:hover {
+  border-color: rgba(181, 31, 50, 0.45);
+  background: rgba(22, 22, 28, 0.95);
+  transform: translateY(-2px);
+}
+
+.ynw-metric-card:hover::before {
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(181, 31, 50, 0.8);
+}
+
+.ynw-metric-val {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.ynw-metric-val--crimson {
+  color: #ff4d61;
+}
+
+.ynw-metric-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.ynw-metric-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: rgba(167, 162, 160, 0.65);
+}
+
+/* ─── Interactive Screen Showcase Canvas ─── */
+.ynw-showcase-box {
+  width: 100%;
+  background: #0d0d10;
+  border: 1px solid rgba(42, 42, 48, 0.85);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+}
+
+.ynw-showcase-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: #141418;
+  border-bottom: 1px solid rgba(42, 42, 48, 0.85);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ynw-showcase-browser-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ynw-showcase-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ynw-showcase-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.ynw-showcase-dot--red    { background: #e0443e; }
+.ynw-showcase-dot--yellow { background: #dea123; }
+.ynw-showcase-dot--green  { background: #1aab29; }
+
+.ynw-showcase-address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: #0a0a0c;
+  padding: 5px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  min-width: 260px;
+}
+
+.ynw-showcase-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.ynw-showcase-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 6px 14px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ynw-showcase-tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ynw-showcase-tab.is-active {
+  color: #fff;
+  background: rgba(181, 31, 50, 0.2);
+  border-color: rgba(181, 31, 50, 0.5);
+  box-shadow: 0 0 12px rgba(181, 31, 50, 0.2);
+}
+
+.ynw-showcase-panel {
+  padding: 28px;
+  display: none;
+  min-height: 380px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(20, 20, 26, 0.6) 0%, rgba(11, 11, 14, 0.98) 100%);
+  position: relative;
+}
+
+.ynw-showcase-panel.is-active {
+  display: block;
+  animation: ynw-screenFade 0.3s ease;
+}
+
+@keyframes ynw-screenFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Screen 1: Feature Weighting Slider UI ─── */
+.ynw-sc-input-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.ynw-sc-input {
+  flex: 1;
+  background: #15151a;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #e5e5e7;
+  outline: none;
+}
+
+.ynw-sc-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.ynw-sc-btn {
+  background: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.ynw-sc-btn:hover {
+  background: #cc253b;
+}
+
+.ynw-sc-sliders-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ynw-sc-slider-card {
+  background: rgba(22, 22, 28, 0.7);
+  border: 1px solid rgba(42, 42, 48, 0.7);
+  border-radius: 4px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.ynw-sc-slider-meta {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.ynw-sc-slider-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.ynw-sc-slider-note {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.ynw-sc-slider-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ynw-sc-range {
+  flex: 1;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.ynw-sc-val-badge {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(181, 31, 50, 0.16);
+  border: 1px solid rgba(181, 31, 50, 0.35);
+  padding: 3px 10px;
+  border-radius: 3px;
+  min-width: 64px;
+  text-align: center;
+}
+
+/* ─── Screen 2: Multi-Agent Execution Pipeline UI ─── */
+.ynw-sc-pipeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(42, 42, 48, 0.6);
+}
+
+.ynw-sc-pipeline-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ynw-sc-pipeline-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.ynw-sc-agent-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ynw-sc-agent-row {
+  background: rgba(20, 20, 26, 0.7);
+  border: 1px solid rgba(42, 42, 48, 0.8);
+  border-radius: 4px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.ynw-sc-agent-row.is-active {
+  border-color: rgba(181, 31, 50, 0.5);
+  background: rgba(28, 22, 26, 0.8);
+  box-shadow: 0 0 16px rgba(181, 31, 50, 0.12);
+}
+
+.ynw-sc-agent-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ynw-sc-agent-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+  font-family: 'Clash Display', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ynw-sc-agent-icon--running {
+  color: #eab308;
+  border-color: #eab308;
+}
+
+.ynw-sc-agent-name {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.ynw-sc-agent-duty {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.ynw-sc-agent-pill {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ynw-sc-agent-pill--done {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #22c55e;
+}
+
+.ynw-sc-agent-pill--running {
+  background: rgba(234, 179, 8, 0.14);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  color: #eab308;
+}
+
+/* ─── Screen 3: Personalized Rating & Sentiment UI ─── */
+.ynw-gallery-grid,
+  .ynw-sc-rating-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.ynw-sc-rating-main {
+  background: rgba(22, 22, 28, 0.85);
+  border: 1px solid rgba(181, 31, 50, 0.35);
+  border-radius: 6px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(181, 31, 50, 0.12);
+}
+
+.ynw-sc-rating-score {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin: 10px 0 4px;
+}
+
+.ynw-sc-rating-score span {
+  font-size: 24px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.ynw-sc-rating-match {
+  color: #22c55e;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.ynw-sc-rating-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: rgba(181, 31, 50, 0.14);
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+
+.ynw-sc-rating-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  line-height: 1.45;
+}
+
+.ynw-sc-features-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ynw-sc-feat-row {
+  background: rgba(20, 20, 26, 0.65);
+  border: 1px solid rgba(42, 42, 48, 0.7);
+  border-radius: 4px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ynw-sc-feat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ynw-sc-feat-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ynw-sc-feat-pct {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.ynw-sc-feat-pct--mixed {
+  color: #eab308;
+}
+
+.ynw-sc-feat-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #18181f;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ynw-sc-feat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #b51f32 0%, #22c55e 100%);
+  border-radius: 3px;
+}
+
+.ynw-sc-feat-bar-fill--mixed {
+  background: linear-gradient(90deg, #b51f32 0%, #eab308 100%);
+}
+
+.ynw-sc-quote-box {
+  grid-column: 1 / -1;
+  background: rgba(16, 16, 20, 0.7);
+  border-left: 3px solid var(--accent-primary);
+  padding: 12px 18px;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ─── Chapters Formatting ─── */
+.ynw-chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-top: 1px solid rgba(42, 42, 48, 0.6);
+  padding-top: 32px;
+}
+
+.ynw-chapter-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ynw-chapter-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.ynw-chapter-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.ynw-chapter-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.ynw-twocol-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.ynw-threecol-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.ynw-prose-card {
+  background: rgba(18, 18, 22, 0.75);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  line-height: 1.6;
+}
+
+.ynw-prose-card h3 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ynw-prose-num {
+  color: var(--accent-primary);
+  font-family: 'Clash Display', sans-serif;
+}
+
+.ynw-prose-card p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+/* Chapter 3 Pipeline Cards */
+.ynw-pipeline-flow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.ynw-pipe-step {
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid rgba(42, 42, 48, 0.8);
+  border-radius: 4px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.ynw-pipe-step:hover {
+  border-color: rgba(181, 31, 50, 0.45);
+  transform: translateY(-2px);
+}
+
+.ynw-pipe-step-num {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent-primary);
+}
+
+.ynw-pipe-step-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.ynw-pipe-step-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Chapter 4 Tech Stack Grid */
+.ynw-stack-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(18, 18, 22, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ynw-stack-table th {
+  background: #141418;
+  padding: 12px 18px;
+  text-align: left;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(42, 42, 48, 0.8);
+}
+
+.ynw-stack-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(42, 42, 48, 0.4);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.ynw-stack-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ynw-stack-layer {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.ynw-stack-tech {
+  color: var(--accent-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Chapter 5 Engineering Challenges */
+.ynw-challenges-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ynw-challenge-card {
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.ynw-challenge-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-primary) 0%, transparent 80%);
+}
+
+.ynw-challenge-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ynw-challenge-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.ynw-challenge-tag {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  font-family: monospace;
+}
+
+.ynw-challenge-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Chapter 6 Roadmap Phases */
+.ynw-roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.ynw-phase-card {
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ynw-phase-card.is-current {
+  border-color: rgba(181, 31, 50, 0.45);
+  background: rgba(22, 18, 20, 0.9);
+}
+
+.ynw-phase-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  width: fit-content;
+}
+
+.ynw-phase-badge--live {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.ynw-phase-badge--planned {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+.ynw-phase-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ynw-phase-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Footer Dual Navigation */
+.ynw-detail-footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ynw-detail-next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  border-radius: 4px;
+  background: rgba(181, 31, 50, 0.18);
+  border: 1px solid rgba(181, 31, 50, 0.45);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ynw-detail-next-btn:hover {
+  background: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(181, 31, 50, 0.35);
+  transform: translateX(2px);
+}
+
+
+/* ================================================================
+   APPLICATION INTERFACE GALLERY (07 // GALLERY)
+   ================================================================ */
+.ynw-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  width: 100%;
+}
+
+.ynw-gallery-card {
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.ynw-gallery-card:hover {
+  border-color: rgba(181, 31, 50, 0.5);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7), 0 0 30px rgba(181, 31, 50, 0.16);
+  transform: translateY(-3px);
+}
+
+.ynw-gallery-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9.8;
+  background: #09090b;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(42, 42, 48, 0.7);
+}
+
+.ynw-gallery-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.45s ease, filter 0.3s ease;
+  display: block;
+}
+
+.ynw-gallery-card:hover .ynw-gallery-img-wrap img {
+  transform: scale(1.025);
+}
+
+.ynw-gallery-zoom-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(9, 9, 11, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.25s ease;
+}
+
+.ynw-gallery-card:hover .ynw-gallery-zoom-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ynw-gallery-info {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(14, 14, 18, 0.95);
+}
+
+.ynw-gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ynw-gallery-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.ynw-gallery-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.ynw-gallery-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Lightbox Modal */
+.ynw-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 7, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ynw-lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ynw-lightbox-content {
+  position: relative;
+  max-width: 92vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.ynw-lightbox-img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid rgba(42, 42, 48, 0.9);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(181, 31, 50, 0.18);
+}
+
+.ynw-lightbox-caption {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.ynw-lightbox-close {
+  position: absolute;
+  top: -46px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.ynw-lightbox-close:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Responsive breakdowns for Revify view */
+@media (max-width: 960px) {
+  .ynw-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ynw-pipeline-flow {
+    grid-template-columns: 1fr;
+  }
+  .ynw-challenges-grid,
+  .ynw-twocol-grid,
+  .ynw-threecol-grid,
+  .ynw-roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+  .ynw-sc-rating-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Return bar at bottom of scroll */
+.ynw-detail-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(42, 42, 46, 0.4);
+}
+
+.ynw-detail-footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ynw-detail-footer-btn:hover {
+  background: rgba(181, 31, 50, 0.15);
+  border-color: var(--accent-primary);
+  color: #fff;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ynw-expansion-portal,
+  .ynw-container.ynw-receding,
+  .ynw-expansion-backdrop {
+    transition-duration: 0.05s !important;
+  }
+}
+
+/* Responsive adjustments for expanded view */
+@media (max-width: 768px) {
+  .ynw-detail-bar {
+    padding: 10px 16px;
+  }
+  .ynw-detail-scroll {
+    padding: 20px 18px 40px;
+    gap: 24px;
+  }
+  .ynw-detail-canvas {
+    min-height: 260px;
+  }
+  .ynw-detail-hero-title {
+    font-size: 30px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     YOUR NEXT WATCH SECTION
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="ynw-section" id="your-next-watch">
+  <div class="ynw-container">
+
+    <!-- Section Header (Left-aligned as in Canva sketches) -->
+    <header class="ynw-header">
+      <h2>YOUR NEXT WATCH</h2>
+      <p class="ynw-subtitle">Rotate the reels to explore projects.</p>
+    </header>
+
+    <!-- Reels Grid -->
+    <div class="ynw-reels">
+
+      <!-- ─── REEL A: THE BUILDS ─── -->
+      <div class="ynw-reel" data-reel="a">
+        <div class="ynw-viewport" id="viewport-a">
+          <div class="ynw-roll-top"></div>
+          <div class="ynw-scene is-transitioning" id="scene-a"></div>
+          <div class="ynw-roll-bottom"></div>
+        </div>
+        <div class="ynw-nav">
+          <button class="ynw-arrow" data-dir="prev" data-reel-target="a" aria-label="Previous frame">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="ynw-dots" id="dots-a"></div>
+          <button class="ynw-arrow" data-dir="next" data-reel-target="a" aria-label="Next frame">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="ynw-counter">
+          <span class="ynw-counter-current" id="cur-a">01</span> / <span id="tot-a">07</span>
+          <span class="ynw-counter-name" id="name-a">THE BUILDS</span>
+        </div>
+      </div>
+
+      <!-- ─── REEL B: THE THINKING ─── -->
+      <div class="ynw-reel" data-reel="b">
+        <div class="ynw-viewport" id="viewport-b">
+          <div class="ynw-roll-top"></div>
+          <div class="ynw-scene is-transitioning" id="scene-b"></div>
+          <div class="ynw-roll-bottom"></div>
+        </div>
+        <div class="ynw-nav">
+          <button class="ynw-arrow" data-dir="prev" data-reel-target="b" aria-label="Previous frame">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="ynw-dots" id="dots-b"></div>
+          <button class="ynw-arrow" data-dir="next" data-reel-target="b" aria-label="Next frame">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="ynw-counter">
+          <span class="ynw-counter-current" id="cur-b">01</span> / <span id="tot-b">06</span>
+          <span class="ynw-counter-name" id="name-b">THE THINKING</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     MODULAR PROJECT CASE STUDIES
+     ================================================================ -->
+<script src="emflow-case-study.js"></script>
+<script src="swiggy-case-study.js"></script>
+<script src="revify-prd-case-study.js"></script>
+
+<!-- ================================================================
+     INTERACTIVE ENGINE: 3D CYLINDER CAROUSEL WITH DRAG & SCROLL
+     ================================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // Project catalog data
+  var REEL_A_DATA = [
+    { tag: 'CHAPTER 01',      title: 'THE BUILDS',  desc: 'High-impact engineering systems and full-stack architecture.' },
+    { tag: 'FEATURED BUILD',  title: 'REVIFY',      desc: 'B2C AI analytics trust layer with personalized feature sentiment & custom scoring.' },
+    { tag: 'BUILD',           title: 'EMFLOW',      desc: 'Centralized workforce workflow, task delegation & operational ticketing.' },
+    { tag: 'BUILD',           title: 'RAG ASSISTANT', desc: 'Enterprise retrieval-augmented generation engine. Content coming up soon.' }
+  ];
+
+  var REEL_B_DATA = [
+    { tag: 'CHAPTER 02',           title: 'THE THINKING',            desc: 'Product strategy teardowns, market insights and UX.' },
+    { tag: 'FEATURED CASE STUDY',  title: 'SWIGGY\nPRODUCT TEARDOWN', desc: 'Hyperlocal UX friction, cart abandonment and retention loops.' },
+    { tag: 'CASE STUDY',           title: 'REVIFY\nPRD',             desc: 'Product requirements, Akash persona, and weighted sentiment scoring.' }
+  ];
+
+  var RADIUS = 420;
+  var ANIM_TIME = 750;
+
+  function FilmReel(cfg) {
+    this.viewport = document.getElementById(cfg.viewportId);
+    this.scene    = document.getElementById(cfg.sceneId);
+    this.dotsEl   = document.getElementById(cfg.dotsId);
+    this.curEl    = document.getElementById(cfg.curId);
+    this.totEl    = document.getElementById(cfg.totId);
+    this.nameEl   = document.getElementById(cfg.nameId);
+    this.data     = cfg.data;
+    this.reelKey  = cfg.reelKey;
+    this.total    = cfg.data.length;
+    this.angle    = 360 / this.total;
+    this.current  = 0;
+    this.accumDeg = 0;
+    this.isBusy   = false;
+
+    // Drag state
+    this.isDragging = false;
+    this.startX     = 0;
+    this.dragOffset = 0;
+    this.hasMoved   = false;
+
+    // Scroll throttle
+    this.lastScrollTime = 0;
+
+    this.init();
+  }
+
+  FilmReel.prototype.perfsHTML = function(isBottom) {
+    var h = '';
+    for (var i = 0; i < 22; i++) {
+      h += '<div class="ynw-perf"></div>';
+    }
+    return '<div class="ynw-perfs ' + (isBottom ? 'ynw-perfs--bottom' : '') + '">' + h + '</div>';
+  };
+
+  FilmReel.prototype.init = function() {
+    var self = this;
+    this.totEl.textContent = pad(this.total);
+
+    // Build frame DOM
+    this.data.forEach(function(item, i) {
+      var frame = document.createElement('div');
+      frame.className = 'ynw-frame';
+      frame.style.transform = 'rotateY(' + (self.angle * i) + 'deg) translateZ(' + RADIUS + 'px)';
+      frame.setAttribute('data-idx', i);
+
+      var titleLines = item.title.split('\n').map(function(s) { return s.trim(); }).join('<br>');
+
+      frame.innerHTML =
+        '<div class="ynw-strip">' +
+          self.perfsHTML(false) +
+          '<div class="ynw-content">' +
+            '<span class="ynw-tag">' + item.tag + '</span>' +
+            '<h3 class="ynw-title">' + titleLines + '</h3>' +
+            '<p class="ynw-desc">' + item.desc + '</p>' +
+            '<div class="ynw-expand-hint">' +
+              '<svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>' +
+              '<span>Expand Frame</span>' +
+            '</div>' +
+            '<span class="ynw-edge ynw-edge--left">FRAME #' + pad(i + 1) + '</span>' +
+            '<span class="ynw-edge ynw-edge--right">35MM // 5219</span>' +
+          '</div>' +
+          self.perfsHTML(true) +
+        '</div>';
+
+      // Click to advance if clicking adjacent frame, or expand if active
+      frame.addEventListener('click', function(e) {
+        if (self.hasMoved || isDetailActive) return; // Prevent click triggered by drag or when open
+        if (frame.classList.contains('is-adjacent')) {
+          var dist = ringDistance(i, self.current, self.total);
+          self.goTo(self.current + dist);
+        } else if (frame.classList.contains('is-active')) {
+          openFilmDetail(self, i, frame, item);
+        }
+      });
+
+      self.scene.appendChild(frame);
+    });
+
+    // Build Dots
+    for (var i = 0; i < this.total; i++) {
+      var dot = document.createElement('div');
+      dot.className = 'ynw-dot' + (i === 0 ? ' is-active' : '');
+      (function(idx) {
+        dot.addEventListener('click', function() { self.goTo(idx); });
+      })(i);
+      this.dotsEl.appendChild(dot);
+    }
+
+    // Bind Arrow Buttons
+    var buttons = document.querySelectorAll('[data-reel-target="' + this.reelKey + '"]');
+    buttons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (isDetailActive) return;
+        if (btn.getAttribute('data-dir') === 'prev') {
+          self.goTo(self.current - 1);
+        } else {
+          self.goTo(self.current + 1);
+        }
+      });
+    });
+
+    // Setup Dragging & Scrolling Interactions
+    this.setupInteractions();
+
+    // Initial positioning
+    this.scene.style.transform = 'translateZ(-' + RADIUS + 'px) rotateY(0deg)';
+    this.updateClasses();
+  };
+
+  // ── Mouse Dragging & Touch Dragging ──
+  FilmReel.prototype.setupInteractions = function() {
+    var self = this;
+    var vp = this.viewport;
+
+    // Mouse Down
+    vp.addEventListener('mousedown', function(e) {
+      if (isDetailActive || e.button !== 0) return; // left click only
+      self.isDragging = true;
+      self.hasMoved = false;
+      self.startX = e.clientX;
+      self.dragOffset = 0;
+      vp.classList.add('is-dragging');
+      self.scene.classList.remove('is-transitioning');
+      e.preventDefault();
+    });
+
+    // Window Mouse Move
+    window.addEventListener('mousemove', function(e) {
+      if (!self.isDragging || isDetailActive) return;
+      var deltaX = e.clientX - self.startX;
+      if (Math.abs(deltaX) > 4) {
+        self.hasMoved = true;
+      }
+      self.dragOffset = deltaX;
+      // Convert drag pixel displacement into rotation degrees
+      // 300px drag ~= 1 frame (self.angle)
+      var degDelta = (deltaX / 300) * self.angle;
+      var currentBase = -self.accumDeg;
+      self.scene.style.transform = 'translateZ(-' + RADIUS + 'px) rotateY(' + (currentBase + degDelta) + 'deg)';
+    });
+
+    // Window Mouse Up
+    window.addEventListener('mouseup', function(e) {
+      if (!self.isDragging) return;
+      self.isDragging = false;
+      vp.classList.remove('is-dragging');
+      self.scene.classList.add('is-transitioning');
+
+      var threshold = 45; // pixels to trigger frame step
+      if (self.dragOffset < -threshold) {
+        // Dragged left -> advance right/forward
+        self.goTo(self.current + 1);
+      } else if (self.dragOffset > threshold) {
+        // Dragged right -> advance left/previous
+        self.goTo(self.current - 1);
+      } else {
+        // Snap back to current
+        self.goTo(self.current);
+      }
+      self.dragOffset = 0;
+    });
+
+    // Touch Support (Mobile)
+    var touchStartX = 0;
+    var touchStartY = 0;
+    var isHorizontalSwipe = false;
+
+    vp.addEventListener('touchstart', function(e) {
+      if (isDetailActive) return;
+      var t = e.touches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+      self.startX = t.clientX;
+      self.isDragging = true;
+      self.hasMoved = false;
+      self.dragOffset = 0;
+      isHorizontalSwipe = false;
+      self.scene.classList.remove('is-transitioning');
+    }, { passive: true });
+
+    vp.addEventListener('touchmove', function(e) {
+      if (!self.isDragging || isDetailActive) return;
+      var t = e.touches[0];
+      var deltaX = t.clientX - touchStartX;
+      var deltaY = t.clientY - touchStartY;
+
+      if (!isHorizontalSwipe && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 8) {
+        isHorizontalSwipe = true;
+      }
+
+      if (isHorizontalSwipe) {
+        if (e.cancelable) e.preventDefault();
+        self.hasMoved = true;
+        self.dragOffset = deltaX;
+        var degDelta = (deltaX / 260) * self.angle;
+        self.scene.style.transform = 'translateZ(-' + RADIUS + 'px) rotateY(' + (-self.accumDeg + degDelta) + 'deg)';
+      }
+    }, { passive: false });
+
+    vp.addEventListener('touchend', function() {
+      if (!self.isDragging) return;
+      self.isDragging = false;
+      self.scene.classList.add('is-transitioning');
+
+      var threshold = 40;
+      if (self.dragOffset < -threshold) {
+        self.goTo(self.current + 1);
+      } else if (self.dragOffset > threshold) {
+        self.goTo(self.current - 1);
+      } else {
+        self.goTo(self.current);
+      }
+      self.dragOffset = 0;
+    });
+
+    // ── Mouse Wheel / Trackpad Scrolling ──
+    vp.addEventListener('wheel', function(e) {
+      if (isDetailActive) return;
+      var now = Date.now();
+      // Throttle wheel events so one swipe moves exactly 1 frame
+      if (now - self.lastScrollTime < 500) {
+        e.preventDefault();
+        return;
+      }
+
+      // Read both deltaX (trackpad horizontal) and deltaY (mouse vertical scroll)
+      var dominantDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      var scrollThreshold = 18;
+
+      if (Math.abs(dominantDelta) > scrollThreshold) {
+        e.preventDefault();
+        self.lastScrollTime = now;
+        if (dominantDelta > 0) {
+          // Scrolled down/right -> advance next
+          self.goTo(self.current + 1);
+        } else {
+          // Scrolled up/left -> advance previous
+          self.goTo(self.current - 1);
+        }
+      }
+    }, { passive: false });
+  };
+
+  // ── Rotation Controller ──
+  FilmReel.prototype.goTo = function(index) {
+    if (this.isBusy || isDetailActive) return;
+    this.isBusy = true;
+    var self = this;
+
+    // Shortest-path around circular cylinder
+    var diff = index - this.current;
+    if (diff > this.total / 2)  diff -= this.total;
+    if (diff < -this.total / 2) diff += this.total;
+
+    this.accumDeg += diff * this.angle;
+    this.current = ((index % this.total) + this.total) % this.total;
+
+    this.scene.classList.add('is-transitioning');
+    this.scene.style.transform = 'translateZ(-' + RADIUS + 'px) rotateY(' + (-this.accumDeg) + 'deg)';
+    this.updateClasses();
+
+    setTimeout(function() {
+      self.isBusy = false;
+    }, ANIM_TIME);
+  };
+
+  // ── Update active / adjacent frame states ──
+  FilmReel.prototype.updateClasses = function() {
+    var self = this;
+    var frames = this.scene.querySelectorAll('.ynw-frame');
+
+    frames.forEach(function(f, i) {
+      f.classList.remove('is-active', 'is-adjacent', 'is-hidden');
+      var dist = ringDistance(i, self.current, self.total);
+      if (dist === 0) {
+        f.classList.add('is-active');
+      } else if (Math.abs(dist) === 1) {
+        f.classList.add('is-adjacent');
+      } else {
+        f.classList.add('is-hidden');
+      }
+    });
+
+    // Update Dots
+    var dots = this.dotsEl.querySelectorAll('.ynw-dot');
+    dots.forEach(function(d, i) {
+      d.classList.toggle('is-active', i === self.current);
+    });
+
+    // Update Counter Numbers
+    this.curEl.textContent = pad(this.current + 1);
+
+    // Update Display Name
+    var currentItem = this.data[this.current];
+    this.nameEl.textContent = currentItem.title.replace('\n', ' ');
+  };
+
+  // ── Math & Formatting Helpers ──
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function ringDistance(target, current, total) {
+    var d = target - current;
+    if (d > total / 2)  d -= total;
+    if (d < -total / 2) d += total;
+    return d;
+  }
+
+  // ============================================================
+  // INSTANTIATE REELS
+  // ============================================================
+  var reelA = new FilmReel({
+    viewportId: 'viewport-a',
+    sceneId:    'scene-a',
+    dotsId:     'dots-a',
+    curId:      'cur-a',
+    totId:      'tot-a',
+    nameId:     'name-a',
+    data:       REEL_A_DATA,
+    reelKey:    'a'
+  });
+
+  var reelB = new FilmReel({
+    viewportId: 'viewport-b',
+    sceneId:    'scene-b',
+    dotsId:     'dots-b',
+    curId:      'cur-b',
+    totId:      'tot-b',
+    nameId:     'name-b',
+    data:       REEL_B_DATA,
+    reelKey:    'b'
+  });
+
+  // ============================================================
+  // CINEMATIC FILM-FRAME EXPANSION ENGINE
+  // ============================================================
+  var isDetailActive = false;
+  var isClosingDetail = false;
+  var currentExpandedPortal = null;
+  var activeOriginFrame = null;
+  var activeOriginReel = null;
+  var activeOriginRect = null;
+
+  function portalPerfsHTML(isBottom, metaText) {
+    var holes = '';
+    for (var i = 0; i < 28; i++) {
+      holes += '<div class="ynw-portal-hole"></div>';
+    }
+    return '<div class="ynw-portal-perfs ' + (isBottom ? 'ynw-portal-perfs--bottom' : '') + '">' +
+             '<div class="ynw-portal-holes">' + holes + '</div>' +
+             '<span class="ynw-portal-meta">' + metaText + '</span>' +
+           '</div>';
+  }
+
+  
+  function getRevifyDetailHTML(reel, index, itemData) {
+    return '' +
+      '<div class="ynw-detail-container">' +
+        '<!-- Top Action & Navigation Bar -->' +
+        '<div class="ynw-detail-bar">' +
+          '<div class="ynw-detail-actions">' +
+            '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
+              '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+              '<span>Back to Watchlist</span>' +
+              '<span class="ynw-detail-kbd">ESC</span>' +
+            '</button>' +
+            '<a class="ynw-detail-link-btn" href="https://github.com" target="_blank" rel="noopener noreferrer" title="View Source Code">' +
+              '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>' +
+              '<span>GitHub Repo &nearr;</span>' +
+            '</a>' +
+            '<a class="ynw-detail-link-btn ynw-detail-link-btn--primary" href="https://revify-ai.vercel.app" target="_blank" rel="noopener noreferrer" title="Launch Web Application">' +
+              '<span class="ynw-live-pulse"></span>' +
+              '<span>Live Demo &nearr;</span>' +
+            '</a>' +
+          '</div>' +
+          '<div class="ynw-detail-badge">' +
+            '<span class="ynw-detail-dot"></span>' +
+            '<span>THE BUILDS // REEL A &mdash; FRAME #02</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Scrollable Case Study Body -->' +
+        '<div class="ynw-detail-scroll" id="ynw-detail-scroll-pane">' +
+
+          '<!-- Hero Summary -->' +
+          '<div class="ynw-detail-hero">' +
+            '<span class="ynw-detail-hero-tag">B2C AI ANALYTICS // MULTI-AGENT TRUST LAYER</span>' +
+            '<h1 class="ynw-detail-hero-title">REVIFY</h1>' +
+            '<p class="ynw-detail-hero-desc">The definitive trust layer for high-consideration e-commerce purchases. Transforming chaotic, generic user reviews into personalized, feature-level intelligence with deterministic scoring.</p>' +
+
+            '<!-- 4-Card Metric Strip -->' +
+            '<div class="ynw-metrics-grid">' +
+              '<div class="ynw-metric-card">' +
+                '<span class="ynw-metric-val">13 MINS</span>' +
+                '<span class="ynw-metric-label">Avg. Reading Time</span>' +
+                '<span class="ynw-metric-sub">Capital One Research</span>' +
+              '</div>' +
+              '<div class="ynw-metric-card">' +
+                '<span class="ynw-metric-val ynw-metric-val--crimson">&lt; 60 SECS</span>' +
+                '<span class="ynw-metric-label">Pipeline Latency</span>' +
+                '<span class="ynw-metric-sub">Target: 45s with wait-time UX</span>' +
+              '</div>' +
+              '<div class="ynw-metric-card">' +
+                '<span class="ynw-metric-val">4 AGENTS</span>' +
+                '<span class="ynw-metric-label">CrewAI Architecture</span>' +
+                '<span class="ynw-metric-sub">Powered by Gemini 3.5 Flash</span>' +
+              '</div>' +
+              '<div class="ynw-metric-card">' +
+                '<span class="ynw-metric-val">DETERMINISTIC</span>' +
+                '<span class="ynw-metric-label">Revify Scoring Logic</span>' +
+                '<span class="ynw-metric-sub">Zero stochastic rating drift</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Interactive Showcase Canvas (Project Screens) -->' +
+          '<div class="ynw-showcase-box">' +
+            '<div class="ynw-showcase-topbar">' +
+              '<div class="ynw-showcase-browser-left">' +
+                '<div class="ynw-showcase-dots">' +
+                  '<div class="ynw-showcase-dot ynw-showcase-dot--red"></div>' +
+                  '<div class="ynw-showcase-dot ynw-showcase-dot--yellow"></div>' +
+                  '<div class="ynw-showcase-dot ynw-showcase-dot--green"></div>' +
+                '</div>' +
+                '<div class="ynw-showcase-address">' +
+                  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
+                  '<span>https://revify.ai/analyze/sony-wh1000xm5</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="ynw-showcase-tabs">' +
+                '<button class="ynw-showcase-tab is-active" data-tab="tab-weights">01 // Ingestion &amp; Weights</button>' +
+                '<button class="ynw-showcase-tab" data-tab="tab-pipeline">02 // Multi-Agent Pipeline</button>' +
+                '<button class="ynw-showcase-tab" data-tab="tab-rating">03 // Revify Rating &amp; Sentiment</button>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- Showcase Tab 1: Product Ingestion & Feature Weights -->' +
+            '<div class="ynw-showcase-panel is-active" id="tab-weights">' +
+              '<div class="ynw-sc-input-bar">' +
+                '<input class="ynw-sc-input" type="text" value="https://www.amazon.com/dp/B0D1XD1ZW3 &mdash; Sony WH-1000XM5 Premium Wireless ANC Headphones" readonly>' +
+                '<button class="ynw-sc-btn" type="button">Extract Features</button>' +
+              '</div>' +
+              '<div class="ynw-sc-sliders-grid">' +
+                '<div class="ynw-sc-slider-card">' +
+                  '<div class="ynw-sc-slider-meta">' +
+                    '<div class="ynw-sc-slider-title">Active Noise Cancellation</div>' +
+                    '<div class="ynw-sc-slider-note">Acoustic isolation in transit</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-slider-controls">' +
+                    '<input class="ynw-sc-range" type="range" min="1" max="10" value="10" data-target="val-anc">' +
+                    '<span class="ynw-sc-val-badge" id="val-anc">10 / 10</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="ynw-sc-slider-card">' +
+                  '<div class="ynw-sc-slider-meta">' +
+                    '<div class="ynw-sc-slider-title">Battery Life &amp; Charging</div>' +
+                    '<div class="ynw-sc-slider-note">Continuous playback duration</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-slider-controls">' +
+                    '<input class="ynw-sc-range" type="range" min="1" max="10" value="9" data-target="val-bat">' +
+                    '<span class="ynw-sc-val-badge" id="val-bat">9 / 10</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="ynw-sc-slider-card">' +
+                  '<div class="ynw-sc-slider-meta">' +
+                    '<div class="ynw-sc-slider-title">Comfort &amp; Long-Session Wear</div>' +
+                    '<div class="ynw-sc-slider-note">Ear cup clamp force &amp; padding</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-slider-controls">' +
+                    '<input class="ynw-sc-range" type="range" min="1" max="10" value="8" data-target="val-comf">' +
+                    '<span class="ynw-sc-val-badge" id="val-comf">8 / 10</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="ynw-sc-slider-card">' +
+                  '<div class="ynw-sc-slider-meta">' +
+                    '<div class="ynw-sc-slider-title">Microphone &amp; Call Clarity</div>' +
+                    '<div class="ynw-sc-slider-note">Voice isolation in public spaces</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-slider-controls">' +
+                    '<input class="ynw-sc-range" type="range" min="1" max="10" value="4" data-target="val-mic">' +
+                    '<span class="ynw-sc-val-badge" id="val-mic">4 / 10</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- Showcase Tab 2: Real-time Multi-Agent Orchestration -->' +
+            '<div class="ynw-showcase-panel" id="tab-pipeline">' +
+              '<div class="ynw-sc-pipeline-header">' +
+                '<div class="ynw-sc-pipeline-title">CREWAI MULTI-AGENT EXECUTION GRAPH</div>' +
+                '<div class="ynw-sc-pipeline-time">' +
+                  '<span class="ynw-live-pulse"></span>' +
+                  '<span>ELAPSED: 28.4s // CAPPED &lt; 60s</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="ynw-sc-agent-cards">' +
+                '<div class="ynw-sc-agent-row">' +
+                  '<div class="ynw-sc-agent-info">' +
+                    '<div class="ynw-sc-agent-icon">01</div>' +
+                    '<div>' +
+                      '<div class="ynw-sc-agent-name">Review Acquisition Agent (Apify Zebu Actor)</div>' +
+                      '<div class="ynw-sc-agent-duty">Scraped, normalized and deduplicated 248 verified customer reviews from Amazon US</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<span class="ynw-sc-agent-pill ynw-sc-agent-pill--done">&#10003; Ingested (8.2s)</span>' +
+                '</div>' +
+                '<div class="ynw-sc-agent-row">' +
+                  '<div class="ynw-sc-agent-info">' +
+                    '<div class="ynw-sc-agent-icon">02</div>' +
+                    '<div>' +
+                      '<div class="ynw-sc-agent-name">Feature Extraction Agent (Gemini 3.5 Flash)</div>' +
+                      '<div class="ynw-sc-agent-duty">Parsed product taxonomy into 6 key capability facets &amp; mapped to user weight matrix</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<span class="ynw-sc-agent-pill ynw-sc-agent-pill--done">&#10003; Extracted (4.1s)</span>' +
+                '</div>' +
+                '<div class="ynw-sc-agent-row">' +
+                  '<div class="ynw-sc-agent-info">' +
+                    '<div class="ynw-sc-agent-icon">03</div>' +
+                    '<div>' +
+                      '<div class="ynw-sc-agent-name">Chunk Summary Agent (Context-Window Bypass)</div>' +
+                      '<div class="ynw-sc-agent-duty">Partitioned reviews into 4 structured JSON batches to eliminate token boundary overflows</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<span class="ynw-sc-agent-pill ynw-sc-agent-pill--done">&#10003; Synthesized (11.6s)</span>' +
+                '</div>' +
+                '<div class="ynw-sc-agent-row is-active">' +
+                  '<div class="ynw-sc-agent-info">' +
+                    '<div class="ynw-sc-agent-icon ynw-sc-agent-icon--running">04</div>' +
+                    '<div>' +
+                      '<div class="ynw-sc-agent-name">Review Analysis Agent (Sentiment &amp; Evidence Engine)</div>' +
+                      '<div class="ynw-sc-agent-duty">Evaluating weighted feature pros/cons &amp; computing mathematical Revify score</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<span class="ynw-sc-agent-pill ynw-sc-agent-pill--running">&#9889; Processing Batch 3/4</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- Showcase Tab 3: Personalized Rating & Sentiment Breakdown -->' +
+            '<div class="ynw-showcase-panel" id="tab-rating">' +
+              '<div class="ynw-sc-rating-layout">' +
+                '<div class="ynw-sc-rating-main">' +
+                  '<span class="ynw-sc-rating-tag">Personalized Rating</span>' +
+                  '<div class="ynw-sc-rating-score">8.6<span>/10</span></div>' +
+                  '<div class="ynw-sc-rating-match">High Recommendation Match</div>' +
+                  '<p class="ynw-sc-rating-desc">Weighted against your top priorities: ANC (10), Battery (9), Comfort (8), and Mic (4).</p>' +
+                '</div>' +
+                '<div class="ynw-sc-features-breakdown">' +
+                  '<div class="ynw-sc-feat-row">' +
+                    '<div class="ynw-sc-feat-head">' +
+                      '<span class="ynw-sc-feat-title">Active Noise Cancellation (Weight 10/10)</span>' +
+                      '<span class="ynw-sc-feat-pct">94% Positive // 204 Mentions</span>' +
+                    '</div>' +
+                    '<div class="ynw-sc-feat-bar-track">' +
+                      '<div class="ynw-sc-feat-bar-fill" style="width: 94%;"></div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-feat-row">' +
+                    '<div class="ynw-sc-feat-head">' +
+                      '<span class="ynw-sc-feat-title">Battery Life &amp; Charging (Weight 9/10)</span>' +
+                      '<span class="ynw-sc-feat-pct">91% Positive // 168 Mentions</span>' +
+                    '</div>' +
+                    '<div class="ynw-sc-feat-bar-track">' +
+                      '<div class="ynw-sc-feat-bar-fill" style="width: 91%;"></div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-feat-row">' +
+                    '<div class="ynw-sc-feat-head">' +
+                      '<span class="ynw-sc-feat-title">Comfort &amp; Ergonomics (Weight 8/10)</span>' +
+                      '<span class="ynw-sc-feat-pct">85% Positive // 112 Mentions</span>' +
+                    '</div>' +
+                    '<div class="ynw-sc-feat-bar-track">' +
+                      '<div class="ynw-sc-feat-bar-fill" style="width: 85%;"></div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="ynw-sc-feat-row">' +
+                    '<div class="ynw-sc-feat-head">' +
+                      '<span class="ynw-sc-feat-title">Microphone Clarity (Weight 4/10)</span>' +
+                      '<span class="ynw-sc-feat-pct ynw-sc-feat-pct--mixed">58% Mixed // 44 Mentions</span>' +
+                    '</div>' +
+                    '<div class="ynw-sc-feat-bar-track">' +
+                      '<div class="ynw-sc-feat-bar-fill ynw-sc-feat-bar-fill--mixed" style="width: 58%;"></div>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="ynw-sc-quote-box">' +
+                  '&ldquo;Verified Buyer Citation: The ANC genuinely silences the loudest subway trains and the 30-hour battery carried me through four days of heavy work without a charger. The mic picks up slight cafe ambience, but for listening it is superlative.&rdquo;' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Chapter 01: The Premise -->' +
+          '<section class="ynw-chapter">' +
+            '<div class="ynw-chapter-header">' +
+              '<span class="ynw-chapter-num">01 // THE PREMISE</span>' +
+              '<h2 class="ynw-chapter-title">The Definitive Trust Layer for High-Consideration E-Commerce</h2>' +
+              '<p class="ynw-chapter-sub">How Revify transforms overwhelming, generic product feedback into actionable, individualized confidence.</p>' +
+            '</div>' +
+            '<div class="ynw-twocol-grid">' +
+              '<div class="ynw-prose-card">' +
+                '<h3>' +
+                  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>' +
+                  '<span>What is Revify?</span>' +
+                '</h3>' +
+                '<p>Revify is a B2C AI analytics tool designed to act as the definitive trust layer for the e-commerce review ecosystem. It transforms how shoppers evaluate high-consideration purchases by generating personalized, feature-level insights and calculating a custom <strong>&ldquo;Revify Rating.&rdquo;</strong></p>' +
+              '</div>' +
+              '<div class="ynw-prose-card">' +
+                '<h3>' +
+                  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+                  '<span>What problem does it address?</span>' +
+                '</h3>' +
+                '<p>Shoppers currently suffer from decision fatigue and buyer&rsquo;s remorse. High-intent consumers are forced to sift through hundreds of irrelevant reviews to find information about the specific product capabilities they care about, often leading to cart abandonment or suboptimal purchases based on guesswork.</p>' +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+
+          '<!-- Chapter 02: The Problem -->' +
+          '<section class="ynw-chapter">' +
+            '<div class="ynw-chapter-header">' +
+              '<span class="ynw-chapter-num">02 // THE PROBLEM</span>' +
+              '<h2 class="ynw-chapter-title">The 13-Minute Dilemma: Why Modern Product Reviews Fail Shoppers</h2>' +
+              '<p class="ynw-chapter-sub">The breakdown of today&rsquo;s unstructured, noisy, and conflicting feedback loops.</p>' +
+            '</div>' +
+            '<div class="ynw-threecol-grid">' +
+              '<div class="ynw-prose-card">' +
+                '<h3>' +
+                  '<span class="ynw-prose-num">01.</span>' +
+                  '<span>Unstructured &amp; Generic</span>' +
+                '</h3>' +
+                '<p>According to Capital One Shopping Research, online shoppers spend an average of <strong>13 minutes</strong> reading reviews. High-signal technical feedback is buried inside endless commentary on unrelated customer service issues or superficial impressions.</p>' +
+              '</div>' +
+              '<div class="ynw-prose-card">' +
+                '<h3>' +
+                  '<span class="ynw-prose-num">02.</span>' +
+                  '<span>Irrelevant Noise</span>' +
+                '</h3>' +
+                '<p>A buyer seeking battery performance on a laptop must comb through dozens of reviews complaining about courier delivery delays, damaged packaging, or color variations that have zero bearing on the machine&rsquo;s real computing capabilities.</p>' +
+              '</div>' +
+              '<div class="ynw-prose-card">' +
+                '<h3>' +
+                  '<span class="ynw-prose-num">03.</span>' +
+                  '<span>Contradictory Sentiment</span>' +
+                '</h3>' +
+                '<p>One buyer praises the display while another calls it dim under the same listing. Without normalized feature extraction, users are left paralyzed by polarized anecdotes, leading directly to cart abandonment.</p>' +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+
+          '<!-- Chapter 03: The Approach -->' +
+          '<section class="ynw-chapter">' +
+            '<div class="ynw-chapter-header">' +
+              '<span class="ynw-chapter-num">03 // THE APPROACH</span>' +
+              '<h2 class="ynw-chapter-title">The 5-Stage Multi-Agent Architecture</h2>' +
+              '<p class="ynw-chapter-sub">From raw marketplace URLs to personalized mathematical confidence in under 60 seconds.</p>' +
+            '</div>' +
+            '<div class="ynw-pipeline-flow">' +
+              '<div class="ynw-pipe-step">' +
+                '<span class="ynw-pipe-step-num">STAGE 01</span>' +
+                '<h4 class="ynw-pipe-step-title">Review Aggregation</h4>' +
+                '<p class="ynw-pipe-step-desc">Ingests standard product URLs (initially prioritizing Amazon) and utilizes third-party scraping infrastructure to retrieve, normalize, and deduplicate customer reviews.</p>' +
+              '</div>' +
+              '<div class="ynw-pipe-step">' +
+                '<span class="ynw-pipe-step-num">STAGE 02</span>' +
+                '<h4 class="ynw-pipe-step-title">Feature Extraction</h4>' +
+                '<p class="ynw-pipe-step-desc">An AI agent parses the product page to dynamically identify key product features. The user then selects priority features and assigns each a custom weight from 1 to 10.</p>' +
+              '</div>' +
+              '<div class="ynw-pipe-step">' +
+                '<span class="ynw-pipe-step-num">STAGE 03</span>' +
+                '<h4 class="ynw-pipe-step-title">Chunk Summary Agent</h4>' +
+                '<p class="ynw-pipe-step-desc">Employs a CrewAI-orchestrated workflow where this specialized agent breaks massive review corpuses into discrete batches to bypass context-window boundaries.</p>' +
+              '</div>' +
+              '<div class="ynw-pipe-step">' +
+                '<span class="ynw-pipe-step-num">STAGE 04</span>' +
+                '<h4 class="ynw-pipe-step-title">Sentiment Analysis</h4>' +
+                '<p class="ynw-pipe-step-desc">A dedicated Review Analysis Agent maps summarized review data against user-selected features, generating clear sentiment breakdowns, pros/cons, and explanatory summaries.</p>' +
+              '</div>' +
+              '<div class="ynw-pipe-step">' +
+                '<span class="ynw-pipe-step-num">STAGE 05</span>' +
+                '<h4 class="ynw-pipe-step-title">Personalized Scoring</h4>' +
+                '<p class="ynw-pipe-step-desc">A deterministic Scoring Engine mathematically excludes reviews not mentioning the user&rsquo;s chosen features, producing a Revify Rating driven strictly by what they explicitly value.</p>' +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+
+          '<!-- Chapter 04: Under the Hood -->' +
+          '<section class="ynw-chapter">' +
+            '<div class="ynw-chapter-header">' +
+              '<span class="ynw-chapter-num">04 // UNDER THE HOOD</span>' +
+              '<h2 class="ynw-chapter-title">Technical Architecture &amp; System Stack</h2>' +
+              '<p class="ynw-chapter-sub">Enterprise orchestration bridging modern web interfaces, agentic LLMs, and deterministic math.</p>' +
+            '</div>' +
+            '<table class="ynw-stack-table">' +
+              '<thead>' +
+                '<tr>' +
+                  '<th style="width: 22%;">System Layer</th>' +
+                  '<th style="width: 28%;">Technologies</th>' +
+                  '<th>Key Engineering Responsibilities</th>' +
+                '</tr>' +
+              '</thead>' +
+              '<tbody>' +
+                '<tr>' +
+                  '<td class="ynw-stack-layer">Frontend</td>' +
+                  '<td class="ynw-stack-tech">React.js, Vite</td>' +
+                  '<td>Dynamic UX wait-time retention engine, interactive feature sliders, real-time pipeline status stream to keep shoppers actively engaged during the 45-60s processing cycle.</td>' +
+                '</tr>' +
+                '<tr>' +
+                  '<td class="ynw-stack-layer">Backend &amp; Logic</td>' +
+                  '<td class="ynw-stack-tech">Python, Flask</td>' +
+                  '<td>RESTful API layer, batch data orchestration, and the deterministic mathematical scoring engine that calculates the customized Revify Rating.</td>' +
+                '</tr>' +
+                '<tr>' +
+                  '<td class="ynw-stack-layer">AI Orchestration &amp; LLM</td>' +
+                  '<td class="ynw-stack-tech">CrewAI, Google Gemini 3.5 Flash</td>' +
+                  '<td>Multi-agent coordination powering 4 specialized agents: Feature Extraction, Review Acquisition, Chunk Summary, and Review Analysis.</td>' +
+                '</tr>' +
+                '<tr>' +
+                  '<td class="ynw-stack-layer">Data Acquisition</td>' +
+                  '<td class="ynw-stack-tech">Apify (Zebu Actor)</td>' +
+                  '<td>High-reliability e-commerce scraping infrastructure, proxy rotation, and normalization of unstructured marketplace payloads.</td>' +
+                '</tr>' +
+                '<tr>' +
+                  '<td class="ynw-stack-layer">Database &amp; Auth</td>' +
+                  '<td class="ynw-stack-tech">Supabase (PostgreSQL), Auth</td>' +
+                  '<td>Normalized review storage, intermediate AI output persistence to eliminate redundant LLM calls, and user profile management.</td>' +
+                '</tr>' +
+              '</tbody>' +
+            '</table>' +
+          '</section>' +
+
+          '<!-- Chapter 05: The Challenges -->' +
+          '<section class="ynw-chapter">' +
+            '<div class="ynw-chapter-header">' +
+              '<span class="ynw-chapter-num">05 // THE CHALLENGES</span>' +
+              '<h2 class="ynw-chapter-title">Engineering Roadblocks &amp; Architectural Decisions</h2>' +
+              '<p class="ynw-chapter-sub">Critical challenges solved in data acquisition, pipeline latency, context budgets, and scoring integrity.</p>' +
+            '</div>' +
+            '<div class="ynw-challenges-grid">' +
+              '<div class="ynw-challenge-card">' +
+                '<div class="ynw-challenge-head">' +
+                  '<h3 class="ynw-challenge-title">Marketplace Acquisition Reliability</h3>' +
+                  '<span class="ynw-challenge-tag">RESILIENCY</span>' +
+                '</div>' +
+                '<p class="ynw-challenge-body">The entire product pipeline depends on successful data extraction. If the Apify Zebu actor fails or returns empty data due to marketplace anti-scraping measures, downstream agents have no ground truth. We engineered automated retry policies with exponential backoff and payload validation checks.</p>' +
+              '</div>' +
+              '<div class="ynw-challenge-card">' +
+                '<div class="ynw-challenge-head">' +
+                  '<h3 class="ynw-challenge-title">The 45-60s Latency Window vs. Retention</h3>' +
+                  '<span class="ynw-challenge-tag">PERFORMANCE</span>' +
+                '</div>' +
+                '<p class="ynw-challenge-body">Orchestrating multi-agent LLMs and web scrapers takes significant execution time, creating a 45-60 second wait window. To eliminate cart abandonment, the frontend implements captivating real-time pipeline status feeds that explain ongoing agent tasks step-by-step.</p>' +
+              '</div>' +
+              '<div class="ynw-challenge-card">' +
+                '<div class="ynw-challenge-head">' +
+                  '<h3 class="ynw-challenge-title">Context Limits &amp; Hallucination Elimination</h3>' +
+                  '<span class="ynw-challenge-tag">ACCURACY</span>' +
+                '</div>' +
+                '<p class="ynw-challenge-body">Ingesting hundreds of reviews directly into an LLM causes context overflows and increases hallucination risks. The specialized Chunk Summary Agent partitions raw reviews into discrete batches and enforces strict JSON schemas to guarantee traceability back to verified customer quotes.</p>' +
+              '</div>' +
+              '<div class="ynw-challenge-card">' +
+                '<div class="ynw-challenge-head">' +
+                  '<h3 class="ynw-challenge-title">Deterministic vs. Probabilistic Scoring</h3>' +
+                  '<span class="ynw-challenge-tag">FIDELITY</span>' +
+                '</div>' +
+                '<p class="ynw-challenge-body">Asking LLMs to generate the final rating led to stochastic scoring drift where identical inputs yielded fluctuating scores. We deliberately shifted final score calculation entirely into deterministic Python logic, combining feature sentiment exclusively with user-defined weights.</p>' +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+
+          '<!-- Chapter 06: The Outcome & Roadmap -->' +
+          '<section class="ynw-chapter">' +
+            '<div class="ynw-chapter-header">' +
+              '<span class="ynw-chapter-num">06 // THE OUTCOME</span>' +
+              '<h2 class="ynw-chapter-title">Current Milestones &amp; Strategic Vision</h2>' +
+              '<p class="ynw-chapter-sub">From the tested Phase 1 MVP to consumer social trust networks and B2B brand portals.</p>' +
+            '</div>' +
+            '<div class="ynw-roadmap-grid">' +
+              '<div class="ynw-phase-card is-current">' +
+                '<span class="ynw-phase-badge ynw-phase-badge--live">&#9679; Phase 1: Built &amp; Tested (Current MVP)</span>' +
+                '<h3 class="ynw-phase-title">End-to-End B2C Analytics Engine</h3>' +
+                '<p class="ynw-phase-desc">Functional MVP with Amazon URL ingestion, CrewAI multi-agent orchestration, deterministic Revify Rating logic, and an engagement-optimized React interface with active failure guardrails.</p>' +
+              '</div>' +
+              '<div class="ynw-phase-card">' +
+                '<span class="ynw-phase-badge ynw-phase-badge--planned">&#9675; Phase 2: Planned</span>' +
+                '<h3 class="ynw-phase-title">&ldquo;Anonymous Trust&rdquo; Social Layer</h3>' +
+                '<p class="ynw-phase-desc">A consumer review community allowing verified purchasers to submit anonymous, feature-specific feedback completely insulated from merchant manipulation or sponsored bias.</p>' +
+              '</div>' +
+              '<div class="ynw-phase-card">' +
+                '<span class="ynw-phase-badge ynw-phase-badge--planned">&#9675; Phase 3: Planned</span>' +
+                '<h3 class="ynw-phase-title">B2B Collaboration &amp; Multi-Platform</h3>' +
+                '<p class="ynw-phase-desc">Expansion to Flipkart, Best Buy, and global retailers, paired with a brand intelligence portal allowing merchants to benchmark feature sentiment and address legitimate consumer pain points.</p>' +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+
+                    '<!-- Chapter 07: Application Interface Gallery -->' +
+          '<section class="ynw-chapter" id="ynw-revify-gallery">' +
+          '  <div class="ynw-chapter-header">' +
+          '    <span class="ynw-chapter-num">07 // APPLICATION INTERFACE GALLERY</span>' +
+          '    <h2 class="ynw-chapter-title">Production Interface &amp; User Flow</h2>' +
+          '    <p class="ynw-chapter-sub">High-resolution walkthrough of the deployed Revify application &mdash; from Amazon URL ingestion to deterministic sentiment scoring.</p>' +
+          '  </div>' +
+          '  <div class="ynw-gallery-grid">' +
+          '    <!-- Screen 01 -->' +
+          '    <div class="ynw-gallery-card" data-full="revify-project-screenshots/1.png" data-caption="Screen 01 &mdash; Hero Landing &amp; Ingestion: &lsquo;Transform Reviews Into Insights&rsquo; entry portal with live API connection indicator and Amazon URL input.">' +
+          '      <div class="ynw-gallery-img-wrap">' +
+          '        <img src="revify-project-screenshots/1.png" alt="Revify Landing Page" loading="lazy">' +
+          '        <div class="ynw-gallery-zoom-badge">' +
+          '          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' +
+          '          <span>Click to Zoom</span>' +
+          '        </div>' +
+          '      </div>' +
+          '      <div class="ynw-gallery-info">' +
+          '        <div class="ynw-gallery-header">' +
+          '          <h3 class="ynw-gallery-title">Product URL Ingestion &amp; Onboarding</h3>' +
+          '          <span class="ynw-gallery-tag">SCREEN 01</span>' +
+          '        </div>' +
+          '        <p class="ynw-gallery-desc">The primary user landing portal welcoming shoppers to input any standard Amazon product listing URL for automated review scraping.</p>' +
+          '      </div>' +
+          '    </div>' +
+          '    <!-- Screen 02 -->' +
+          '    <div class="ynw-gallery-card" data-full="revify-project-screenshots/2.png" data-caption="Screen 02 &mdash; Analysis Initialization: Validating product metadata, ASIN, and user review requirements before triggering the multi-agent pipeline.">' +
+          '      <div class="ynw-gallery-img-wrap">' +
+          '        <img src="revify-project-screenshots/2.png" alt="Start Your Analysis" loading="lazy">' +
+          '        <div class="ynw-gallery-zoom-badge">' +
+          '          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' +
+          '          <span>Click to Zoom</span>' +
+          '        </div>' +
+          '      </div>' +
+          '      <div class="ynw-gallery-info">' +
+          '        <div class="ynw-gallery-header">' +
+          '          <h3 class="ynw-gallery-title">Analysis Setup &amp; Product Mapping</h3>' +
+          '          <span class="ynw-gallery-tag">SCREEN 02</span>' +
+          '        </div>' +
+          '        <p class="ynw-gallery-desc">Captures the target product URL and optional user aliases, providing transparent onboarding guidance on how feature-based analysis works.</p>' +
+          '      </div>' +
+          '    </div>' +
+          '    <!-- Screen 03 -->' +
+          '    <div class="ynw-gallery-card" data-full="revify-project-screenshots/3.png" data-caption="Screen 03 &mdash; Dynamic Feature Selection: AI extracts 9 product capabilities (Performance, Processor, Battery, Display, Camera, Build, Storage, UI) for personalized weighting.">' +
+          '      <div class="ynw-gallery-img-wrap">' +
+          '        <img src="revify-project-screenshots/3.png" alt="Select Features to Analyze" loading="lazy">' +
+          '        <div class="ynw-gallery-zoom-badge">' +
+          '          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' +
+          '          <span>Click to Zoom</span>' +
+          '        </div>' +
+          '      </div>' +
+          '      <div class="ynw-gallery-info">' +
+          '        <div class="ynw-gallery-header">' +
+          '          <h3 class="ynw-gallery-title">Dynamic Feature Selection Matrix</h3>' +
+          '          <span class="ynw-gallery-tag">SCREEN 03</span>' +
+          '        </div>' +
+          '        <p class="ynw-gallery-desc">The AI agent parses product technical specifications into discrete capability facets, allowing the shopper to choose exactly what matters for their purchase.</p>' +
+          '      </div>' +
+          '    </div>' +
+          '    <!-- Screen 04 -->' +
+          '    <div class="ynw-gallery-card" data-full="revify-project-screenshots/4.png" data-caption="Screen 04 &mdash; Real-Time Agent Pipeline: 5-stage progress UX (Initializing, Feature Extraction, Review Scraping, AI Analysis, Finalizing) eliminating cart abandonment during the 45s window.">' +
+          '      <div class="ynw-gallery-img-wrap">' +
+          '        <img src="revify-project-screenshots/4.png" alt="Analyzing Your Product" loading="lazy">' +
+          '        <div class="ynw-gallery-zoom-badge">' +
+          '          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' +
+          '          <span>Click to Zoom</span>' +
+          '        </div>' +
+          '      </div>' +
+          '      <div class="ynw-gallery-info">' +
+          '        <div class="ynw-gallery-header">' +
+          '          <h3 class="ynw-gallery-title">Real-Time Pipeline Execution &amp; Progress</h3>' +
+          '          <span class="ynw-gallery-tag">SCREEN 04</span>' +
+          '        </div>' +
+          '        <p class="ynw-gallery-desc">Live multi-agent orchestration visualizer featuring dynamic stage progression (Scraping &rarr; Chunking &rarr; Analysis) to maintain shopper engagement.</p>' +
+          '      </div>' +
+          '    </div>' +
+          '    <!-- Screen 05 -->' +
+          '    <div class="ynw-gallery-card" data-full="revify-project-screenshots/5.png" data-caption="Screen 05 &mdash; Executive Intelligence Dashboard: Synthesizing 197 processed reviews into sentiment pie charts, relative feature score bars, and overall product rating.">' +
+          '      <div class="ynw-gallery-img-wrap">' +
+          '        <img src="revify-project-screenshots/5.png" alt="Analysis Results Dashboard" loading="lazy">' +
+          '        <div class="ynw-gallery-zoom-badge">' +
+          '          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' +
+          '          <span>Click to Zoom</span>' +
+          '        </div>' +
+          '      </div>' +
+          '      <div class="ynw-gallery-info">' +
+          '        <div class="ynw-gallery-header">' +
+          '          <h3 class="ynw-gallery-title">Executive Sentiment &amp; Score Dashboard</h3>' +
+          '          <span class="ynw-gallery-tag">SCREEN 05</span>' +
+          '        </div>' +
+          '        <p class="ynw-gallery-desc">High-level quantitative overview delivering rapid visual insights: Features Analyzed (7), Reviews Processed (197), Top Feature (Processor), and distribution charts.</p>' +
+          '      </div>' +
+          '    </div>' +
+          '    <!-- Screen 06 -->' +
+          '    <div class="ynw-gallery-card" data-full="revify-project-screenshots/6.png" data-caption="Screen 06 &mdash; Granular Feature Sentiment Breakdown: In-depth scores and verified buyer consensus summaries for Processor (100%), Battery (60%), Display (100%), and Camera (20%).">' +
+          '      <div class="ynw-gallery-img-wrap">' +
+          '        <img src="revify-project-screenshots/6.png" alt="Detailed Feature Analysis" loading="lazy">' +
+          '        <div class="ynw-gallery-zoom-badge">' +
+          '          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>' +
+          '          <span>Click to Zoom</span>' +
+          '        </div>' +
+          '      </div>' +
+          '      <div class="ynw-gallery-info">' +
+          '        <div class="ynw-gallery-header">' +
+          '          <h3 class="ynw-gallery-title">Granular Feature Sentiment Analysis</h3>' +
+          '          <span class="ynw-gallery-tag">SCREEN 06</span>' +
+          '        </div>' +
+          '        <p class="ynw-gallery-desc">Comprehensive breakdown providing honest, verified consensus on each individual feature (e.g. 100% Display vs. 20% Camera in low light) with zero marketing fluff.</p>' +
+          '      </div>' +
+          '    </div>' +
+          '  </div>' +
+          '</section>' +
+          '<!-- Footer Navigation Dual-Action -->' +
+          '<div class="ynw-detail-footer">' +
+            '<div class="ynw-detail-footer-nav">' +
+              '<button class="ynw-detail-footer-btn" id="ynw-detail-footer-back">' +
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                '<span>Return to Watchlist</span>' +
+              '</button>' +
+              '<button class="ynw-detail-next-btn" id="ynw-detail-next-build">' +
+                '<span>Next Build: EMFLOW</span>' +
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>' +
+      '</div>';
+  }
+
+  function openFilmDetail(reel, index, frameEl, itemData) {
+    if (isDetailActive || isClosingDetail) return;
+    isDetailActive = true;
+    isClosingDetail = false;
+    activeOriginReel = reel;
+    activeOriginFrame = frameEl;
+
+    // Settle cylinder into stationary position
+    reel.scene.classList.add('is-transitioning');
+    reel.scene.style.transform = 'translateZ(-' + RADIUS + 'px) rotateY(' + (-reel.accumDeg) + 'deg)';
+
+    // Get origin coordinates BEFORE container recedes to guarantee exact pixel positioning
+    var rect = frameEl.getBoundingClientRect();
+    activeOriginRect = {
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height
+    };
+
+    // Stage 2: Cinematic backdrop & receding dual-cylinder mechanism
+    var container = document.querySelector('.ynw-container');
+    if (container) container.classList.add('ynw-receding');
+
+    var backdrop = document.getElementById('ynw-expansion-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'ynw-expansion-backdrop';
+      backdrop.className = 'ynw-expansion-backdrop';
+      document.body.appendChild(backdrop);
+    }
+    backdrop.classList.add('is-active');
+
+    // Stage 3: Create expanding film portal at exact origin coordinates
+    var portal = document.createElement('div');
+    portal.className = 'ynw-expansion-portal';
+    portal.style.top = activeOriginRect.top + 'px';
+    portal.style.left = activeOriginRect.left + 'px';
+    portal.style.width = activeOriginRect.width + 'px';
+    portal.style.height = activeOriginRect.height + 'px';
+
+    var titleLines = itemData.title.split('\n').map(function(s) { return s.trim(); }).join(' ');
+    var collectionName = reel.reelKey === 'a' ? 'The Builds' : 'The Thinking';
+    var collectionTag = reel.reelKey === 'a' ? 'ENGINEERING & ARCHITECTURE' : 'PRODUCT STRATEGY & TEARDOWN';
+
+    var previewHTML =
+      '<div class="ynw-portal-preview">' +
+        '<span class="ynw-tag">' + itemData.tag + '</span>' +
+        '<h3 class="ynw-title">' + itemData.title.replace(/\n/g, '<br>') + '</h3>' +
+        '<p class="ynw-desc">' + itemData.desc + '</p>' +
+      '</div>';
+
+    var detailHTML = '';
+    var isReelA = (reel.reelKey === 'a');
+
+    if (isReelA) {
+      if (index === 0 || itemData.title === 'THE BUILDS') {
+        // Title Card Overview for THE BUILDS
+        detailHTML =
+          '<div class="ynw-detail-container">' +
+            '<div class="ynw-detail-bar">' +
+              '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                '<span>Back to Watchlist</span>' +
+                '<span class="ynw-detail-kbd">ESC</span>' +
+              '</button>' +
+              '<div class="ynw-detail-badge">' +
+                '<span class="ynw-detail-dot"></span>' +
+                '<span>' + collectionName + ' // COLLECTION OVERVIEW</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="ynw-detail-scroll">' +
+              '<div class="ynw-detail-hero">' +
+                '<span class="ynw-detail-hero-tag">CHAPTER 01 // PRODUCTION ARCHITECTURE</span>' +
+                '<h1 class="ynw-detail-hero-title">THE BUILDS</h1>' +
+                '<p class="ynw-detail-hero-desc">High-impact engineering systems, full-stack architecture, and production distributed applications built by Harshal.</p>' +
+              '</div>' +
+              '<div class="ef-cards-grid" style="margin-top:24px;">' +
+                '<div class="ef-card">' +
+                  '<span class="ef-card-tag">BUILD 01</span>' +
+                  '<h3 class="ef-card-title">Revify</h3>' +
+                  '<p class="ef-card-desc">B2C AI analytics trust layer with personalized feature sentiment and deterministic Revify Rating.</p>' +
+                '</div>' +
+                '<div class="ef-card">' +
+                  '<span class="ef-card-tag">BUILD 02</span>' +
+                  '<h3 class="ef-card-title">EmFlow</h3>' +
+                  '<p class="ef-card-desc">Full-stack employee workflow, task delegation, and operational ticketing platform.</p>' +
+                '</div>' +
+                '<div class="ef-card">' +
+                  '<span class="ef-card-tag">BUILD 03</span>' +
+                  '<h3 class="ef-card-title">RAG Assistant</h3>' +
+                  '<p class="ef-card-desc">Enterprise hybrid retrieval-augmented generation engine with semantic reranking.</p>' +
+                '</div>' +
+              '</div>' +
+              '<div class="ynw-detail-footer">' +
+                '<div class="ynw-detail-footer-inner">' +
+                  '<button class="ynw-detail-footer-btn" id="ynw-detail-footer-back">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                    '<span>Return to Watchlist</span>' +
+                  '</button>' +
+                  '<button class="ynw-detail-next-btn" id="builds-title-next">' +
+                    '<span>Next Build: REVIFY</span>' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+                  '</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      } else if (index === 1 || itemData.title === 'REVIFY') {
+        detailHTML = getRevifyDetailHTML(reel, index, itemData);
+      } else if (index === 2 || itemData.title === 'EMFLOW') {
+        detailHTML = window.getEmFlowDetailHTML ? window.getEmFlowDetailHTML(reel, index, itemData) : '';
+      } else if (index === 3 || itemData.title.indexOf('RAG') !== -1) {
+        // Clean Coming Soon card for RAG Assistant with prominent GitHub link
+        detailHTML =
+          '<div class="ynw-detail-container">' +
+            '<div class="ynw-detail-bar">' +
+              '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                '<span>Back to Watchlist</span>' +
+                '<span class="ynw-detail-kbd">ESC</span>' +
+              '</button>' +
+              '<div class="ynw-detail-actions">' +
+                '<a class="ynw-detail-link-btn" href="https://github.com" target="_blank" rel="noopener noreferrer" title="View Source Code">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>' +
+                  '<span>GitHub Repo &nearr;</span>' +
+                '</a>' +
+              '</div>' +
+              '<div class="ynw-detail-badge">' +
+                '<span class="ynw-detail-dot"></span>' +
+                '<span>' + collectionName + ' // REEL ' + reel.reelKey.toUpperCase() + ' — FRAME #04</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="ynw-detail-scroll">' +
+              '<div class="ynw-detail-hero">' +
+                '<span class="ynw-detail-hero-tag">COMING SOON // PRODUCTION REPOSITORY</span>' +
+                '<h1 class="ynw-detail-hero-title">RAG ASSISTANT</h1>' +
+                '<p class="ynw-detail-hero-desc">Enterprise retrieval-augmented generation engine with hybrid dense-sparse search and cross-encoder reranking.</p>' +
+              '</div>' +
+              '<div style="background:#111115; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:44px 32px; text-align:center; margin:32px 0;">' +
+                '<div style="font-size:38px; margin-bottom:16px;">🚧</div>' +
+                '<h3 style="font-family:\'Clash Display\',sans-serif; font-size:22px; color:#fff; margin:0 0 10px 0;">Content Coming Up Soon</h3>' +
+                '<p style="font-family:\'DM Sans\',sans-serif; font-size:14px; color:var(--text-secondary); max-width:540px; margin:0 auto 26px auto; line-height:1.6;">' +
+                  'The deep-dive technical case study and interactive pipeline demo are currently being prepared. In the meantime, you can explore the repository directly on GitHub:' +
+                '</p>' +
+                '<a href="https://github.com" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:8px; background:rgba(181,31,50,0.18); border:1px solid var(--accent-primary); color:#fff; padding:11px 24px; border-radius:4px; font-family:\'DM Sans\',sans-serif; font-size:13px; font-weight:600; text-decoration:none; transition:all 0.2s ease;">' +
+                  '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>' +
+                  '<span>Visit GitHub Repository ↗ (https://github.com)</span>' +
+                '</a>' +
+              '</div>' +
+              '<div class="ynw-detail-footer">' +
+                '<div class="ynw-detail-footer-inner">' +
+                  '<button class="ynw-detail-footer-btn" id="ynw-detail-footer-back">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                    '<span>Return to Watchlist</span>' +
+                  '</button>' +
+                  '<button class="ynw-detail-next-btn" id="rag-next-revify">' +
+                    '<span>Next Build: REVIFY</span>' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+                  '</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }
+    } else {
+      if (index === 0 || itemData.title === 'THE THINKING') {
+        // Title Card Overview for THE THINKING
+        detailHTML =
+          '<div class="ynw-detail-container">' +
+            '<div class="ynw-detail-bar">' +
+              '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                '<span>Back to Watchlist</span>' +
+                '<span class="ynw-detail-kbd">ESC</span>' +
+              '</button>' +
+              '<div class="ynw-detail-badge">' +
+                '<span class="ynw-detail-dot"></span>' +
+                '<span>' + collectionName + ' // COLLECTION OVERVIEW</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="ynw-detail-scroll">' +
+              '<div class="ynw-detail-hero">' +
+                '<span class="ynw-detail-hero-tag">CHAPTER 02 // PRODUCT STRATEGY & TEARDOWNS</span>' +
+                '<h1 class="ynw-detail-hero-title">THE THINKING</h1>' +
+                '<p class="ynw-detail-hero-desc">Product strategy breakdowns, user friction teardowns, and comprehensive MVP specifications authored by Harshal.</p>' +
+              '</div>' +
+              '<div class="ef-cards-grid" style="margin-top:24px;">' +
+                '<div class="ef-card">' +
+                  '<span class="ef-card-tag">CASE STUDY 01</span>' +
+                  '<h3 class="ef-card-title">Swiggy Product Teardown</h3>' +
+                  '<p class="ef-card-desc">Interactive 9-page presentation analyzing hyperlocal UX friction, cart abandonment, and retention loops.</p>' +
+                '</div>' +
+                '<div class="ef-card">' +
+                  '<span class="ef-card-tag">CASE STUDY 02</span>' +
+                  '<h3 class="ef-card-title">Revify PRD</h3>' +
+                  '<p class="ef-card-desc">Full product requirements document, high-intent shopper persona (Akash, 28), and weighted scoring engine.</p>' +
+                '</div>' +
+              '</div>' +
+              '<div class="ynw-detail-footer">' +
+                '<div class="ynw-detail-footer-inner">' +
+                  '<button class="ynw-detail-footer-btn" id="ynw-detail-footer-back">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                    '<span>Return to Watchlist</span>' +
+                  '</button>' +
+                  '<button class="ynw-detail-next-btn" id="thinking-title-next">' +
+                    '<span>Next Case Study: SWIGGY TEARDOWN</span>' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+                  '</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      } else if (index === 1 || itemData.title.indexOf('SWIGGY') !== -1) {
+        detailHTML = window.getSwiggyDetailHTML ? window.getSwiggyDetailHTML(reel, index, itemData) : '';
+      } else if (index === 2 || itemData.title.indexOf('REVIFY') !== -1) {
+        detailHTML = window.getRevifyPrdDetailHTML ? window.getRevifyPrdDetailHTML(reel, index, itemData) : '';
+      }
+    }
+
+    portal.innerHTML = previewHTML + detailHTML;
+    document.body.appendChild(portal);
+    currentExpandedPortal = portal;
+
+    // Force layout reflow so the browser registers origin coordinates before expanding
+    void portal.offsetWidth;
+
+    // Calculate target viewport dimensions for full cinema view
+    var isMobile = window.innerWidth <= 768;
+    var targetWidth = isMobile ? Math.min(window.innerWidth - 20, 1180) : Math.min(window.innerWidth - 64, 1180);
+    var targetHeight = isMobile ? Math.min(window.innerHeight - 30, 800) : Math.min(window.innerHeight - 80, 780);
+    var targetLeft = (window.innerWidth - targetWidth) / 2;
+    var targetTop = Math.max(16, (window.innerHeight - targetHeight) / 2);
+
+    // Expand portal smoothly to full cinema view
+    requestAnimationFrame(function() {
+      portal.style.top = targetTop + 'px';
+      portal.style.left = targetLeft + 'px';
+      portal.style.width = targetWidth + 'px';
+      portal.style.height = targetHeight + 'px';
+      portal.classList.add('is-expanded');
+    });
+
+    // Conceal original frame in background
+    frameEl.classList.add('is-concealed');
+
+    // Smoothly reveal detailed case study content
+    setTimeout(function() {
+      portal.classList.add('is-content-revealed');
+
+      // Bind THE BUILDS title card next button -> REVIFY
+      var bTitleNext = portal.querySelector('#builds-title-next');
+      if (bTitleNext) {
+        bTitleNext.addEventListener('click', function() {
+          closeFilmDetail();
+          setTimeout(function() {
+            reelA.goTo(1);
+            setTimeout(function() {
+              var activeFrame = reelA.scene.querySelector('.ynw-frame.is-active') || reelA.scene.querySelectorAll('.ynw-frame')[1];
+              if (activeFrame) openFilmDetail(reelA, 1, activeFrame, REEL_A_DATA[1]);
+            }, 550);
+          }, 450);
+        });
+      }
+
+      // Bind Revify Next Build Button (Advances Reel A to EMFLOW)
+      if (isReelA && (index === 1 || itemData.title === 'REVIFY')) {
+        var nextBtn = portal.querySelector('#ynw-detail-next-build');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function() {
+            closeFilmDetail();
+            setTimeout(function() {
+              reelA.goTo(2);
+              setTimeout(function() {
+                var activeFrame = reelA.scene.querySelector('.ynw-frame.is-active') || reelA.scene.querySelectorAll('.ynw-frame')[2];
+                if (activeFrame) openFilmDetail(reelA, 2, activeFrame, REEL_A_DATA[2]);
+              }, 550);
+            }, 450);
+          });
+        }
+      }
+
+      // Initialize EmFlow bindings if EmFlow is expanded
+      if (isReelA && (index === 2 || itemData.title === 'EMFLOW') && window.initEmFlowBindings) {
+        window.initEmFlowBindings(portal, reelA, openFilmDetail, REEL_A_DATA, closeFilmDetail);
+      }
+
+      // Bind RAG Assistant next button -> loops back to REVIFY
+      var ragNextRevify = portal.querySelector('#rag-next-revify');
+      if (ragNextRevify) {
+        ragNextRevify.addEventListener('click', function() {
+          closeFilmDetail();
+          setTimeout(function() {
+            reelA.goTo(1);
+            setTimeout(function() {
+              var activeFrame = reelA.scene.querySelector('.ynw-frame.is-active') || reelA.scene.querySelectorAll('.ynw-frame')[1];
+              if (activeFrame) openFilmDetail(reelA, 1, activeFrame, REEL_A_DATA[1]);
+            }, 550);
+          }, 450);
+        });
+      }
+
+      // Bind THE THINKING title card next button -> SWIGGY TEARDOWN
+      var tTitleNext = portal.querySelector('#thinking-title-next');
+      if (tTitleNext) {
+        tTitleNext.addEventListener('click', function() {
+          closeFilmDetail();
+          setTimeout(function() {
+            reelB.goTo(1);
+            setTimeout(function() {
+              var activeFrame = reelB.scene.querySelector('.ynw-frame.is-active') || reelB.scene.querySelectorAll('.ynw-frame')[1];
+              if (activeFrame) openFilmDetail(reelB, 1, activeFrame, REEL_B_DATA[1]);
+            }, 550);
+          }, 450);
+        });
+      }
+
+      // Initialize Swiggy Teardown bindings
+      if (!isReelA && (index === 1 || itemData.title.indexOf('SWIGGY') !== -1) && window.initSwiggyBindings) {
+        window.initSwiggyBindings(portal, reelB, openFilmDetail, REEL_B_DATA, closeFilmDetail);
+      }
+
+      // Initialize Revify PRD bindings
+      if (!isReelA && (index === 2 || itemData.title.indexOf('REVIFY') !== -1) && window.initRevifyPrdBindings) {
+        window.initRevifyPrdBindings(portal, reelB, openFilmDetail, REEL_B_DATA, closeFilmDetail);
+      }
+
+      var closeBtn = document.getElementById('ynw-detail-close-btn');
+      if (closeBtn) closeBtn.focus();
+    }, 380);
+
+    // Bind event listeners for closing
+    var closeBtn = document.getElementById('ynw-detail-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeFilmDetail);
+    }
+    var footerBtn = document.getElementById('ynw-detail-footer-back');
+    if (footerBtn) {
+      footerBtn.addEventListener('click', closeFilmDetail);
+    }
+    backdrop.onclick = function() {
+      closeFilmDetail();
+    };
+  }
+
+  function closeFilmDetail() {
+    if (!isDetailActive || !currentExpandedPortal || isClosingDetail) return;
+    isClosingDetail = true;
+
+    var portal = currentExpandedPortal;
+    var frameEl = activeOriginFrame;
+    var container = document.querySelector('.ynw-container');
+    var backdrop = document.getElementById('ynw-expansion-backdrop');
+
+    // 1. Immediately cross-fade: hide detail container, reveal preview face
+    portal.classList.remove('is-content-revealed');
+
+    // 2. Animate portal smoothly back to the exact stored activeOriginRect
+    portal.classList.remove('is-expanded');
+    portal.style.top = activeOriginRect.top + 'px';
+    portal.style.left = activeOriginRect.left + 'px';
+    portal.style.width = activeOriginRect.width + 'px';
+    portal.style.height = activeOriginRect.height + 'px';
+
+    // 3. Unblur background dual cylinders
+    if (container) container.classList.remove('ynw-receding');
+    if (backdrop) backdrop.classList.remove('is-active');
+
+    // 4. Seamless transition handoff: only swap when transition settles
+    var hasCleanedUp = false;
+    function finalizeClose() {
+      if (hasCleanedUp) return;
+      hasCleanedUp = true;
+
+      if (frameEl) {
+        frameEl.classList.remove('is-concealed');
+      }
+      if (portal && portal.parentNode) {
+        portal.parentNode.removeChild(portal);
+      }
+      currentExpandedPortal = null;
+      activeOriginFrame = null;
+      activeOriginReel = null;
+      activeOriginRect = null;
+      isDetailActive = false;
+      isClosingDetail = false;
+    }
+
+    portal.addEventListener('transitionend', function onEnd(e) {
+      if (e.target === portal && (e.propertyName === 'width' || e.propertyName === 'top')) {
+        portal.removeEventListener('transitionend', onEnd);
+        finalizeClose();
+      }
+    });
+
+    setTimeout(finalizeClose, 650);
+  }
+
+  // ============================================================
+  // KEYBOARD NAVIGATION
+  // Hover over a reel to control with ArrowLeft / ArrowRight
+  // ESC key closes expanded project view
+  // ============================================================
+  var activeHoverReel = null;
+
+  document.querySelectorAll('.ynw-reel').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      activeHoverReel = el.getAttribute('data-reel');
+    });
+    el.addEventListener('mouseleave', function() {
+      activeHoverReel = null;
+    });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    var lb = document.getElementById('ynw-lightbox-modal');
+    if (e.key === 'Escape' && lb && lb.classList.contains('is-open')) {
+      lb.classList.remove('is-open');
+      e.preventDefault();
+      return;
+    }
+    if (e.key === 'Escape' && isDetailActive) {
+      closeFilmDetail();
+      e.preventDefault();
+      return;
+    }
+    if (isDetailActive || !activeHoverReel) return;
+    if (e.key === 'ArrowLeft') {
+      if (activeHoverReel === 'a') reelA.goTo(reelA.step - 1);
+      if (activeHoverReel === 'b') reelB.goTo(reelB.step - 1);
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+      if (activeHoverReel === 'a') reelA.goTo(reelA.step + 1);
+      if (activeHoverReel === 'b') reelB.goTo(reelB.step + 1);
+      e.preventDefault();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

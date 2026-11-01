@@ -1,0 +1,100 @@
+/* ============ CONTACT — end credits footer ============ */
+
+.cf-section {
+  position: relative;
+  background: #050505;
+  border-top: 1px solid rgba(231, 226, 223, 0.06);
+  padding: 90px 24px 54px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-margin-top: 40px;
+}
+
+.cf-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(167, 162, 160, 0.6);
+}
+
+.cf-wordmark {
+  margin: 10px 0 0;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--paper, #e7e2df);
+  line-height: 1;
+}
+
+.cf-accent {
+  color: var(--crimson, #b51f32);
+}
+
+.cf-tagline {
+  margin-top: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-muted, #a7a2a0);
+}
+
+.cf-links {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 22px;
+}
+
+.cf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(231, 226, 223, 0.82);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 10px 16px;
+  border: 1px solid rgba(231, 226, 223, 0.12);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.cf-link:hover {
+  border-color: rgba(211, 59, 76, 0.55);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.cf-link-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.cf-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(181, 31, 50, 0.8);
+}
+
+.cf-copyright {
+  margin-top: 36px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(167, 162, 160, 0.4);
+}
+
+@media (max-width: 640px) {
+  .cf-links { flex-direction: column; gap: 10px; }
+  .cf-dot { display: none; }
+  .cf-link { width: 100%; max-width: 300px; justify-content: center; }
+}
