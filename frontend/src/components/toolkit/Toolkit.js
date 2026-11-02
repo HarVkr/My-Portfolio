@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowLeft, Power } from "lucide-react";
 import CameraArt from "./CameraArt";
 import { DEFAULT_TOOLKIT } from "./defaultToolkit";
 import { toolIcon } from "./toolIcons";
+import { reelSound } from "../ynw/ynwSound";
 import "./toolkit.css";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL || "";
@@ -29,6 +30,8 @@ function loopedStrip(items) {
 
 export default function Toolkit() {
   const rootRef = useRef(null);
+  const stageRef = useRef(null);
+  const sheetRef = useRef(null);
   const inView = useInView(rootRef, { once: true, amount: 0.12 });
   const reduce = useReducedMotion();
   const [data, setData] = useState(null);
@@ -57,13 +60,107 @@ export default function Toolkit() {
     ? toolkit.sections.find((s) => String(s.order) === String(expanded))
     : null;
 
+  // ── measured light fan ──
+  // The beam leaves the lens already wide: the upper edge climbs out of the
+  // section toward Your Next Watch, the lower edge dives toward Filmography.
+  // The contact sheet sits inside the throw. Recomputed on resize and
+  // whenever the sheet's layout changes (power on/off, expand/collapse).
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const update = () => {
+      const sheet = sheetRef.current;
+      const svg = stage.querySelector(".tk-camera-svg");
+      if (!sheet || !svg) return;
+      const s = stage.getBoundingClientRect();
+      const c = svg.getBoundingClientRect();
+      const lensX = c.left - s.left + c.width * (267 / 320);
+      const lensY = c.top - s.top + c.height * (162 / 348);
+      const ax = lensX - 34;
+
+      // One continuous light fan: the beam leaves the lens already wide —
+      // the upper edge climbs out of the section toward Your Next Watch,
+      // the lower edge dives toward Filmography. The contact sheet simply
+      // sits inside the throw. Same angles everywhere, so the in-stage
+      // layers and the travelling wedge read as a single cone.
+      const fan = (up, down, grow) => {
+        const far = s.width + 40;
+        const yUp = lensY - (far - ax) * up;
+        const yLow = lensY + (far - ax) * down;
+        return (
+          "polygon(" +
+          ax + "px " + lensY + "px, " +
+          far + "px " + (yUp - grow) + "px, " +
+          far + "px " + (yLow + grow) + "px)"
+        );
+      };
+
+      // Lift only the upper edge so the cone clears the sheet's upper-left
+      // corner while retaining the lens origin and the physical lower edge.
+      stage.style.setProperty("--beam-pool-poly", fan(0.72, 1.05, 26));
+      stage.style.setProperty("--beam-veil-poly", fan(0.65, 1.12, 44));
+
+      // the travelling wedge: measured against the section (it spans
+      // 1600px above and 2200px below the section box) so the exact same
+      // angles continue past the stage edges — behind the other sections
+      const section = rootRef.current;
+      const escape = section && section.querySelector(".tk-beam--escape");
+      if (section && escape) {
+        const sec = section.getBoundingClientRect();
+        const eApexY = lensY + (s.top - sec.top) + 1600;
+        const eFar = sec.width + 60;
+        const eYUp = eApexY - (eFar - ax) * 0.72;
+        const eYLow = eApexY + (eFar - ax) * 1.05;
+        escape.style.setProperty(
+          "--beam-escape-poly",
+          "polygon(" + ax + "px " + eApexY + "px, " +
+          eFar + "px " + eYUp + "px, " +
+          eFar + "px " + eYLow + "px)"
+        );
+      }
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    const ro = new ResizeObserver(update);
+    if (sheetRef.current) ro.observe(sheetRef.current);
+    return () => {
+      window.removeEventListener("resize", update);
+      ro.disconnect();
+    };
+  }, [isOn, expandedSection, data]);
+
+  // ── shared sound state (syncs with the Your Next Watch chip) ──
+  const [soundOn, setSoundOn] = useState(() => reelSound.isEnabled());
+  useEffect(() => {
+    const sync = (e) => setSoundOn(Boolean(e.detail && e.detail.on));
+    window.addEventListener("ynw-sound-changed", sync);
+    return () => window.removeEventListener("ynw-sound-changed", sync);
+  }, []);
+  useEffect(() => () => reelSound.motorStop(), []);
+
+  const toggleSound = () => {
+    const next = reelSound.setEnabled(!soundOn);
+    setSoundOn(next);
+    try {
+      window.dispatchEvent(new CustomEvent("ynw-sound-changed", { detail: { on: next } }));
+    } catch (e) {
+      /* older browsers — the chip still works, just no cross-sync */
+    }
+    if (next) reelSound.blip();
+  };
+
   return (
     <section
       ref={rootRef}
       id="the-toolkit"
       data-testid="toolkit-section"
-      className={`tk-section${inView ? " is-inview" : ""}`}
+      className={`tk-section${inView ? " is-inview" : ""}${isOn ? " tk-on" : ""}`}
     >
+      {/* the travelling wedge — escapes the stage, rides behind the neighbours */}
+      <div className="tk-beam tk-beam--escape" aria-hidden="true" />
+
       <div className="tk-header">
         <h2>THE TOOLKIT</h2>
         <p className="tk-subtitle">The how behind the what I create.</p>
@@ -71,33 +168,33 @@ export default function Toolkit() {
           A collection of technologies, tools and creative capabilities that
           help me turn ideas into working experiences.
         </p>
+        <button
+          type="button"
+          className={`tk-sound-chip${soundOn ? " is-on" : ""}`}
+          data-testid="toolkit-sound-toggle"
+          data-cursor-hover
+          aria-pressed={soundOn}
+          onClick={toggleSound}
+        >
+          {soundOn ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
+          )}
+          <span>Sound {soundOn ? "On" : "Off"}</span>
+        </button>
       </div>
 
       <div
+        ref={stageRef}
         className={`tk-stage${isOn ? " is-lit" : ""}${
           expandedSection ? " is-expanded" : ""
         }`}
       >
-        {/* projection beam */}
+        {/* projection pool: glows UNDER the light table, behind the sheet */}
         <div className="tk-beam-wrap" aria-hidden="true">
-          <div className="tk-beam tk-beam--halo" />
-          <div className="tk-beam tk-beam--core" />
+          <div className="tk-beam tk-beam--pool" />
           <div className="tk-beam tk-beam--wash" />
-          <div className="tk-motes">
-            {[
-              { left: "38%", top: "34%", d: "0s", dur: "9s" },
-              { left: "55%", top: "22%", d: "1.4s", dur: "11s" },
-              { left: "70%", top: "62%", d: "0.7s", dur: "10s" },
-              { left: "84%", top: "40%", d: "2.2s", dur: "12s" },
-              { left: "48%", top: "74%", d: "3s", dur: "9.5s" },
-              { left: "92%", top: "78%", d: "1.1s", dur: "13s" },
-            ].map((m, i) => (
-              <span
-                key={i}
-                style={{ left: m.left, top: m.top, animationDelay: m.d, animationDuration: m.dur }}
-              />
-            ))}
-          </div>
         </div>
 
         {/* projector column */}
@@ -107,6 +204,15 @@ export default function Toolkit() {
             type="button"
             data-testid="toolkit-power-btn"
             onClick={() => {
+              reelSound.ensure();
+              reelSound.clunk();
+              if (!isOn) {
+                // motor spins up + light warms out of the glass
+                setTimeout(() => reelSound.motorStart(), 420);
+              } else {
+                reelSound.motorStop();
+                reelSound.collapse();
+              }
               setIsOn((v) => !v);
               setExpanded(null);
             }}
@@ -124,7 +230,7 @@ export default function Toolkit() {
 
         {/* contact sheet */}
         <div className="tk-sheet-area">
-          <div className="tk-sheet" data-testid="toolkit-sheet">
+          <div ref={sheetRef} className="tk-sheet" data-testid="toolkit-sheet">
             {toolkit.sections.map((section) => {
               const isExpanded = expandedSection && expandedSection.order === section.order;
               const isDimmed = expandedSection && !isExpanded;
@@ -137,7 +243,12 @@ export default function Toolkit() {
                   }${isOn ? " is-lit" : ""}`}
                   data-testid={`toolkit-card-${section.order}`}
                   onClick={() => {
-                    if (isOn && !expandedSection) setExpanded(section.order);
+                    if (isOn && !expandedSection) {
+                      reelSound.ensure();
+                      reelSound.expand();
+                      reelSound.motorStart();
+                      setExpanded(section.order);
+                    }
                   }}
                 >
                   <Perfs />
@@ -232,6 +343,9 @@ export default function Toolkit() {
                           data-testid="toolkit-back-btn"
                           onClick={(e) => {
                             e.stopPropagation();
+                            reelSound.ensure();
+                            reelSound.collapse();
+                            reelSound.motorStart();
                             setExpanded(null);
                           }}
                           className="tk-back-btn"
@@ -281,7 +395,29 @@ export default function Toolkit() {
             </div>
           </div>
         </div>
+
+        {/* atmosphere: a whisper of projected light + drifting dust floats
+            ABOVE the sheet so the frames keep their deep, readable blacks */}
+        <div className="tk-veil-wrap" aria-hidden="true">
+          <div className="tk-beam tk-beam--veil" />
+        </div>
+        <div className="tk-motes" aria-hidden="true">
+          {[
+            { left: "38%", top: "34%", d: "0s", dur: "9s" },
+            { left: "55%", top: "22%", d: "1.4s", dur: "11s" },
+            { left: "70%", top: "62%", d: "0.7s", dur: "10s" },
+            { left: "84%", top: "40%", d: "2.2s", dur: "12s" },
+            { left: "48%", top: "74%", d: "3s", dur: "9.5s" },
+            { left: "92%", top: "78%", d: "1.1s", dur: "13s" },
+          ].map((m, i) => (
+            <span
+              key={i}
+              style={{ left: m.left, top: m.top, animationDelay: m.d, animationDuration: m.dur }}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
 }
+                

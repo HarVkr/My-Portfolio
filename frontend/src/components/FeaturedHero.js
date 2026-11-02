@@ -14,6 +14,9 @@ import PortraitStage from "@/components/PortraitStage";
 import ResumeChooser from "@/components/ResumeChooser";
 import YourNextWatch from "@/components/ynw/YourNextWatch";
 import Toolkit from "@/components/toolkit/Toolkit";
+import Filmography from "@/components/filmography/Filmography";
+import OffScript from "@/components/offscript/Offscript";
+import ContactFooter from "@/components/ContactFooter";
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -114,12 +117,12 @@ export default function FeaturedHero() {
         </button>
       </div>
 
-      <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-[1600px] items-center gap-10 px-6 pb-24 pt-28 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-0 lg:px-0 lg:pb-0 lg:pt-0">
+      <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-[1600px] items-center gap-10 px-6 pb-24 pt-28 sm:px-10 lg:max-w-none lg:grid-cols-1 lg:gap-0 lg:px-0 lg:pb-0 lg:pt-0">
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative z-10 max-w-3xl lg:pl-20 xl:pl-28"
+          className="relative z-10 max-w-3xl lg:max-w-[min(48rem,52vw)] lg:pl-[8vw]"
         >
           <motion.p
             variants={fadeUp}
@@ -198,7 +201,7 @@ export default function FeaturedHero() {
         </motion.div>
 
         <motion.div
-          className="relative order-first h-[46vh] w-full sm:h-[52vh] lg:order-none lg:h-full"
+          className="relative order-first h-[46vh] w-full sm:h-[52vh] lg:absolute lg:right-[5.4vw] lg:top-0 lg:h-full lg:w-[34vw]"
           initial={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)", opacity: 0.3 }}
           animate={reduce ? { opacity: 1 } : { clipPath: "inset(0 0 0% 0)", opacity: 1 }}
           transition={reduce ? { duration: 0.4 } : { duration: 1.5, ease: EASE, delay: 0.1 }}
@@ -212,12 +215,12 @@ export default function FeaturedHero() {
           </motion.div>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-obsidian/60 via-transparent to-obsidian lg:bg-gradient-to-r lg:from-obsidian lg:via-transparent lg:to-transparent"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-obsidian/60 via-transparent to-obsidian lg:bg-none"
           />
         </motion.div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-6 py-5 text-[9px] font-medium uppercase tracking-[0.35em] text-ink-muted/50 sm:px-10 lg:px-16">
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-6 py-5 text-[9px] font-medium uppercase tracking-[0.35em] text-ink-muted/50 sm:px-10 lg:pl-16 lg:pr-[calc(39.4vw+2.5rem)]">
         <span>Harshal — A Mind Without a Genre</span>
         <span className="hidden sm:inline">Now Featured</span>
       </div>
@@ -227,6 +230,9 @@ export default function FeaturedHero() {
 
       <YourNextWatch />
       <Toolkit />
+      <Filmography />
+      <OffScript />
+      <ContactFooter />
       <ResumeChooser open={resumeOpen} onClose={() => setResumeOpen(false)} />
     </motion.main>
   );

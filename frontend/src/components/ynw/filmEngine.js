@@ -6,19 +6,19 @@ import "./caseStudies/emflow.js";
 import "./caseStudies/swiggy.js";
 import "./caseStudies/revifyPrd.js";
 import "./caseStudies/rag.js";
+import { reelSound } from "./ynwSound";
 
-const RADIUS = 420;
-const ANIM_TIME = 750;
+// ── 35mm curved-band geometry ──
+// Each frame is windowed across SLICES_PER_FRAME facets so the film wraps
+// into a genuinely curved band around the spool (no flat "cube" faces).
+const SLICES_PER_FRAME = 10;
+const PX_PER_FRAME = 300; // px of drag ≈ one frame of film
+const FRICTION = 2.3;     // momentum decay (1/s) — film has weight
+const SNAP_V = 0.05;      // deg/ms — below this, settle to nearest frame
+const FLING_V = 0.12;     // deg/ms — above this, a release flings freely
 
 function pad(n) {
   return String(n).padStart(2, "0");
-}
-
-function ringDistance(target, current, total) {
-  let d = target - current;
-  if (d > total / 2) d -= total;
-  if (d < -total / 2) d += total;
-  return d;
 }
 
 function perfsHTML(isBottom) {
@@ -59,7 +59,9 @@ export function createFilmExperience(root, reelsData) {
       document.body.appendChild(lb);
     }
     lb.querySelector("img").src = src;
-    lb.querySelector(".ynw-lightbox-caption").textContent = caption || "";
+    lb.querySelector("p.ynw-lightbox-caption").textContent = caption || "";
+    reelSound.ensure();
+    reelSound.shutter();
     requestAnimationFrame(() => lb.classList.add("is-open"));
   }
 
@@ -322,13 +324,18 @@ export function createFilmExperience(root, reelsData) {
   function openFilmDetail(reel, index, frameEl, itemData) {
     if (isDetailActive || isClosingDetail) return;
     isDetailActive = true;
+    reelSound.ensure();
+    reelSound.expand();
+    reelSound.whirStop();
     activeOriginReel = reel;
     activeOriginFrame = frameEl;
 
     reel.scene.classList.add("is-transitioning");
-    reel.scene.style.transform = "translateZ(-" + RADIUS + "px) rotateY(" + -reel.accumDeg + "deg)";
+    reel.scene.style.transform =
+      "translateZ(-" + reel.geometry.radius + "px) rotateY(" + -reel.accumDeg + "deg)";
 
-    const rect = frameEl.getBoundingClientRect();
+    const probe = frameEl.querySelector(".ynw-frame-probe");
+    const rect = (probe || frameEl).getBoundingClientRect();
     activeOriginRect = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
 
     const container = root.querySelector(".ynw-container");
@@ -459,6 +466,7 @@ export function createFilmExperience(root, reelsData) {
   function closeFilmDetail() {
     if (!isDetailActive || !currentExpandedPortal || isClosingDetail) return;
     isClosingDetail = true;
+    reelSound.collapse();
 
     const portal = currentExpandedPortal;
     const frameEl = activeOriginFrame;
@@ -514,29 +522,58 @@ export function createFilmExperience(root, reelsData) {
       this.total = cfg.data.length;
       this.angle = 360 / this.total;
       this.current = 0;
-      this.accumDeg = 0;
-      this.isBusy = false;
-      this.isDragging = false;
-      this.startX = 0;
-      this.dragOffset = 0;
-      this.hasMoved = false;
+      this.accumDeg = 0;      // continuous rotation accumulator (float)
+      this.velocity = 0;      // deg/ms, signed
+      this.mode = "idle";     // idle | drag | coast | settle
+      this.raf = null;
+      this.lastFrameT = 0;
+      this.lastBoundary = 0;
+      this.sliceRefs = [];
+      this.geometry = null;
       this.lastScrollTime = 0;
+      this.hasMoved = false;
+      this.reduceMotion =
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       this.init();
     }
 
-    init() {
+    // Frame width follows the CSS (82% of the viewport; 90% ≤540px) and the
+    // radius is derived so the band wraps the spool with zero gaps.
+    measure() {
+      const vpW = this.viewport.clientWidth || 600;
+      const frac = window.matchMedia("(max-width: 540px)").matches ? 0.9 : 0.82;
+      const frameW = Math.max(250, vpW * frac);
+      const facets = this.total * SLICES_PER_FRAME;
+      const radius = frameW / (SLICES_PER_FRAME * 2 * Math.sin(Math.PI / facets));
+      const sliceW = 2 * radius * Math.sin(Math.PI / facets) + 0.6;
+      return { frameW, radius, sliceW, sliceAngle: this.angle / SLICES_PER_FRAME };
+    }
+
+    buildBand() {
       const self = this;
-      this.totEl.textContent = pad(this.total);
+      const g = (this.geometry = this.measure());
+      this.scene.innerHTML = "";
+      this.dotsEl.innerHTML = "";
+      this.sliceRefs = [];
 
       this.data.forEach((item, i) => {
         const frame = document.createElement("div");
         frame.className = "ynw-frame";
-        frame.style.transform = "rotateY(" + this.angle * i + "deg) translateZ(" + RADIUS + "px)";
         frame.setAttribute("data-idx", i);
 
+        // Invisible flat panel at this frame's ring position — the expansion
+        // FLIP reads its projected rect (a group bbox spans the whole ring).
+        const probe = document.createElement("div");
+        probe.className = "ynw-frame-probe";
+        probe.style.transform =
+          "rotateY(" + this.angle * i + "deg) translateZ(" + g.radius + "px)";
+        frame.appendChild(probe);
+
+        const content = document.createElement("div");
+        content.className = "ynw-strip";
         const titleLines = item.title.split("\n").map((s) => s.trim()).join("<br>");
-        frame.innerHTML =
-          '<div class="ynw-strip">' +
+        content.innerHTML =
           perfsHTML(false) +
           '<div class="ynw-content">' +
           '<span class="ynw-tag">' + item.tag + "</span>" +
@@ -548,34 +585,192 @@ export function createFilmExperience(root, reelsData) {
           '<span class="ynw-edge ynw-edge--left">FRAME #' + pad(i + 1) + "</span>" +
           '<span class="ynw-edge ynw-edge--right">35MM // 5219</span>' +
           "</div>" +
-          perfsHTML(true) +
-          "</div>";
+          perfsHTML(true);
 
-        // Click handling is delegated at scene level (see setupInteractions):
-        // 3D-projected frames can miss naive hit-testing at their bbox centers.
+        for (let j = 0; j < SLICES_PER_FRAME; j++) {
+          // centre the facet span on the frame's ring angle so a settled
+          // accumulator of i*angle faces the frame's centre at the viewer
+          const base = this.angle * i - this.angle / 2 + g.sliceAngle * j;
+          const slice = document.createElement("div");
+          slice.className = "ynw-slice";
+          slice.style.width = g.sliceW + "px";
+          slice.style.marginLeft = -(g.sliceW / 2) + "px";
+          slice.style.transform =
+            "rotateY(" + base + "deg) translateZ(" + g.radius + "px)";
+          const win = document.createElement("div");
+          win.className = "ynw-slice-window";
+          const clone = content.cloneNode(true);
+          clone.style.position = "absolute";
+          clone.style.top = "0";
+          clone.style.left = "0";
+          clone.style.width = g.frameW + "px";
+          clone.style.marginLeft = -(j * g.sliceW) + "px";
+          win.appendChild(clone);
+          const shade = document.createElement("div");
+          shade.className = "ynw-slice-shade";
+          slice.appendChild(win);
+          slice.appendChild(shade);
+          frame.appendChild(slice);
+          this.sliceRefs.push({ base, shade });
+        }
 
         self.scene.appendChild(frame);
       });
 
       for (let i = 0; i < this.total; i++) {
         const dot = document.createElement("div");
-        dot.className = "ynw-dot" + (i === 0 ? " is-active" : "");
+        dot.className = "ynw-dot" + (i === this.current ? " is-active" : "");
         dot.setAttribute("data-testid", "ynw-dot-" + this.reelKey + "-" + i);
         dot.addEventListener("click", () => self.goTo(i));
         this.dotsEl.appendChild(dot);
       }
+    }
+
+    applyTransform() {
+      this.scene.style.transform =
+        "translateZ(-" + this.geometry.radius + "px) rotateY(" + -this.accumDeg + "deg)";
+    }
+
+    speed01() {
+      return Math.min(1, Math.abs(this.velocity) / 0.55);
+    }
+
+    wrapAngle(a) {
+      return (((a % 360) + 540) % 360) - 180;
+    }
+
+    // Sprocket ticks on frame boundaries + live counter while the reel moves.
+    emitMotion() {
+      const boundary = Math.floor(this.accumDeg / this.angle);
+      if (boundary !== this.lastBoundary) {
+        this.lastBoundary = boundary;
+        reelSound.tick(Math.min(1, Math.abs(this.velocity) / 0.5));
+      }
+      const idx =
+        ((Math.round(this.accumDeg / this.angle) % this.total) + this.total) % this.total;
+      if (idx !== this.current) {
+        this.current = idx;
+        this.updateClasses();
+      }
+    }
+
+    updateShading() {
+      for (let k = 0; k < this.sliceRefs.length; k++) {
+        const ref = this.sliceRefs[k];
+        const d = Math.abs(this.wrapAngle(ref.base - this.accumDeg));
+        ref.shade.style.opacity = (Math.min(1, d / 88) * 0.82).toFixed(3);
+      }
+    }
+
+    easeSettle(t) {
+      const c1 = 0.62, c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    }
+
+    easeOut(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    startSettle(targetAccum) {
+      this.mode = "settle";
+      this.settleFrom = this.accumDeg;
+      this.settleTo = targetAccum;
+      this.settleDur = this.reduceMotion
+        ? 220
+        : Math.min(820, 340 + Math.abs(targetAccum - this.accumDeg) * 1.5);
+      this.settleT0 = performance.now();
+      this.lastBoundary = Math.floor(this.accumDeg / this.angle);
+      this.startLoop();
+    }
+
+    beginSettle() {
+      this.startSettle(Math.round(this.accumDeg / this.angle) * this.angle);
+    }
+
+    settleToFrame(index) {
+      let diff = index - this.current;
+      if (diff > this.total / 2) diff -= this.total;
+      if (diff < -this.total / 2) diff += this.total;
+      this.startSettle(
+        (Math.round(this.accumDeg / this.angle) + diff) * this.angle
+      );
+    }
+
+    finishSettle() {
+      this.accumDeg = this.settleTo;
+      this.current =
+        ((Math.round(this.accumDeg / this.angle) % this.total) + this.total) % this.total;
+      this.mode = "idle";
+      this.velocity = 0;
+      reelSound.clunk();
+      reelSound.whirStop();
+      this.updateClasses();
+      this.applyTransform();
+      this.updateShading();
+    }
+
+    startLoop() {
+      if (this.raf) return;
+      const self = this;
+      const step = (now) => {
+        const dt = Math.min(48, now - (self.lastFrameT || now));
+        self.lastFrameT = now;
+
+        if (self.mode === "drag") {
+          self.emitMotion();
+          self.updateShading();
+          self.applyTransform();
+          reelSound.whir(self.speed01());
+        } else if (self.mode === "coast") {
+          const decay = Math.exp((-FRICTION * dt) / 1000);
+          self.accumDeg += self.velocity * dt;
+          self.velocity *= decay;
+          self.emitMotion();
+          self.updateShading();
+          self.applyTransform();
+          reelSound.whir(self.speed01());
+          if (Math.abs(self.velocity) < SNAP_V) self.beginSettle();
+        } else if (self.mode === "settle") {
+          const t = Math.min(1, (now - self.settleT0) / self.settleDur);
+          const e = self.reduceMotion ? self.easeOut(t) : self.easeSettle(t);
+          const target = self.settleFrom + (self.settleTo - self.settleFrom) * e;
+          self.velocity = dt > 0 ? (target - self.accumDeg) / dt : 0;
+          self.accumDeg = target;
+          self.emitMotion();
+          self.updateShading();
+          self.applyTransform();
+          reelSound.whir(self.speed01() * 0.55);
+          if (t >= 1) self.finishSettle();
+        }
+
+        if (self.mode === "idle") {
+          self.raf = null;
+          return;
+        }
+        self.raf = requestAnimationFrame(step);
+      };
+      this.raf = requestAnimationFrame(step);
+    }
+
+    init() {
+      const self = this;
+      this.totEl.textContent = pad(this.total);
+
+      this.buildBand();
 
       this.reelEl.querySelectorAll(".ynw-arrow").forEach((btn) => {
         btn.addEventListener("click", () => {
           if (isDetailActive) return;
+          reelSound.ensure();
           self.goTo(btn.getAttribute("data-dir") === "prev" ? self.current - 1 : self.current + 1);
         });
       });
 
       this.setupInteractions();
 
-      this.scene.style.transform = "translateZ(-" + RADIUS + "px) rotateY(0deg)";
+      this.applyTransform();
       this.updateClasses();
+      this.updateShading();
     }
 
     setupInteractions() {
@@ -584,41 +779,55 @@ export function createFilmExperience(root, reelsData) {
 
       const onMouseDown = (e) => {
         if (isDetailActive || e.button !== 0) return;
-        self.isDragging = true;
+        reelSound.ensure();
+        self.mode = "drag";
         self.hasMoved = false;
         self.startX = e.clientX;
-        self.dragOffset = 0;
+        self.dragStartAccum = self.accumDeg;
+        self.velocity = 0;
+        self.lastMoveT = performance.now();
+        self.lastBoundary = Math.floor(self.accumDeg / self.angle);
         vp.classList.add("is-dragging");
-        self.scene.classList.remove("is-transitioning");
         e.preventDefault();
+        self.startLoop();
       };
       const onMouseMove = (e) => {
-        if (!self.isDragging || isDetailActive) return;
-        const deltaX = e.clientX - self.startX;
-        if (Math.abs(deltaX) > 4) self.hasMoved = true;
-        self.dragOffset = deltaX;
-        const degDelta = (deltaX / 300) * self.angle;
-        self.scene.style.transform = "translateZ(-" + RADIUS + "px) rotateY(" + (-self.accumDeg + degDelta) + "deg)";
+        if (self.mode !== "drag" || isDetailActive) return;
+        const now = performance.now();
+        const dx = e.clientX - self.startX;
+        if (Math.abs(dx) > 4) self.hasMoved = true;
+        const prev = self.accumDeg;
+        self.accumDeg = self.dragStartAccum - dx * (self.angle / PX_PER_FRAME);
+        const dt = Math.max(1, now - self.lastMoveT);
+        const inst = (self.accumDeg - prev) / dt;
+        self.velocity = self.velocity * 0.72 + inst * 0.28;
+        self.lastMoveT = now;
       };
-      const onMouseUp = () => {
-        if (!self.isDragging) return;
-        self.isDragging = false;
+      const releaseDrag = () => {
+        if (self.mode !== "drag") return;
+        self.mode = "idle";
         vp.classList.remove("is-dragging");
-        self.scene.classList.add("is-transitioning");
-        const threshold = 45;
-        if (self.dragOffset < -threshold) self.goTo(self.current + 1);
-        else if (self.dragOffset > threshold) self.goTo(self.current - 1);
-        else self.goTo(self.current);
-        self.dragOffset = 0;
+        const idleFor = performance.now() - self.lastMoveT;
+        if (idleFor > 90) self.velocity = 0; // held still before release
+        if (!self.reduceMotion && Math.abs(self.velocity) > FLING_V) {
+          self.mode = "coast"; // let the film run on and wind down
+        } else {
+          const dxTotal = (self.dragStartAccum - self.accumDeg) * (PX_PER_FRAME / self.angle);
+          let target = self.current;
+          if (dxTotal < -45) target = self.current + 1;
+          else if (dxTotal > 45) target = self.current - 1;
+          self.settleToFrame(target);
+        }
+        self.startLoop();
       };
 
       vp.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("mouseup", onMouseUp);
+      window.addEventListener("mouseup", releaseDrag);
       cleanups.push(() => {
         vp.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("mouseup", onMouseUp);
+        window.removeEventListener("mouseup", releaseDrag);
       });
 
       let touchStartX = 0;
@@ -628,39 +837,38 @@ export function createFilmExperience(root, reelsData) {
       const onTouchStart = (e) => {
         if (isDetailActive) return;
         const t = e.touches[0];
+        reelSound.ensure();
         touchStartX = t.clientX;
         touchStartY = t.clientY;
         self.startX = t.clientX;
-        self.isDragging = true;
+        self.mode = "drag";
         self.hasMoved = false;
-        self.dragOffset = 0;
+        self.dragStartAccum = self.accumDeg;
+        self.velocity = 0;
+        self.lastMoveT = performance.now();
+        self.lastBoundary = Math.floor(self.accumDeg / self.angle);
         isHorizontalSwipe = false;
-        self.scene.classList.remove("is-transitioning");
+        self.startLoop();
       };
       const onTouchMove = (e) => {
-        if (!self.isDragging || isDetailActive) return;
+        if (self.mode !== "drag" || isDetailActive) return;
         const t = e.touches[0];
-        const deltaX = t.clientX - touchStartX;
-        const deltaY = t.clientY - touchStartY;
-        if (!isHorizontalSwipe && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 8) isHorizontalSwipe = true;
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        if (!isHorizontalSwipe && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) isHorizontalSwipe = true;
         if (isHorizontalSwipe) {
           if (e.cancelable) e.preventDefault();
-          self.hasMoved = true;
-          self.dragOffset = deltaX;
-          const degDelta = (deltaX / 260) * self.angle;
-          self.scene.style.transform = "translateZ(-" + RADIUS + "px) rotateY(" + (-self.accumDeg + degDelta) + "deg)";
+          const now = performance.now();
+          if (Math.abs(dx) > 4) self.hasMoved = true;
+          const prev = self.accumDeg;
+          self.accumDeg = self.dragStartAccum - dx * (self.angle / (PX_PER_FRAME - 40));
+          const dt = Math.max(1, now - self.lastMoveT);
+          const inst = (self.accumDeg - prev) / dt;
+          self.velocity = self.velocity * 0.72 + inst * 0.28;
+          self.lastMoveT = now;
         }
       };
-      const onTouchEnd = () => {
-        if (!self.isDragging) return;
-        self.isDragging = false;
-        self.scene.classList.add("is-transitioning");
-        const threshold = 40;
-        if (self.dragOffset < -threshold) self.goTo(self.current + 1);
-        else if (self.dragOffset > threshold) self.goTo(self.current - 1);
-        else self.goTo(self.current);
-        self.dragOffset = 0;
-      };
+      const onTouchEnd = () => releaseDrag();
 
       vp.addEventListener("touchstart", onTouchStart, { passive: true });
       vp.addEventListener("touchmove", onTouchMove, { passive: false });
@@ -682,6 +890,7 @@ export function createFilmExperience(root, reelsData) {
         if (Math.abs(dominantDelta) > 18) {
           e.preventDefault();
           self.lastScrollTime = now;
+          reelSound.ensure();
           self.goTo(dominantDelta > 0 ? self.current + 1 : self.current - 1);
         }
       };
@@ -689,10 +898,11 @@ export function createFilmExperience(root, reelsData) {
       cleanups.push(() => vp.removeEventListener("wheel", onWheel));
 
       // Deterministic click zones: the browser's hit-testing is unreliable on
-      // 3D-projected frames, so resolve intent geometrically — centre third
-      // expands the active frame, the flanks rotate to the adjacent one.
+      // 3D-projected facets, so resolve intent geometrically — centre third
+      // expands the active frame, the flanks spin to the adjacent one.
       const onViewportClick = (e) => {
         if (isDetailActive || self.hasMoved) return;
+        reelSound.ensure();
         const rect = vp.getBoundingClientRect();
         const dx = e.clientX - (rect.left + rect.width / 2);
         if (Math.abs(dx) < rect.width * 0.3) {
@@ -707,30 +917,14 @@ export function createFilmExperience(root, reelsData) {
     }
 
     goTo(index) {
-      if (this.isBusy || isDetailActive) return;
-      this.isBusy = true;
-      const self = this;
-      let diff = index - this.current;
-      if (diff > this.total / 2) diff -= this.total;
-      if (diff < -this.total / 2) diff += this.total;
-      this.accumDeg += diff * this.angle;
-      this.current = ((index % this.total) + this.total) % this.total;
-      this.scene.classList.add("is-transitioning");
-      this.scene.style.transform = "translateZ(-" + RADIUS + "px) rotateY(" + -this.accumDeg + "deg)";
-      this.updateClasses();
-      setTimeout(() => {
-        self.isBusy = false;
-      }, ANIM_TIME);
+      if (isDetailActive || this.mode === "drag") return;
+      this.settleToFrame(index);
     }
 
     updateClasses() {
       const self = this;
       this.scene.querySelectorAll(".ynw-frame").forEach((f, i) => {
-        f.classList.remove("is-active", "is-adjacent", "is-hidden");
-        const dist = ringDistance(i, self.current, self.total);
-        if (dist === 0) f.classList.add("is-active");
-        else if (Math.abs(dist) === 1) f.classList.add("is-adjacent");
-        else f.classList.add("is-hidden");
+        f.classList.toggle("is-active", i === self.current);
       });
       this.dotsEl.querySelectorAll(".ynw-dot").forEach((d, i) => {
         d.classList.toggle("is-active", i === self.current);
@@ -756,6 +950,36 @@ export function createFilmExperience(root, reelsData) {
       reelKey: reelDef.key,
     });
     reelsByKey[reelDef.key] = reel;
+  });
+
+  // Rebuild the curved band when the viewport changes size (geometry is
+  // measured in pixels), preserving rotation state.
+  let resizeT = null;
+  const onReelResize = () => {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(() => {
+      Object.keys(reelsByKey).forEach((k) => {
+        const r = reelsByKey[k];
+        if (r.mode !== "idle") return;
+        r.buildBand();
+        r.applyTransform();
+        r.updateClasses();
+        r.updateShading();
+      });
+    }, 250);
+  };
+  window.addEventListener("resize", onReelResize);
+  cleanups.push(() => {
+    window.removeEventListener("resize", onReelResize);
+    clearTimeout(resizeT);
+  });
+
+  // Audio must be unlocked inside a user gesture — arm on the first press.
+  const unlockAudio = () => reelSound.ensure();
+  root.addEventListener("pointerdown", unlockAudio);
+  cleanups.push(() => {
+    root.removeEventListener("pointerdown", unlockAudio);
+    reelSound.whirStop();
   });
 
   // Keyboard: arrows rotate the hovered reel, ESC closes detail / lightbox

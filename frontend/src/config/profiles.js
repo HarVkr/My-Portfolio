@@ -34,7 +34,6 @@ export const PROFILES = [
       "The complete story. The person behind the projects, ideas and ambitions.",
     heroIntro:
       "A curious mind exploring technology, creativity and everything in between.",
-    // TODO(portrait): drop the final portrait at public/portrait.jpg and set portrait: "/portrait.jpg"
     portrait: null,
   },
   {
@@ -45,7 +44,6 @@ export const PROFILES = [
       "Experience, education, skills, achievements and career highlights.",
     heroIntro:
       "An aspiring product professional with an engineering foundation, hands-on projects and a passion for building useful experiences.",
-    // TODO(portrait): drop the final portrait at public/portrait.jpg and set portrait: "/portrait.jpg"
     portrait: null,
   },
   {
@@ -56,7 +54,6 @@ export const PROFILES = [
       "Product thinking, engineering, projects, technology and the creative side.",
     heroIntro:
       "Exploring product thinking, software engineering and creative problem-solving through hands-on work.",
-    // TODO(portrait): drop the final portrait at public/portrait.jpg and set portrait: "/portrait.jpg"
     portrait: null,
   },
 ];

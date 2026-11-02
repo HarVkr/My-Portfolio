@@ -8,8 +8,10 @@
   flex-direction: column;
   justify-content: center;
   padding: 90px 40px 80px;
-  overflow: hidden;
-  background: var(--bg-primary, #090909);
+  /* the travelling beam must escape this section and slide behind the
+     neighbours — no clipping, no opaque floor (the canvas is #090909) */
+  overflow: visible;
+  background: transparent;
 }
 
 .tk-section::before {
@@ -81,7 +83,8 @@
   max-width: 1560px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 390px 1fr;
+  grid-template-columns: 360px 1fr;
+  column-gap: 44px;
   align-items: start;
 }
 
@@ -89,35 +92,98 @@
 .tk-beam-wrap {
   position: absolute;
   inset: 0;
-  left: 302px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tk-veil-wrap {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
   z-index: 2;
+}
+
+.tk-motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
 }
 
 .tk-beam {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.3s ease, filter 1.3s ease;
+  /* slow lamp warm-up — the light eases out of the glass */
+  transition: opacity 2.8s cubic-bezier(0.3, 0, 0.55, 1), filter 1.6s ease;
 }
 
-.tk-beam--core {
+/* the travelling wedge — the FULL "<": it leaves the stage, crosses the
+   section boundary and rides BEHIND Your Next Watch above and Filmography
+   below (z-index -1 in the root context, under every section's content).
+   FRAGILE: this only paints if NOTHING between this element and <html>
+   creates a stacking context or clips — keep .tk-section overflow visible,
+   its background transparent, and never add transform/filter/z-index or an
+   opaque background to #root or the page wrapper.
+   Neighbour sections keep transparent floors so the throw stays visible;
+   their cards simply sit forward of it. */
+.tk-beam--escape {
+  top: -1600px;
+  bottom: -2200px;
+  left: 0;
+  right: 0;
+  z-index: -1;
   background: linear-gradient(90deg,
-    rgba(255, 246, 231, 0.34) 0%,
-    rgba(255, 246, 231, 0.13) 45%,
-    rgba(255, 246, 231, 0.05) 78%,
-    rgba(255, 246, 231, 0.03) 100%);
-  clip-path: polygon(0 112px, 100% 0%, 100% 100%, 0 258px);
-  filter: blur(9px);
+    rgba(255, 236, 200, 0.09) 0%,
+    rgba(255, 236, 200, 0.055) 45%,
+    rgba(255, 236, 200, 0.042) 78%,
+    rgba(255, 236, 200, 0.03) 100%);
+  clip-path: var(--beam-escape-poly, polygon(240px 1900px, 150% -400px, 150% 4400px));
+  filter: blur(30px);
+  transition: opacity 2.4s cubic-bezier(0.3, 0, 0.55, 1);
 }
 
-.tk-beam--halo {
+.tk-section.tk-on .tk-beam--escape {
+  opacity: 1;
+}
+
+/* The pool glows UNDER the light table (behind the sheet) — it illuminates
+   the scene without lifting the frames off their deep blacks. */
+.tk-beam--pool {
   background: linear-gradient(90deg,
-    rgba(255, 246, 231, 0.17) 0%,
-    rgba(255, 246, 231, 0.055) 60%,
-    transparent 100%);
-  clip-path: polygon(0 52px, 100% 0%, 100% 100%, 0 318px);
-  filter: blur(26px);
+    rgba(255, 241, 214, 0.3) 0%,
+    rgba(255, 241, 214, 0.12) 45%,
+    rgba(255, 241, 214, 0.05) 80%,
+    rgba(255, 241, 214, 0.03) 100%);
+  clip-path: var(--beam-pool-poly, polygon(-2px 180px, 30% 60px, 100% 0px, 100% 100%, 30% 100%));
+  filter: blur(32px);
+}
+
+/* the whisper above: just enough atmosphere to feel projected */
+.tk-beam--veil {
+  background: linear-gradient(90deg,
+    rgba(255, 241, 214, 0.052) 0%,
+    rgba(255, 241, 214, 0.02) 55%,
+    rgba(255, 241, 214, 0.008) 100%);
+  clip-path: var(--beam-veil-poly, polygon(-2px 180px, 30% 50px, 100% -40px, 100% 100%, 30% 100%));
+  filter: blur(46px);
+}
+
+/* projector light flicker — a barely-there stutter like real carbon-arc light */
+@keyframes tk-flicker {
+  0%, 100% { opacity: 1; }
+  7% { opacity: 0.955; }
+  9% { opacity: 1; }
+  41% { opacity: 1; }
+  43% { opacity: 0.97; }
+  45% { opacity: 1; }
+  77% { opacity: 0.985; }
+  79% { opacity: 1; }
+}
+
+.tk-stage.is-lit .tk-beam--pool,
+.tk-stage.is-lit .tk-beam--veil {
+  animation: tk-flicker 4.2s steps(1) infinite;
 }
 
 /* diffuse screen glow: the lit sheet itself glows like a real projection
@@ -138,7 +204,7 @@
   opacity: 1;
 }
 
-.tk-stage.is-expanded .tk-beam--core {
+.tk-stage.is-expanded .tk-beam--pool {
   filter: blur(7px);
 }
 
@@ -174,7 +240,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 4px;
+  /* drops the lens to the sheet's vertical centre so the beam fans out
+     into a proper symmetric V */
+  padding-top: 146px;
 }
 
 .tk-camera {
@@ -198,11 +266,15 @@
 }
 
 .tk-camera.is-on .tk-camera-glow {
-  opacity: 1;
+  opacity: 0.35;
 }
 
 .tk-lens {
   transition: stroke 0.6s ease, filter 0.6s ease;
+}
+
+.tk-lens-core {
+  transition: fill 1.8s ease;
 }
 
 .tk-camera.is-on .tk-lens {
@@ -211,7 +283,11 @@
 }
 
 .tk-camera.is-on .tk-lens-core {
-  fill: rgba(255, 246, 231, 0.85);
+  fill: url(#tkg-hot);
+}
+
+.tk-camera.is-on .tk-lamp {
+  opacity: 1;
 }
 
 .tk-reel,
@@ -314,25 +390,39 @@
 .tk-sheet-area {
   position: relative;
   z-index: 1;
-  padding: 22px 0 0 6px;
+  padding: 8px 0 8px 0;
   min-width: 0;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transform: translateY(56px);
 }
 
 .tk-sheet {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 18px;
+  gap: 16px;
+  width: 100%;
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: 18px;
   background: rgba(23, 23, 25, 0.32);
   border: 1px solid rgba(231, 226, 223, 0.07);
   border-radius: 6px;
-  padding: 22px;
-  transition: background 1.2s ease, border-color 1.2s ease, box-shadow 1.2s ease;
+  padding: 18px;
+  transition: background 2.4s ease, border-color 2.4s ease, box-shadow 2.4s ease;
 }
 
 .tk-stage.is-lit .tk-sheet {
-  background: rgba(23, 23, 25, 0.5);
-  border-color: rgba(231, 226, 223, 0.1);
-  box-shadow: inset 0 0 80px rgba(255, 246, 231, 0.02);
+  background: rgba(23, 23, 25, 0.18);
+  border-color: rgba(255, 241, 214, 0.12);
+  box-shadow: inset 0 0 80px rgba(255, 241, 214, 0.028);
+}
+
+/* light kisses the top edge of each frame — the sheet is lit, not veiled */
+.tk-stage.is-lit .tk-card-face {
+  box-shadow: inset 0 1px 0 rgba(255, 241, 214, 0.05);
 }
 
 .tk-card {
@@ -378,8 +468,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 5px 10px;
+  gap: 8px;
+  padding: 4px 9px;
   background: rgba(0, 0, 0, 0.55);
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
   flex-shrink: 0;
@@ -391,8 +481,8 @@
 }
 
 .tk-perfs span {
-  width: 9px;
-  height: 6px;
+  width: 7px;
+  height: 5px;
   border-radius: 1.5px;
   background: #16161b;
   border: 1px solid #26262c;
@@ -404,8 +494,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 152px;
-  padding: 16px 22px;
+  min-height: 126px;
+  padding: 14px 20px;
   position: relative;
   background: linear-gradient(150deg,
     rgba(14, 14, 17, 1) 0%,
@@ -415,27 +505,27 @@
 
 .tk-card-num {
   font-family: 'Courier New', monospace;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
   color: var(--accent-primary, #b51f32);
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 }
 
 .tk-card-title {
   font-family: 'Clash Display', sans-serif;
-  font-size: clamp(18px, 1.75vw, 24px);
+  font-size: clamp(16px, 1.2vw, 19.5px);
   font-weight: 600;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   color: var(--text-primary, #e7e2df);
   text-transform: uppercase;
-  line-height: 1.2;
-  margin-bottom: 8px;
+  line-height: 1.25;
+  margin-bottom: 7px;
 }
 
 .tk-card-tagline {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px;
+  font-size: 12px;
   color: var(--text-secondary, #a7a2a0);
   line-height: 1.5;
 }
@@ -747,56 +837,132 @@
 .tk-lang-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 12px;
-  margin-top: 6px;
+  gap: 7px 8px;
+  margin-top: 5px;
 }
 
 .tk-lang-chip {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
   font-family: 'Clash Display', sans-serif;
-  font-size: 15px;
+  font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   color: var(--text-primary, #e7e2df);
   border: 1px solid rgba(231, 226, 223, 0.14);
   border-radius: 3px;
-  padding: 8px 14px;
+  padding: 5px 10px;
   background: rgba(255, 255, 255, 0.02);
 }
 
 .tk-lang-chip .tk-strip-icon {
-  width: 16px;
-  height: 16px;
+  width: 13px;
+  height: 13px;
+}
+
+/* ---------- projector life: lamp, halo, sound chip ---------- */
+@keyframes tk-lamp-blink {
+  0%, 62% { opacity: 1; }
+  64%, 100% { opacity: 0.18; }
+}
+
+.tk-lamp {
+  transition: opacity 0.4s ease;
+}
+
+.tk-stage.is-lit .tk-lamp {
+  animation: tk-lamp-blink 1.7s steps(1) infinite;
+}
+
+@keyframes tk-halo-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+.tk-lens-halo {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.9s ease;
+}
+
+.tk-stage.is-lit .tk-lens-halo {
+  animation: tk-halo-breathe 3.2s ease-in-out infinite;
+}
+
+/* sound on/off chip — shares state with the Your Next Watch chip */
+.tk-header {
+  position: relative;
+}
+
+.tk-sound-chip {
+  position: absolute;
+  top: 12px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(231, 226, 223, 0.75);
+  background: rgba(23, 23, 25, 0.6);
+  border: 1px solid rgba(231, 226, 223, 0.14);
+  border-radius: 999px;
+  padding: 9px 16px;
+  transition: border-color 0.3s ease, color 0.3s ease;
+  z-index: 2;
+}
+
+.tk-sound-chip:hover {
+  border-color: rgba(211, 59, 76, 0.55);
+  color: #ffffff;
+}
+
+.tk-sound-chip.is-on {
+  color: var(--accent-light, #d33b4c);
+  border-color: rgba(211, 59, 76, 0.45);
+}
+
+.tk-sound-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 1024px) {
+  .tk-sound-chip { position: static; margin-bottom: 14px; align-self: flex-start; }
 }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1024px) {
   .tk-stage {
-    grid-template-columns: 330px 1fr;
+    grid-template-columns: 300px 1fr;
+    column-gap: 30px;
   }
-  .tk-beam-wrap {
-    left: 262px;
+  .tk-camera-col { padding-top: 106px; }
+  .tk-sheet-area {
+    min-height: 560px;
+    transform: translateY(42px);
   }
-  .tk-beam--core {
-    clip-path: polygon(0 128px, 100% 0%, 100% 100%, 0 226px);
-  }
-  .tk-beam--halo {
-    clip-path: polygon(0 80px, 100% 0%, 100% 100%, 0 280px);
-  }
+  .tk-sheet { max-width: none; margin-right: 4px; }
 }
 
 @media (max-width: 860px) {
   .tk-section {
-    padding: 60px 18px 56px;
-  }
+    padding: 60px 18px 56px;  }
   .tk-stage {
     grid-template-columns: 1fr;
     gap: 8px;
   }
   .tk-camera-col {
     order: -1;
+    padding-top: 0;
+  }
+  .tk-sheet-area {
+    transform: none;
   }
   .tk-camera {
     width: 252px;
@@ -804,18 +970,18 @@
   .tk-beam-wrap {
     left: 0;
   }
-  .tk-beam--core {
+  .tk-beam--pool {
     clip-path: polygon(45% 402px, 55% 402px, 100% 100%, 0 100%);
     background: linear-gradient(180deg,
-      rgba(255, 246, 231, 0.3) 0%,
-      rgba(255, 246, 231, 0.1) 45%,
-      rgba(255, 246, 231, 0.04) 100%);
+      rgba(255, 241, 214, 0.24) 0%,
+      rgba(255, 241, 214, 0.09) 45%,
+      rgba(255, 241, 214, 0.035) 100%);
   }
-  .tk-beam--halo {
+  .tk-beam--veil {
     clip-path: polygon(40% 402px, 60% 402px, 100% 100%, 0 100%);
     background: linear-gradient(180deg,
-      rgba(255, 246, 231, 0.13) 0%,
-      rgba(255, 246, 231, 0.04) 60%,
+      rgba(255, 241, 214, 0.05) 0%,
+      rgba(255, 241, 214, 0.016) 60%,
       transparent 100%);
   }
   .tk-sheet {
@@ -835,4 +1001,18 @@
   .tk-camera-tag {
     display: none;
   }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .tk-reel,
+  .tk-crank,
+  .tk-lamp,
+  .tk-lens-halo,
+  .tk-beam--core,
+  .tk-beam--halo,
+  .tk-motes span {
+    animation: none !important;
+  }
+  .tk-lamp { opacity: 1 !important; }
 }

@@ -24,7 +24,7 @@
   justify-content: center;
   padding: 60px 40px 70px;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: transparent;
 }
 
 /* Atmospheric crimson ambient glow behind the section */
@@ -57,8 +57,9 @@
 /* ─── Section Header ─── */
 .ynw-header {
   text-align: left;
-  margin-bottom: 44px;
+  margin-bottom: 72px;
   padding-left: 4px;
+  position: relative;
 }
 
 .ynw-header h2 {
@@ -70,6 +71,50 @@
   line-height: 1.1;
   text-transform: uppercase;
   margin-bottom: 8px;
+}
+
+.ynw-accent {
+  color: var(--accent-primary, #b51f32);
+}
+
+/* sound on/off chip — one switch for the whole section */
+.ynw-sound-chip {
+  position: absolute;
+  top: 14px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(231, 226, 223, 0.75);
+  background: rgba(23, 23, 25, 0.6);
+  border: 1px solid rgba(231, 226, 223, 0.14);
+  border-radius: 999px;
+  padding: 9px 16px;
+  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ynw-sound-chip:hover {
+  border-color: rgba(211, 59, 76, 0.55);
+  color: #ffffff;
+}
+
+.ynw-sound-chip.is-on {
+  color: var(--accent-light, #d33b4c);
+  border-color: rgba(211, 59, 76, 0.45);
+}
+
+.ynw-sound-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 900px) {
+  .ynw-sound-chip { position: static; margin-top: 18px; align-self: flex-start; }
 }
 
 .ynw-header .ynw-subtitle {
@@ -90,7 +135,7 @@
 
 .ynw-reel {
   flex: 1;
-  max-width: 640px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -103,7 +148,7 @@
 .ynw-viewport {
   position: relative;
   width: 100%;
-  height: 330px;
+  height: 390px;
   perspective: 900px;
   perspective-origin: 50% 42%;
   overflow: visible;
@@ -118,76 +163,6 @@
   cursor: grabbing !important;
 }
 
-.ynw-roll-top {
-  position: absolute;
-  top: -22px;
-  left: 3%;
-  right: 3%;
-  height: 40px;
-  z-index: 6;
-  pointer-events: none;
-}
-
-.ynw-roll-top::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background: linear-gradient(180deg,
-    #212126 0%,
-    #18181b 36%,
-    rgba(23, 23, 25, 0.5) 72%,
-    transparent 100%
-  );
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  border-top: 1.5px solid #3c3c43;
-  border-left: 1px solid rgba(60, 60, 67, 0.4);
-  border-right: 1px solid rgba(60, 60, 67, 0.4);
-}
-
-.ynw-roll-top::after {
-  content: '';
-  position: absolute;
-  bottom: 6px;
-  left: 15%;
-  right: 15%;
-  height: 60%;
-  background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.015) 50%,
-    transparent 100%
-  );
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-}
-
-.ynw-roll-bottom {
-  position: absolute;
-  bottom: -12px;
-  left: 6%;
-  right: 6%;
-  height: 20px;
-  z-index: 6;
-  pointer-events: none;
-}
-
-.ynw-roll-bottom::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background: linear-gradient(0deg,
-    rgba(12, 12, 14, 0.95) 0%,
-    rgba(23, 23, 25, 0.3) 60%,
-    transparent 100%
-  );
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
-  border-bottom: 1.2px solid rgba(48, 48, 54, 0.6);
-}
-
 .ynw-scene {
   width: 100%;
   height: 100%;
@@ -197,41 +172,69 @@
 }
 
 .ynw-scene.is-transitioning {
-  transition: transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* transforms are driven by the reel physics loop — no CSS transitions */
 }
 
 /* ================================================================
-   FILM FRAME (35mm realistic strip)
+   FILM FRAME — a grouping node holding the curved facets of one
+   frame of the continuous 35mm band. Slices carry the 3D placement;
+   shading is a per-facet overlay driven by the physics loop.
    ================================================================ */
 .ynw-frame {
   position: absolute;
-  width: 82%;
-  height: 290px;
-  left: 9%;
+  left: 0;
+  right: 0;
+  height: 350px;
   top: 20px;
-  backface-visibility: hidden;
-  transition: opacity 0.75s ease, filter 0.75s ease;
-  will-change: opacity, filter;
+  transform-style: preserve-3d;
   cursor: pointer;
 }
 
 .ynw-frame.is-active {
-  opacity: 1;
-  filter: brightness(1);
   z-index: 5;
 }
 
-.ynw-frame.is-adjacent {
-  opacity: 0.42;
-  filter: brightness(0.48);
-  cursor: pointer;
-  z-index: 3;
+/* invisible flat panel at the frame's ring position — the expansion
+   FLIP reads its projected rect (a group's bbox spans the whole ring) */
+.ynw-frame-probe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 82%;
+  margin-left: -41%;
+  visibility: hidden;
+  pointer-events: none;
+  backface-visibility: hidden;
 }
 
-.ynw-frame.is-hidden {
+.ynw-slice {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 50%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.ynw-slice-window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ynw-slice-shade {
+  position: absolute;
+  inset: -1px;
+  background: #050506;
   opacity: 0;
   pointer-events: none;
-  z-index: 1;
+}
+
+.ynw-frame.is-concealed .ynw-slice {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: none !important;
 }
 
 .ynw-strip {
@@ -281,6 +284,13 @@
 .ynw-perfs.ynw-perfs--bottom {
   border-bottom: none;
   border-top: 1px solid rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.72);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.025);
+}
+
+.ynw-perfs.ynw-perfs--bottom .ynw-perf {
+  background: #222229;
+  border-color: #3a3a43;
 }
 
 .ynw-perf {
@@ -299,7 +309,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px 32px;
+  padding: 20px 36px;
   position: relative;
   background: linear-gradient(145deg,
     rgba(12, 12, 14, 1) 0%,
@@ -329,14 +339,14 @@
 
 .ynw-tag {
   font-family: 'DM Sans', sans-serif;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--accent-primary);
   background: rgba(181, 31, 50, 0.1);
   border: 1px solid rgba(181, 31, 50, 0.22);
-  padding: 3px 14px;
+  padding: 4px 16px;
   border-radius: 2px;
   margin-bottom: 12px;
   transition: all 0.3s ease;
@@ -349,7 +359,7 @@
 
 .ynw-title {
   font-family: 'Clash Display', sans-serif;
-  font-size: clamp(28px, 3.2vw, 38px);
+  font-size: clamp(32px, 3.5vw, 44px);
   font-weight: 700;
   color: var(--text-primary);
   text-align: center;
@@ -361,11 +371,11 @@
 
 .ynw-desc {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--text-secondary);
   text-align: center;
   line-height: 1.55;
-  max-width: 360px;
+  max-width: 420px;
   font-weight: 400;
 }
 
@@ -504,13 +514,7 @@
 
 /* Film grain overlay on the viewport */
 .ynw-viewport::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.022;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  z-index: 10;
+  display: none;
 }
 
 @keyframes ynw-fadeUp {
@@ -542,8 +546,8 @@
    ================================================================ */
 @media (max-width: 1050px) {
   .ynw-reels { gap: 28px; }
-  .ynw-viewport { height: 330px; }
-  .ynw-frame { height: 288px; }
+  .ynw-viewport { height: 370px; }
+  .ynw-frame { height: 330px; }
 }
 
 @media (max-width: 900px) {
@@ -560,7 +564,8 @@
 @media (max-width: 540px) {
   .ynw-section { padding: 40px 18px 40px; }
   .ynw-viewport { height: 295px; perspective: 800px; }
-  .ynw-frame { height: 254px; width: 90%; left: 5%; }
+  .ynw-frame { height: 254px; }
+  .ynw-frame-probe { width: 90%; margin-left: -45%; }
   .ynw-title { font-size: 24px; }
   .ynw-desc { font-size: 12px; }
   .ynw-content { padding: 12px 18px; }

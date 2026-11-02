@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { createFilmExperience } from "./filmEngine";
+import { reelSound } from "./ynwSound";
 import { DEFAULT_REELS } from "./defaultCatalog";
 import "./ynw.css";
 import "./caseStudies/emflow.js";
@@ -15,6 +16,18 @@ export default function YourNextWatch() {
   const cleanupRef = useRef(null);
   const inView = useInView(rootRef, { once: true, amount: 0.15 });
   const [reels, setReels] = useState(null);
+  const [soundOn, setSoundOn] = useState(() => reelSound.isEnabled());
+
+  const toggleSound = () => {
+    const next = reelSound.setEnabled(!soundOn);
+    setSoundOn(next);
+    try {
+      window.dispatchEvent(new CustomEvent("ynw-sound-changed", { detail: { on: next } }));
+    } catch (e) {
+      /* older browsers — the chip still works, just no cross-sync */
+    }
+    if (next) reelSound.blip();
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -34,8 +47,11 @@ export default function YourNextWatch() {
   }, []);
 
   useEffect(() => {
-    if (!inView || !reels || !rootRef.current) return;
-    cleanupRef.current = createFilmExperience(rootRef.current, reels);
+    if (!inView || !rootRef.current) return;
+    cleanupRef.current = createFilmExperience(
+      rootRef.current,
+      reels || DEFAULT_REELS,
+    );
     return () => {
       if (cleanupRef.current) cleanupRef.current();
       cleanupRef.current = null;
@@ -53,8 +69,25 @@ export default function YourNextWatch() {
     >
       <div className="ynw-container">
         <header className="ynw-header">
-          <h2>YOUR NEXT WATCH</h2>
+          <h2>
+            YOUR NEXT WATCH<span className="ynw-accent">.</span>
+          </h2>
           <p className="ynw-subtitle">Rotate the reels to explore projects.</p>
+          <button
+            type="button"
+            className={`ynw-sound-chip${soundOn ? " is-on" : ""}`}
+            data-testid="ynw-sound-toggle"
+            data-cursor-hover
+            aria-pressed={soundOn}
+            onClick={toggleSound}
+          >
+            {soundOn ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
+            )}
+            <span>Sound {soundOn ? "On" : "Off"}</span>
+          </button>
         </header>
 
         <div className="ynw-reels">
@@ -66,9 +99,7 @@ export default function YourNextWatch() {
               data-testid={`ynw-reel-${reel.key}`}
             >
               <div className="ynw-viewport" data-cursor-hover>
-                <div className="ynw-roll-top" />
                 <div className="ynw-scene is-transitioning" />
-                <div className="ynw-roll-bottom" />
               </div>
 
               <div className="ynw-nav">
