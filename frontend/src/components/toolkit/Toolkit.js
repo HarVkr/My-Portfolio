@@ -122,12 +122,22 @@ export default function Toolkit() {
     };
 
     update();
-    window.addEventListener("resize", update);
-    const ro = new ResizeObserver(update);
-    if (sheetRef.current) ro.observe(sheetRef.current);
+
+    let rafId = null;
+    const scheduleUpdate = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
+    };
+
+    window.addEventListener("resize", scheduleUpdate);
+
+    // Update light fan cleanly after card expand / collapse completes without mid-animation thrashing
+    const timer = setTimeout(update, 460);
+
     return () => {
-      window.removeEventListener("resize", update);
-      ro.disconnect();
+      window.removeEventListener("resize", scheduleUpdate);
+      if (rafId) cancelAnimationFrame(rafId);
+      clearTimeout(timer);
     };
   }, [isOn, expandedSection, data]);
 
@@ -235,8 +245,7 @@ export default function Toolkit() {
               const isExpanded = expandedSection && expandedSection.order === section.order;
               const isDimmed = expandedSection && !isExpanded;
               return (
-                <motion.article
-                  layout={reduce ? false : "position"}
+                <article
                   key={section.order}
                   className={`tk-card${isExpanded ? " is-expanded" : ""}${
                     isDimmed ? " is-dimmed" : ""
@@ -358,7 +367,7 @@ export default function Toolkit() {
                     </div>
                   </div>
                   <Perfs bottom />
-                </motion.article>
+                </article>
               );
             })}
 

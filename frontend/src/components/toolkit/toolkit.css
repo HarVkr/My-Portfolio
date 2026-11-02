@@ -543,15 +543,16 @@
 
 .tk-card.is-dimmed {
   opacity: 0.18 !important;
-  filter: brightness(0.4) !important;
   pointer-events: none;
   transform: none;
+  transition: opacity 0.35s ease;
 }
 
 .tk-card-details {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  contain: layout style;
 }
 
 .tk-card.is-expanded .tk-card-details {
@@ -562,7 +563,7 @@
   min-height: 0;
   overflow: hidden;
   opacity: 0;
-  transition: opacity 0.55s ease 0.1s;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
   padding: 0 22px;
 }
 
@@ -713,7 +714,7 @@
 }
 
 .tk-card.is-expanded .tk-filmstrip-track {
-  animation: tk-strip-run 26s linear infinite;
+  animation: tk-strip-run 26s linear infinite 0.45s;
 }
 
 .tk-filmstrip:hover .tk-filmstrip-track {
