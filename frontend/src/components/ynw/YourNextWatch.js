@@ -8,6 +8,7 @@ import "./caseStudies/emflow.js";
 import "./caseStudies/swiggy.js";
 import "./caseStudies/revifyPrd.js";
 import "./caseStudies/rag.js";
+import "./caseStudies/bharatsaathi.js";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL || "";
 
@@ -48,31 +49,44 @@ export default function YourNextWatch() {
 
   useEffect(() => {
     if (!inView || !rootRef.current) return;
-    cleanupRef.current = createFilmExperience(
-      rootRef.current,
-      reels || DEFAULT_REELS,
-    );
-    return () => {
-      if (cleanupRef.current) cleanupRef.current();
+    if (cleanupRef.current) {
+      cleanupRef.current();
       cleanupRef.current = null;
+    }
+
+    const initialData = reels || DEFAULT_REELS;
+    cleanupRef.current = createFilmExperience({
+      root: rootRef.current,
+      reelsData: initialData,
+    });
+
+    return () => {
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
+      }
     };
   }, [inView, reels]);
 
+  const soundLabel = soundOn ? "Sound On" : "Sound Off";
   const shown = reels || DEFAULT_REELS;
 
   return (
     <section
       ref={rootRef}
-      className={`ynw-section${inView ? " is-inview" : ""}`}
       id="your-next-watch"
       data-testid="ynw-section"
+      className="ynw-section"
     >
       <div className="ynw-container">
         <header className="ynw-header">
-          <h2>
-            YOUR NEXT WATCH<span className="ynw-accent">.</span>
-          </h2>
-          <p className="ynw-subtitle">Rotate the reels to explore projects.</p>
+          <p className="ynw-eyebrow">Interactive Portfolio Cinema</p>
+          <h2>YOUR NEXT WATCH</h2>
+          <p className="ynw-subtitle">
+            Two reels. Six projects. Drag, scroll or use arrow keys to rotate
+            the cylinders. Click any frame to inspect the deep-dive.
+          </p>
+
           <button
             type="button"
             className={`ynw-sound-chip${soundOn ? " is-on" : ""}`}
@@ -82,11 +96,35 @@ export default function YourNextWatch() {
             onClick={toggleSound}
           >
             {soundOn ? (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
             ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
             )}
-            <span>Sound {soundOn ? "On" : "Off"}</span>
+            <span>{soundLabel}</span>
           </button>
         </header>
 

@@ -6,6 +6,7 @@ import "./caseStudies/emflow.js";
 import "./caseStudies/swiggy.js";
 import "./caseStudies/revifyPrd.js";
 import "./caseStudies/rag.js";
+import "./caseStudies/bharatsaathi.js";
 import { reelSound } from "./ynwSound";
 
 // ── 35mm curved-band geometry ──
@@ -27,7 +28,24 @@ function perfsHTML(isBottom) {
   return '<div class="ynw-perfs ' + (isBottom ? "ynw-perfs--bottom" : "") + '">' + h + "</div>";
 }
 
-export function createFilmExperience(root, reelsData) {
+export function createFilmExperience(rootOrConfig, maybeReelsData) {
+  let root = rootOrConfig;
+  let reelsData = maybeReelsData;
+
+  // Support both createFilmExperience(root, reelsData) and createFilmExperience({ root, reelsData })
+  if (rootOrConfig && typeof rootOrConfig === 'object' && !rootOrConfig.nodeType) {
+    root = rootOrConfig.root;
+    reelsData = rootOrConfig.reelsData !== undefined ? rootOrConfig.reelsData : maybeReelsData;
+  }
+
+  if (!root || typeof root.querySelector !== 'function') {
+    return () => {};
+  }
+
+  if (!Array.isArray(reelsData)) {
+    reelsData = [];
+  }
+
   const reelsByKey = {};
   const cleanups = [];
   let isDetailActive = false;
@@ -318,6 +336,7 @@ export function createFilmExperience(root, reelsData) {
     if (renderer === "swiggy" && window.getSwiggyDetailHTML) return window.getSwiggyDetailHTML(reel, index, itemData);
     if (renderer === "revify-prd" && window.getRevifyPrdDetailHTML) return window.getRevifyPrdDetailHTML(reel, index, itemData);
     if (renderer === "rag" && window.getRagDetailHTML) return window.getRagDetailHTML(reel, index, itemData);
+    if (renderer === "bharatsaathi" && window.getBharatSaathiDetailHTML) return window.getBharatSaathiDetailHTML(reel, index, itemData);
     return buildTitleCardHTML(reel, itemData);
   }
 
@@ -432,6 +451,7 @@ export function createFilmExperience(root, reelsData) {
       if (renderer === "swiggy" && window.initSwiggyBindings) window.initSwiggyBindings(portal, reel, openFilmDetail, reel.data, closeFilmDetail);
       if (renderer === "revify-prd" && window.initRevifyPrdBindings) window.initRevifyPrdBindings(portal, reel, openFilmDetail, reel.data, closeFilmDetail);
       if (renderer === "rag" && window.initRagBindings) window.initRagBindings(portal, reel, openFilmDetail, reel.data, closeFilmDetail);
+      if (renderer === "bharatsaathi" && window.initBharatSaathiBindings) window.initBharatSaathiBindings(portal, reel, openFilmDetail, reel.data, closeFilmDetail);
 
       // Showcase tabs (Revify interactive canvas)
       const tabs = portal.querySelectorAll(".ynw-showcase-tab");
@@ -553,8 +573,8 @@ export function createFilmExperience(root, reelsData) {
     buildBand() {
       const self = this;
       const g = (this.geometry = this.measure());
-      this.scene.innerHTML = "";
-      this.dotsEl.innerHTML = "";
+      if (this.scene) this.scene.innerHTML = "";
+      if (this.dotsEl) this.dotsEl.innerHTML = "";
       this.sliceRefs = [];
 
       this.data.forEach((item, i) => {
@@ -617,12 +637,14 @@ export function createFilmExperience(root, reelsData) {
         self.scene.appendChild(frame);
       });
 
-      for (let i = 0; i < this.total; i++) {
-        const dot = document.createElement("div");
-        dot.className = "ynw-dot" + (i === this.current ? " is-active" : "");
-        dot.setAttribute("data-testid", "ynw-dot-" + this.reelKey + "-" + i);
-        dot.addEventListener("click", () => self.goTo(i));
-        this.dotsEl.appendChild(dot);
+      if (this.dotsEl) {
+        for (let i = 0; i < this.total; i++) {
+          const dot = document.createElement("div");
+          dot.className = "ynw-dot" + (i === this.current ? " is-active" : "");
+          dot.setAttribute("data-testid", "ynw-dot-" + this.reelKey + "-" + i);
+          dot.addEventListener("click", () => self.goTo(i));
+          this.dotsEl.appendChild(dot);
+        }
       }
     }
 
@@ -754,7 +776,7 @@ export function createFilmExperience(root, reelsData) {
 
     init() {
       const self = this;
-      this.totEl.textContent = pad(this.total);
+      if (this.totEl) this.totEl.textContent = pad(this.total);
 
       this.buildBand();
 
@@ -923,14 +945,20 @@ export function createFilmExperience(root, reelsData) {
 
     updateClasses() {
       const self = this;
-      this.scene.querySelectorAll(".ynw-frame").forEach((f, i) => {
-        f.classList.toggle("is-active", i === self.current);
-      });
-      this.dotsEl.querySelectorAll(".ynw-dot").forEach((d, i) => {
-        d.classList.toggle("is-active", i === self.current);
-      });
-      this.curEl.textContent = pad(this.current + 1);
-      this.nameEl.textContent = this.data[this.current].title.replace("\n", " ");
+      if (this.scene) {
+        this.scene.querySelectorAll(".ynw-frame").forEach((f, i) => {
+          f.classList.toggle("is-active", i === self.current);
+        });
+      }
+      if (this.dotsEl) {
+        this.dotsEl.querySelectorAll(".ynw-dot").forEach((d, i) => {
+          d.classList.toggle("is-active", i === self.current);
+        });
+      }
+      if (this.curEl) this.curEl.textContent = pad(this.current + 1);
+      if (this.nameEl && this.data && this.data[this.current]) {
+        this.nameEl.textContent = this.data[this.current].title.replace("\n", " ");
+      }
     }
   }
 
@@ -938,15 +966,42 @@ export function createFilmExperience(root, reelsData) {
   reelsData.forEach((reelDef) => {
     const el = root.querySelector('.ynw-reel[data-reel="' + reelDef.key + '"]');
     if (!el) return;
+
+    // Self-scaffold inner DOM if the host element is missing children
+    if (!el.querySelector(".ynw-viewport")) {
+      el.innerHTML =
+        '<div class="ynw-viewport" data-cursor-hover>' +
+        '<div class="ynw-scene is-transitioning"></div>' +
+        '</div>' +
+        '<div class="ynw-nav">' +
+        '<button type="button" class="ynw-arrow" data-dir="prev" aria-label="Previous frame — ' + (reelDef.name || '') + '">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>' +
+        '</button>' +
+        '<div class="ynw-dots"></div>' +
+        '<button type="button" class="ynw-arrow" data-dir="next" aria-label="Next frame — ' + (reelDef.name || '') + '">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>' +
+        '</button>' +
+        '</div>' +
+        '<div class="ynw-counter">' +
+        '<span class="ynw-counter-current">01</span> / ' +
+        '<span data-reel-total>' + String((reelDef.frames || []).length).padStart(2, '0') + '</span> ' +
+        '<span class="ynw-counter-name">' + (reelDef.name || '') + '</span>' +
+        '</div>';
+    }
+
+    const vp = el.querySelector(".ynw-viewport");
+    const scene = el.querySelector(".ynw-scene");
+    if (!vp || !scene) return;
+
     const reel = new FilmReel({
-      viewport: el.querySelector(".ynw-viewport"),
-      scene: el.querySelector(".ynw-scene"),
+      viewport: vp,
+      scene: scene,
       dotsEl: el.querySelector(".ynw-dots"),
       curEl: el.querySelector(".ynw-counter-current"),
       totEl: el.querySelector("[data-reel-total]"),
       nameEl: el.querySelector(".ynw-counter-name"),
       reelEl: el,
-      data: reelDef.frames,
+      data: reelDef.frames || [],
       reelKey: reelDef.key,
     });
     reelsByKey[reelDef.key] = reel;

@@ -9,7 +9,15 @@ import {
 } from "framer-motion";
 import { ArrowLeft, ArrowRight, Download, Eye, FileText, Sparkles } from "lucide-react";
 import { HERO_CONTENT, PROFILES, RESUME_URL } from "@/config/profiles";
-import { FilmGrain, Vignette } from "@/components/Atmosphere";
+import {
+  AnamorphicDivider,
+  CinematicScanlines,
+  FilmGrain,
+  FilmSprocketRails,
+  NetflixVolumetricAurora,
+  ProjectorMotes,
+  Vignette,
+} from "@/components/Atmosphere";
 import PortraitStage from "@/components/PortraitStage";
 import ResumeChooser from "@/components/ResumeChooser";
 import YourNextWatch from "@/components/ynw/YourNextWatch";
@@ -91,10 +99,15 @@ export default function FeaturedHero() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: reduce ? 0.2 : 0.5 } }}
       exit={{ opacity: 0, transition: { duration: 0.35 } }}
-      className="relative min-h-screen overflow-hidden bg-obsidian"
+      className="relative min-h-screen overflow-x-hidden bg-obsidian text-paper"
       data-testid="featured-hero"
     >
+      {/* Cinematic Studio Atmosphere Layer */}
       <FilmGrain />
+      <CinematicScanlines />
+      <NetflixVolumetricAurora />
+      <ProjectorMotes />
+      <FilmSprocketRails />
 
       <div className="relative overflow-hidden">
         <motion.div
@@ -333,12 +346,64 @@ export default function FeaturedHero() {
         <Vignette />
       </div>
 
-      {/* Profile-Curated View Sections */}
-      {isSectionVisible("ynw") && <YourNextWatch />}
-      {isSectionVisible("toolkit") && <Toolkit />}
-      {isSectionVisible("filmography") && <Filmography />}
-      {isSectionVisible("offscript") && <OffScript />}
-      {isSectionVisible("contact") && <ContactFooter />}
+      {/* Profile-Curated View Sections with Anamorphic Cinema Dividers */}
+      {isSectionVisible("ynw") && (
+        <Fragment key="section-ynw">
+          <YourNextWatch />
+          {isSectionVisible("toolkit") && (
+            <AnamorphicDivider
+              reel="REEL 02"
+              tagline="THE HOW BEHIND THE WHAT"
+              label="THE TOOLKIT & CAPABILITIES"
+            />
+          )}
+        </Fragment>
+      )}
+
+      {isSectionVisible("toolkit") && (
+        <Fragment key="section-toolkit">
+          <Toolkit />
+          {isSectionVisible("filmography") && (
+            <AnamorphicDivider
+              reel="REEL 03"
+              tagline="CHRONICLES & EXPERIENCE"
+              label="THE FILMOGRAPHY & THE NEXT CHAPTER"
+            />
+          )}
+          {!isSectionVisible("filmography") && isSectionVisible("offscript") && (
+            <AnamorphicDivider
+              reel="POST-CREDITS"
+              tagline="FOR THE ONES WHO STAYED"
+              label="OFF-SCRIPT // CREATIVE SCENES"
+            />
+          )}
+        </Fragment>
+      )}
+
+      {isSectionVisible("filmography") && (
+        <Fragment key="section-filmography">
+          <Filmography />
+          {isSectionVisible("offscript") && (
+            <AnamorphicDivider
+              reel="POST-CREDITS"
+              tagline="FOR THE ONES WHO STAYED"
+              label="OFF-SCRIPT // SCENES & STILLS"
+            />
+          )}
+        </Fragment>
+      )}
+
+      {isSectionVisible("offscript") && (
+        <Fragment key="section-offscript">
+          <OffScript />
+        </Fragment>
+      )}
+
+      {isSectionVisible("contact") && (
+        <Fragment key="section-contact">
+          <ContactFooter />
+        </Fragment>
+      )}
 
       <ResumeChooser open={resumeOpen} onClose={() => setResumeOpen(false)} />
     </motion.main>

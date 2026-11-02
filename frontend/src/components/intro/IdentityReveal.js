@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Vignette } from "@/components/Atmosphere";
 import { IDENTITY } from "@/config/profiles";
 
@@ -30,7 +30,7 @@ export default function IdentityReveal({ onExplore }) {
 
   return (
     <motion.section
-      className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 text-center"
+      className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 text-center select-none"
       data-testid="identity-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: reduce ? 0.3 : 0.6 } }}
@@ -41,26 +41,51 @@ export default function IdentityReveal({ onExplore }) {
         transition: { duration: 0.55, ease: [0.4, 0, 0.2, 1] },
       }}
     >
-      <h1
-        className="font-display font-bold leading-[1.02] tracking-[-0.015em] text-paper"
-        style={{ fontSize: "clamp(4.25rem, 15vw, 12rem)" }}
-        data-testid="identity-name"
+      {/* Top Cinema Slate Marker */}
+      <motion.p
+        variants={fadeUp}
+        custom={reduce ? 0 : 0.1}
+        initial="hidden"
+        animate="show"
+        className="mb-8 inline-flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.45em] text-crimson-light/90"
       >
-        <span className="inline-flex overflow-hidden pb-[0.06em]">
-          {IDENTITY.name.split("").map((ch, i) => (
-            <motion.span
-              key={i}
-              className="inline-block"
-              variants={letter}
-              custom={i}
-              initial="hidden"
-              animate="show"
-            >
-              {ch}
-            </motion.span>
-          ))}
-        </span>
-      </h1>
+        <span aria-hidden="true" className="h-1 w-1 rounded-full bg-crimson" />
+        Opening Title // Act I
+        <span aria-hidden="true" className="h-1 w-1 rounded-full bg-crimson" />
+      </motion.p>
+
+      {/* Main Title Container with Anamorphic Halo */}
+      <div className="relative">
+        {/* Subtle Anamorphic Glow behind the name */}
+        <motion.div
+          aria-hidden="true"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.6, delay: 0.3 }}
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-44 w-[min(90vw,900px)] rounded-full bg-[radial-gradient(ellipse,rgba(181,31,50,0.24)_0%,rgba(181,31,50,0.06)_50%,transparent_75%)] blur-2xl -z-10"
+        />
+
+        <h1
+          className="font-display font-bold leading-[1.02] tracking-[-0.015em] text-paper drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]"
+          style={{ fontSize: "clamp(4.25rem, 15vw, 12rem)" }}
+          data-testid="identity-name"
+        >
+          <span className="inline-flex overflow-hidden pb-[0.06em]">
+            {IDENTITY.name.split("").map((ch, i) => (
+              <motion.span
+                key={i}
+                className="inline-block"
+                variants={letter}
+                custom={i}
+                initial="hidden"
+                animate="show"
+              >
+                {ch}
+              </motion.span>
+            ))}
+          </span>
+        </h1>
+      </div>
 
       <h2 className="mt-8 overflow-hidden font-display text-[clamp(1.3rem,3vw,2.1rem)] font-medium text-paper/90">
         <motion.span
@@ -110,7 +135,7 @@ export default function IdentityReveal({ onExplore }) {
         animate="show"
         whileHover={reduce ? undefined : { scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="group mt-16 inline-flex items-center gap-4 rounded-sm bg-crimson px-10 py-4 text-[11px] font-semibold uppercase tracking-[0.35em] text-paper transition-[background-color,box-shadow] duration-300 hover:bg-crimson-light hover:shadow-[0_0_48px_rgba(181,31,50,0.4)] sm:px-12"
+        className="group mt-16 inline-flex items-center gap-4 rounded-sm bg-crimson px-10 py-4 text-[11px] font-semibold uppercase tracking-[0.35em] text-paper transition-[background-color,box-shadow] duration-300 hover:bg-crimson-light hover:shadow-[0_0_48px_rgba(181,31,50,0.45)] sm:px-12"
       >
         Explore
         <ArrowRight

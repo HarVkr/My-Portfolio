@@ -23,8 +23,8 @@ FRAMES = [
      "renderer": "emflow",
      "links": {"github": "https://github.com", "live": "https://emflow-app.vercel.app"}},
     {"reel": "a", "order": 4, "tag": "BUILD", "title": "RAG ASSISTANT",
-     "desc": "Enterprise hybrid retrieval-augmented generation engine with semantic reranking.",
-     "renderer": "rag", "links": {"github": "https://github.com"}},
+     "desc": "Retrieval-augmented generation engine with hybrid search, pgvector, and Gemini.",
+     "renderer": "rag", "links": {"github": "https://github.com/HarVkr/jiopay-rag-chatbot"}},
     # REEL B — THE THINKING
     {"reel": "b", "order": 1, "tag": "CHAPTER 02", "title": "THE THINKING",
      "desc": "Product strategy teardowns, market insights and UX.",
@@ -35,9 +35,9 @@ FRAMES = [
     {"reel": "b", "order": 3, "tag": "CASE STUDY", "title": "REVIFY\nPRD",
      "desc": "Product requirements, Akash persona, and weighted sentiment scoring.",
      "renderer": "revify-prd", "links": {}},
-    {"reel": "b", "order": 4, "tag": "CASE STUDY", "title": "RAG\nEVALUATION",
-     "desc": "Systematic retrieval benchmarks and Ragas-framework guardrails.",
-     "renderer": "rag", "links": {}},
+    {"reel": "b", "order": 4, "tag": "HYPERVERGE CASE STUDY", "title": "BHARATSAATHI",
+     "desc": "Simplifying Digital KYC for Bharat using AI — voice-first guidance, offline-friendly hybrid OCR.",
+     "renderer": "bharatsaathi", "links": {"doc": "https://drive.google.com/file/d/18QIjkYB5ZfamfvYVMiEBNywS8D1Vq7Hn/view?usp=sharing"}},
 ]
 
 
@@ -50,8 +50,7 @@ def main():
             {"$set": frame},
             upsert=True,
         )
-    print(f"Seeded {len(FRAMES)} frames -> {db.ynw_frames.count_documents({})} total in {os.environ['DB_NAME']}.ynw_frames")
-    client.close()
+    print(f"Seeded {len(FRAMES)} film frames across 2 reels.")
 
 
 if __name__ == "__main__":

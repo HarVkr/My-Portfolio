@@ -325,6 +325,7 @@ export default function Toolkit() {
                                       <svg
                                         className="tk-strip-icon"
                                         viewBox={icon.vb}
+                                        style={icon.color ? { color: icon.color, fill: icon.color } : undefined}
                                         aria-hidden="true"
                                         dangerouslySetInnerHTML={{ __html: icon.svg }}
                                       />
@@ -381,6 +382,7 @@ export default function Toolkit() {
                           <svg
                             className="tk-strip-icon"
                             viewBox={icon.vb}
+                            style={icon.color ? { color: icon.color, fill: icon.color } : undefined}
                             aria-hidden="true"
                             dangerouslySetInnerHTML={{ __html: icon.svg }}
                           />

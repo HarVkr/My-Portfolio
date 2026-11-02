@@ -1,10 +1,11 @@
 /**
- * RAG ASSISTANT & RAG EVALUATION — Case Study Module
- * Covers:
- * - Reel A Frame #03: RAG ASSISTANT (Enterprise Hybrid Retrieval Engine)
- * - Reel B Frame #03: RAG EVALUATION (Systematic Retrieval Benchmarks & Ragas Framework)
+ * RAG ASSISTANT & RAG EVALUATION - Case Study Module
+ * Handles rich detail modal rendering for:
+ * - Reel A Frame #04: RAG ASSISTANT (Retrieval-Augmented Generation Chatbot)
+ * - Reel B Frame #04: RAG EVALUATION (Systematic Retrieval Benchmarks & Ragas Framework)
  */
-(function() {
+
+(function () {
   'use strict';
 
   function injectStyles() {
@@ -17,7 +18,7 @@
 .rag-shell {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
 }
 
 .rag-pipeline-card {
@@ -26,6 +27,7 @@
   border-radius: 8px;
   padding: 24px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-top: 16px;
 }
 
 .rag-pipeline-header {
@@ -50,8 +52,8 @@
 
 .rag-pipeline-steps {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
   margin-bottom: 24px;
 }
 
@@ -99,7 +101,7 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
   margin: 0;
 }
 
@@ -114,6 +116,12 @@
   display: flex;
   gap: 10px;
   margin-bottom: 16px;
+}
+
+@media (max-width: 640px) {
+  .rag-query-input-row {
+    flex-direction: column;
+  }
 }
 
 .rag-query-input {
@@ -137,12 +145,13 @@
   color: #fff;
   border: none;
   border-radius: 4px;
-  padding: 0 18px;
+  padding: 10px 18px;
   font-family: 'DM Sans', sans-serif;
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
+  white-space: nowrap;
 }
 
 .rag-query-btn:hover {
@@ -158,7 +167,7 @@
   border-radius: 4px;
   padding: 14px;
   line-height: 1.6;
-  max-height: 220px;
+  max-height: 240px;
   overflow-y: auto;
 }
 
@@ -224,6 +233,31 @@
   line-height: 1.6;
   margin: 0;
 }
+
+.rag-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rag-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.rag-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
 `;
 
     var s = document.createElement('style');
@@ -235,133 +269,24 @@
   function getRagDetailHTML(reel, index, itemData) {
     injectStyles();
 
-    var isThinkingReel = reel.reelKey === 'b';
-    var collectionName = isThinkingReel ? 'The Thinking' : 'The Builds';
+    var collectionName = 'The Builds';
     var frameNum = String((reel.current || index) + 1).padStart(2, '0');
 
-    if (isThinkingReel) {
-      // Reel B: RAG EVALUATION (Thinking / Strategy)
+    // Reel A: RAG ASSISTANT (The Builds - Real Project Content)
       return '' +
         '<div class="ynw-detail-container">' +
           '<div class="ynw-detail-bar">' +
-            '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
-              '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-              '<span>Back to Watchlist</span>' +
-              '<span class="ynw-detail-kbd">ESC</span>' +
-            '</button>' +
-            '<div class="ynw-detail-badge">' +
-              '<span class="ynw-detail-dot"></span>' +
-              '<span>' + collectionName + ' // REEL ' + reel.reelKey.toUpperCase() + ' — FRAME #' + frameNum + '</span>' +
+            '<div class="ynw-detail-actions">' +
+              '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+                '<span>Back to Watchlist</span>' +
+                '<span class="ynw-detail-kbd">ESC</span>' +
+              '</button>' +
+              '<a class="ynw-detail-link-btn" href="https://github.com/HarVkr/jiopay-rag-chatbot" target="_blank" rel="noopener noreferrer" title="View Source Code">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>' +
+                '<span>GitHub Repo &nearr;</span>' +
+              '</a>' +
             '</div>' +
-          '</div>' +
-
-          '<div class="ynw-detail-scroll">' +
-            '<div class="ynw-detail-hero">' +
-              '<span class="ynw-detail-hero-tag">EVALUATION FRAMEWORK // AI BENCHMARKING</span>' +
-              '<h1 class="ynw-detail-hero-title">RAG EVALUATION &amp; HALLUCINATION GUARDRAILS</h1>' +
-              '<p class="ynw-detail-hero-desc">Systematic testing methodologies, synthetic test dataset generation, and continuous Ragas metrics for enterprise retrieval-augmented generation systems.</p>' +
-            '</div>' +
-
-            '<div class="rag-shell">' +
-              // Section 1
-              '<div class="ef-section">' +
-                '<div class="ef-section-header">' +
-                  '<span class="ef-section-num">01</span>' +
-                  '<h2 class="ef-section-title">The Evaluation Dilemma in Probabilistic Systems</h2>' +
-                '</div>' +
-                '<p class="ef-prose">Traditional unit testing breaks when testing LLM-powered applications. Given the non-deterministic nature of generative responses and multi-hop retrieval pipelines, manual spot-checking fails to detect subtle regressions, context dilution, or subtle hallucination loops before deployment.</p>' +
-                '<div class="ef-cards-grid">' +
-                  '<div class="ef-card">' +
-                    '<span class="ef-card-tag">FAILURE MODE 01</span>' +
-                    '<h3 class="ef-card-title">Context Dilution</h3>' +
-                    '<p class="ef-card-desc">Retrieving top-k chunks with low signal-to-noise ratio confuses the LLM attention window, increasing answer latency and prompting plausible yet fabricated answers.</p>' +
-                  '</div>' +
-                  '<div class="ef-card">' +
-                    '<span class="ef-card-tag">FAILURE MODE 02</span>' +
-                    '<h3 class="ef-card-title">Silent Factual Drift</h3>' +
-                    '<p class="ef-card-desc">When underlying knowledge bases update, stale semantic embeddings or incorrect chunk boundaries introduce undetected factual contradictions.</p>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-
-              // Section 2
-              '<div class="ef-section">' +
-                '<div class="ef-section-header">' +
-                  '<span class="ef-section-num">02</span>' +
-                  '<h2 class="ef-section-title">The 4-Pillar Ragas Evaluation Framework</h2>' +
-                '</div>' +
-                '<div class="rag-eval-grid">' +
-                  '<div class="rag-eval-card">' +
-                    '<span class="rag-eval-score-pill">97.4%</span>' +
-                    '<h3 class="rag-eval-name">Faithfulness</h3>' +
-                    '<span class="rag-eval-formula">Score = |Claims supported by context| / |Total claims|</span>' +
-                    '<p class="rag-eval-desc">Measures the factual consistency of the generated answer against the retrieved context chunks. A high faithfulness score mathematically guarantees the absence of hallucination.</p>' +
-                  '</div>' +
-                  '<div class="rag-eval-card">' +
-                    '<span class="rag-eval-score-pill">94.8%</span>' +
-                    '<h3 class="rag-eval-name">Answer Relevance</h3>' +
-                    '<span class="rag-eval-formula">Cosine_Sim(Embedding(Q), Embedding(Generated_Q_from_A))</span>' +
-                    '<p class="rag-eval-desc">Assesses whether the response directly addresses the user\'s explicit question or wanders into redundant, evasive, or extraneous narrative.</p>' +
-                  '</div>' +
-                  '<div class="rag-eval-card">' +
-                    '<span class="rag-eval-score-pill">93.2%</span>' +
-                    '<h3 class="rag-eval-name">Context Precision</h3>' +
-                    '<span class="rag-eval-formula">mAP = &Sigma; (Precision@k &times; relevance_k) / |Relevant Chunks|</span>' +
-                    '<p class="rag-eval-desc">Evaluates whether signal-bearing chunks were prioritized at the very top of the retrieved context window rather than buried at lower rank positions.</p>' +
-                  '</div>' +
-                  '<div class="rag-eval-card">' +
-                    '<span class="rag-eval-score-pill">96.1%</span>' +
-                    '<h3 class="rag-eval-name">Context Recall</h3>' +
-                    '<span class="rag-eval-formula">Recall = |Ground truth facts retrieved| / |Total ground truth facts|</span>' +
-                    '<p class="rag-eval-desc">Verifies whether the hybrid retrieval step captured all facts necessary to construct a complete, unambiguous response according to reference standards.</p>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-
-              // Section 3
-              '<div class="ef-section">' +
-                '<div class="ef-section-header">' +
-                  '<span class="ef-section-num">03</span>' +
-                  '<h2 class="ef-section-title">Continuous CI/CD Quality Gates</h2>' +
-                '</div>' +
-                '<p class="ef-prose">Every prompt adjustment, chunk size tuning, or embedding model migration runs against a synthetic golden test suite of 500+ curated queries with automated regression alerts:</p>' +
-                '<div class="rag-trace-log">' +
-                  '[CI GATE] Running Ragas Automated Benchmark Suite (520 test pairs)...<br>' +
-                  '[STEP 1/3] Context Precision Check: <span class="rag-trace-highlight">93.2% (Pass &gt; 90.0%)</span><br>' +
-                  '[STEP 2/3] Faithfulness (Zero Hallucination Gate): <span class="rag-trace-highlight">97.4% (Pass &gt; 95.0%)</span><br>' +
-                  '[STEP 3/3] Answer Relevance Check: <span class="rag-trace-highlight">94.8% (Pass &gt; 90.0%)</span><br>' +
-                  '<span class="rag-trace-highlight">[STATUS] All quality gates passed. Safe to merge pull request.</span>' +
-                '</div>' +
-              '</div>' +
-
-            '</div>' +
-
-            // Footer
-            '<div class="ynw-detail-footer">' +
-              '<div class="ynw-detail-footer-inner">' +
-                '<button class="ynw-detail-footer-btn" id="ynw-detail-footer-back">' +
-                  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-                  '<span>Return to Watchlist</span>' +
-                '</button>' +
-                '<button class="ynw-detail-next-btn" id="rag-next-swiggy">' +
-                  '<span>Next Thinking: SWIGGY TEARDOWN</span>' +
-                  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
-                '</button>' +
-              '</div>' +
-            '</div>' +
-
-          '</div>' +
-        '</div>';
-    } else {
-      // Reel A: RAG ASSISTANT (Engineering / Build)
-      return '' +
-        '<div class="ynw-detail-container">' +
-          '<div class="ynw-detail-bar">' +
-            '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
-              '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-              '<span>Back to Watchlist</span>' +
-              '<span class="ynw-detail-kbd">ESC</span>' +
-            '</button>' +
             '<div class="ynw-detail-badge">' +
               '<span class="ynw-detail-dot"></span>' +
               '<span>' + collectionName + ' // REEL ' + reel.reelKey.toUpperCase() + ' — FRAME #' + frameNum + '</span>' +
@@ -371,89 +296,279 @@
           '<div class="ynw-detail-scroll">' +
             '<div class="ynw-detail-hero">' +
               '<span class="ynw-detail-hero-tag">ENTERPRISE SYSTEM // RETRIEVAL-AUGMENTED GENERATION</span>' +
-              '<h1 class="ynw-detail-hero-title">RAG ASSISTANT: PRODUCTION RETRIEVAL ENGINE</h1>' +
-              '<p class="ynw-detail-hero-desc">Sub-second, zero-hallucination semantic query engine with hybrid dense-sparse vector search, cross-encoder reranking, and dynamic query decomposition.</p>' +
+              '<h1 class="ynw-detail-hero-title">RAG ASSISTANT</h1>' +
+              '<p class="ynw-detail-hero-desc">Retrieval-augmented generation chatbot for merchant and business operations — providing grounded, verifiable answers across payments, settlements, onboarding, and compliance with transparent source citations.</p>' +
+
+              '<!-- 4-Card Metric Strip -->' +
+              '<div class="ynw-metrics-grid">' +
+                '<div class="ynw-metric-card">' +
+                  '<span class="ynw-metric-val">GEMINI 2.5</span>' +
+                  '<span class="ynw-metric-label">Synthesis Engine</span>' +
+                  '<span class="ynw-metric-sub">Google Gemini 2.5 Flash</span>' +
+                '</div>' +
+                '<div class="ynw-metric-card">' +
+                  '<span class="ynw-metric-val ynw-metric-val--crimson">PGVECTOR</span>' +
+                  '<span class="ynw-metric-label">Vector Database</span>' +
+                  '<span class="ynw-metric-sub">Supabase + Hybrid Search</span>' +
+                '</div>' +
+                '<div class="ynw-metric-card">' +
+                  '<span class="ynw-metric-val">1,000+</span>' +
+                  '<span class="ynw-metric-label">Processed Chunks</span>' +
+                  '<span class="ynw-metric-sub">Multi-Strategy Chunking</span>' +
+                '</div>' +
+                '<div class="ynw-metric-card">' +
+                  '<span class="ynw-metric-val">EDGE API</span>' +
+                  '<span class="ynw-metric-label">Runtime Architecture</span>' +
+                  '<span class="ynw-metric-sub">Next.js 15 + In-Memory Cache</span>' +
+                '</div>' +
+              '</div>' +
             '</div>' +
 
             '<div class="rag-shell">' +
-              // Section 1
-              '<div class="ef-section">' +
-                '<div class="ef-section-header">' +
-                  '<span class="ef-section-num">01</span>' +
-                  '<h2 class="ef-section-title">The Engineering Challenge</h2>' +
-                '</div>' +
-                '<p class="ef-prose">Naïve RAG systems (single vector database + cosine distance + prompt stuffing) fail in production environments due to vocabulary mismatch, lost-in-the-middle context degradation, and high end-to-end latency. RAG Assistant was built with a high-throughput multi-stage retrieval architecture designed for enterprise documents.</p>' +
-              '</div>' +
 
-              // Section 2: Pipeline
-              '<div class="rag-pipeline-card">' +
-                '<div class="rag-pipeline-header">' +
-                  '<h3 class="rag-pipeline-title">' +
-                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' +
-                    '<span>Multi-Stage Retrieval Architecture</span>' +
-                  '</h3>' +
-                  '<span class="rag-step-num" style="margin:0;">Latency Budget: &lt; 400ms</span>' +
+              '<!-- Chapter 01: The Premise -->' +
+              '<section class="ynw-chapter">' +
+                '<div class="ynw-chapter-header">' +
+                  '<span class="ynw-chapter-num">01 // THE PREMISE</span>' +
+                  '<h2 class="ynw-chapter-title">Intelligent Natural-Language Merchant Support</h2>' +
+                  '<p class="ynw-chapter-sub">Connecting business merchants to instant, reliable answers backed by verifiable source citations.</p>' +
                 '</div>' +
-                '<div class="rag-pipeline-steps">' +
-                  '<div class="rag-step-box rag-step-box--active">' +
-                    '<span class="rag-step-num">Stage 01</span>' +
-                    '<h4 class="rag-step-title">HyDE Expansion</h4>' +
-                    '<p class="rag-step-desc">Generates hypothetical document embeddings to bridge lexical domain gaps for abstract queries.</p>' +
+                '<div class="ynw-twocol-grid">' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>' +
+                      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>' +
+                      '<span>What is RAG Assistant?</span>' +
+                    '</h3>' +
+                    '<p>RAG Assistant is a retrieval-augmented generation chatbot built for merchant and business customers. It helps merchants find reliable answers about payment services, settlements, refunds, onboarding, KYC, policies, troubleshooting, and partner operations through natural-language questions.</p>' +
                   '</div>' +
-                  '<div class="rag-step-box">' +
-                    '<span class="rag-step-num">Stage 02</span>' +
-                    '<h4 class="rag-step-title">Hybrid Retrieval</h4>' +
-                    '<p class="rag-step-desc">Fuses dense vector semantic similarity with sparse BM25 exact keyword matching via RRF.</p>' +
-                  '</div>' +
-                  '<div class="rag-step-box">' +
-                    '<span class="rag-step-num">Stage 03</span>' +
-                    '<h4 class="rag-step-title">Cross-Encoder</h4>' +
-                    '<p class="rag-step-desc">Full token-level interaction reranks top 50 candidates down to top 5 high-relevance chunks.</p>' +
-                  '</div>' +
-                  '<div class="rag-step-box">' +
-                    '<span class="rag-step-num">Stage 04</span>' +
-                    '<h4 class="rag-step-title">Stream Synthesis</h4>' +
-                    '<p class="rag-step-desc">Streams citations and verified answers with active factual verification filters.</p>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>' +
+                      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' +
+                      '<span>Contextual Grounding + Gemini</span>' +
+                    '</h3>' +
+                    '<p>The project combines a searchable knowledge base with Google Gemini 2.5 Flash to provide contextual answers and transparent source citations, eliminating speculation in compliance-heavy business queries.</p>' +
                   '</div>' +
                 '</div>' +
+              '</section>' +
 
-                // Interactive Trace Inspector
-                '<div class="rag-interactive-box">' +
-                  '<div class="rag-query-input-row">' +
-                    '<input type="text" class="rag-query-input" id="rag-demo-input" value="How does the system handle high concurrency and cache invalidation?" readonly>' +
-                    '<button class="rag-query-btn" id="rag-trace-trigger">Trace Retrieval Pipeline</button>' +
+              '<!-- Chapter 02: The Problem -->' +
+              '<section class="ynw-chapter">' +
+                '<div class="ynw-chapter-header">' +
+                  '<span class="ynw-chapter-num">02 // THE PROBLEM</span>' +
+                  '<h2 class="ynw-chapter-title">Information Fragmentation &amp; Compliance Sensitivity</h2>' +
+                  '<p class="ynw-chapter-sub">Why generic chatbots generate plausible but inaccurate advice when domain rules matter.</p>' +
+                '</div>' +
+                '<div class="ynw-prose-card" style="margin-bottom: 16px;">' +
+                  '<p>Business information is distributed across web pages, FAQs, partner documentation, and policy PDFs. Finding the correct answer often requires navigating multiple disparate sources and understanding domain-specific terminology.<br><br>A generic chatbot could generate plausible but inaccurate responses, especially for compliance and policy questions. The system therefore needed to address four fundamental requirements:</p>' +
+                '</div>' +
+                '<div class="ynw-twocol-grid">' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">01.</span> Multi-Format Documentation Search</h3>' +
+                    '<p>Search seamlessly across multiple disparate formats including dynamic web pages, tabular FAQs, partner docs, and formal policy PDFs.</p>' +
                   '</div>' +
-                  '<div class="rag-trace-log" id="rag-trace-output">' +
-                    '[TRACE 0.00s] Incoming query received: "How does the system handle high concurrency..."<br>' +
-                    '[TRACE +42ms] Generated HyDE hypothetical passage embedding (1536 dims).<br>' +
-                    '[TRACE +85ms] Qdrant HNSW vector search fetched 30 dense candidates.<br>' +
-                    '[TRACE +98ms] BM25 inverted index retrieved 30 sparse keyword candidates.<br>' +
-                    '[TRACE +135ms] Reciprocal Rank Fusion merged 46 unique candidate passages.<br>' +
-                    '[TRACE +220ms] Cohere Cross-Encoder reranked top 5 chunks (<span class="rag-trace-highlight">relevance score: 0.962</span>).<br>' +
-                    '[TRACE +340ms] Synthesizing stream output with verified source anchors.' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">02.</span> Semantic &amp; Exact Terminology</h3>' +
+                    '<p>Accurately handle both broad semantic questions and exact technical tokens such as APIs, UTRs, KYC specifications, and settlement schedules.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">03.</span> Strict Hallucination Elimination</h3>' +
+                    '<p>Constrain LLM reasoning strictly to retrieved factual excerpts to avoid fabricated policy advice or inaccurate fee structures.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">04.</span> Transparent Source Provenance</h3>' +
+                    '<p>Provide full transparency by showing users exact source citations, similarity scores, and document excerpts backing every response.</p>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
+              '</section>' +
 
-              // Section 3: Architecture Specs
-              '<div class="ef-section">' +
-                '<div class="ef-section-header">' +
-                  '<span class="ef-section-num">03</span>' +
-                  '<h2 class="ef-section-title">Production Metrics &amp; Benchmarks</h2>' +
+              '<!-- Chapter 03: The Approach -->' +
+              '<section class="ynw-chapter">' +
+                '<div class="ynw-chapter-header">' +
+                  '<span class="ynw-chapter-num">03 // THE APPROACH</span>' +
+                  '<h2 class="ynw-chapter-title">The Complete End-to-End RAG Pipeline</h2>' +
+                  '<p class="ynw-chapter-sub">From automated web &amp; PDF ingestion to routed retrieval and cited generation.</p>' +
                 '</div>' +
-                '<div class="ef-cards-grid">' +
-                  '<div class="ef-card">' +
-                    '<span class="ef-card-tag">LATENCY</span>' +
-                    '<h3 class="ef-card-title">380ms P50 Retrieval</h3>' +
-                    '<p class="ef-card-desc">Achieved via async pipelining, Redis semantic cache for frequent queries, and quantized HNSW indexing.</p>' +
+                '<div class="rag-pipeline-card">' +
+                  '<div class="rag-pipeline-header">' +
+                    '<h3 class="rag-pipeline-title">' +
+                      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' +
+                      '<span>10-Stage Processing &amp; Retrieval Flow</span>' +
+                    '</h3>' +
+                    '<span class="rag-step-num" style="margin:0;">Latency Budget: &lt; 350ms</span>' +
                   '</div>' +
-                  '<div class="ef-card">' +
-                    '<span class="ef-card-tag">ACCURACY</span>' +
-                    '<h3 class="ef-card-title">94.6% Context Precision</h3>' +
-                    '<p class="ef-card-desc">Cross-encoder reranking eliminates irrelevant boilerplate, keeping token cost low and generation fidelity high.</p>' +
+                  '<div class="rag-pipeline-steps">' +
+                    '<div class="rag-step-box rag-step-box--active">' +
+                      '<span class="rag-step-num">Stage 01</span>' +
+                      '<h4 class="rag-step-title">Scrape &amp; Extract</h4>' +
+                      '<p class="rag-step-desc">Scrape web pages, FAQs, and extract text from public policy and compliance PDFs.</p>' +
+                    '</div>' +
+                    '<div class="rag-step-box">' +
+                      '<span class="rag-step-num">Stage 02</span>' +
+                      '<h4 class="rag-step-title">Clean &amp; Chunk</h4>' +
+                      '<p class="rag-step-desc">Normalize text and evaluate fixed-size, recursive, semantic, structural, and LLM chunking strategies.</p>' +
+                    '</div>' +
+                    '<div class="rag-step-box">' +
+                      '<span class="rag-step-num">Stage 03</span>' +
+                      '<h4 class="rag-step-title">Vector Embeddings</h4>' +
+                      '<p class="rag-step-desc">Generate 384-dim embeddings via transformer models with a 512-entry in-memory cache.</p>' +
+                    '</div>' +
+                    '<div class="rag-step-box">' +
+                      '<span class="rag-step-num">Stage 04</span>' +
+                      '<h4 class="rag-step-title">Supabase pgvector</h4>' +
+                      '<p class="rag-step-desc">Store chunks and vectors with Cosine/L2 indexes, full-text search, and JSONB metadata.</p>' +
+                    '</div>' +
+                    '<div class="rag-step-box">' +
+                      '<span class="rag-step-num">Stage 05</span>' +
+                      '<h4 class="rag-step-title">Rule-Based Router</h4>' +
+                      '<p class="rag-step-desc">Classify each query to route through topic, FAQ, PDF, semantic, or hybrid search RPCs.</p>' +
+                    '</div>' +
+                    '<div class="rag-step-box">' +
+                      '<span class="rag-step-num">Stage 06</span>' +
+                      '<h4 class="rag-step-title">Grounded Synthesis</h4>' +
+                      '<p class="rag-step-desc">Send retrieved context to Gemini 2.5 Flash; return answers with ranked source citations.</p>' +
+                    '</div>' +
+                  '</div>' +
+
+                  '<!-- Interactive Trace Inspector -->' +
+                  '<div class="rag-interactive-box">' +
+                    '<div class="rag-query-input-row">' +
+                      '<input type="text" class="rag-query-input" id="rag-demo-input" value="What is the settlement timeline and KYC documentation required for international collect links?" readonly>' +
+                      '<button class="rag-query-btn" id="rag-trace-trigger">Trace Retrieval Pipeline</button>' +
+                    '</div>' +
+                    '<div class="rag-trace-log" id="rag-trace-output">' +
+                      '[TRACE 0.00s] Incoming query received: "What is the settlement timeline and KYC documentation required..."<br>' +
+                      '[TRACE +18ms] RAGSearchRouter classified query &bull; Topics: [Settlements, KYC, Collect Links] &bull; Mode: Hybrid Search<br>' +
+                      '[TRACE +46ms] In-memory cache checked (miss) -> Generated 384-dim embedding via all-MiniLM-L6-v2.<br>' +
+                      '[TRACE +94ms] Supabase RPC hybrid search executed across chunks (Cosine Vector + BM25 Full-Text).<br>' +
+                      '[TRACE +138ms] Retrieved top 12 chunks -> ranked and filtered by similarity threshold (<span class="rag-trace-highlight">top score: 0.942</span>).<br>' +
+                      '[TRACE +185ms] Context window constructed with 4 grounded document excerpts and source citations.<br>' +
+                      '[TRACE +320ms] <span class="rag-trace-highlight">Google Gemini 2.5 Flash synthesized grounded response with 3 transparent citations &bull; Latency: 320ms</span>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
+              '</section>' +
+
+              '<!-- Chapter 04: Under the Hood -->' +
+              '<section class="ynw-chapter">' +
+                '<div class="ynw-chapter-header">' +
+                  '<span class="ynw-chapter-num">04 // UNDER THE HOOD</span>' +
+                  '<h2 class="ynw-chapter-title">Technical Architecture &amp; System Specs</h2>' +
+                  '<p class="ynw-chapter-sub">Full-stack Next.js Edge runtime, model selection, database schema, and data pipelines.</p>' +
+                '</div>' +
+                '<div class="ynw-twocol-grid">' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Frontend &amp; UX</h3>' +
+                    '<p>Next.js 15, React 19, TypeScript, Tailwind CSS, Lucide React. Built with a responsive chat interface featuring loading states, prompt suggestion chips, and copy-to-clipboard support.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Backend Edge Runtime</h3>' +
+                    '<p>Next.js Edge API route at <code>/api/chat</code>. It validates incoming questions, computes query embeddings, selects retrieval strategy, builds the context window, and communicates with Gemini on the Edge.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>AI &amp; Embedding Models</h3>' +
+                    '<ul class="rag-list">' +
+                      '<li><strong>Google Gemini 2.5 Flash</strong> for grounded response generation.</li>' +
+                      '<li><strong>Hugging Face sentence-transformers/all-MiniLM-L6-v2</strong> for 384-dimensional query embeddings.</li>' +
+                      '<li>Empirical benchmarks across BGE Large, E5 Large, and MiniLM models.</li>' +
+                      '<li>512-entry in-memory embedding cache to minimize redundant API latency.</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Query Routing Engine</h3>' +
+                    '<p>The <code>RAGSearchRouter</code> dynamically detects topics including collect links, settlements, refunds, payment gateways, partner programs, KYC, fees, and technical issues. It separates FAQ-style, policy-related, exact-term, and complex multi-part queries.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Supabase Database Schema</h3>' +
+                    '<ul class="rag-list">' +
+                      '<li><code>rag_chunks</code> table storing content, metadata, source type, topics, and vector embeddings.</li>' +
+                      '<li>Cosine and L2 vector indexes for sub-second nearest-neighbor retrieval.</li>' +
+                      '<li>Full-text search and JSONB metadata indexes.</li>' +
+                      '<li>RPC functions for similarity, hybrid, topic, and FAQ searches with analytics views.</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Data Sources &amp; Deployment</h3>' +
+                    '<ul class="rag-list">' +
+                      '<li>~25 business URLs, 3 formal policy PDFs, and 100+ FAQ entries.</li>' +
+                      '<li>1,000+ processed chunks across multiple embedding and chunking datasets.</li>' +
+                      '<li>Deployed on <strong>Vercel</strong> running on Edge Runtime.</li>' +
+                    '</ul>' +
+                  '</div>' +
+                '</div>' +
+              '</section>' +
+
+              '<!-- Chapter 05: The Challenges -->' +
+              '<section class="ynw-chapter">' +
+                '<div class="ynw-chapter-header">' +
+                  '<span class="ynw-chapter-num">05 // THE CHALLENGES</span>' +
+                  '<h2 class="ynw-chapter-title">Engineering Hurdles &amp; Edge Cases Solved</h2>' +
+                  '<p class="ynw-chapter-sub">Tackling dynamic scraping, boundary loss, endpoint fragility, and strict hallucination boundaries.</p>' +
+                '</div>' +
+                '<div class="ynw-twocol-grid">' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">01.</span> Boilerplate &amp; Noise Removal</h3>' +
+                    '<p>Extracting high-signal content from dynamic, JavaScript-rendered websites while systematically stripping repeated navigation, headers, footers, and promotional banners.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">02.</span> Chunk Boundary Context Preservation</h3>' +
+                    '<p>Preventing context fragmentation when splitting structured FAQs, legal policies, and unstructured web pages into independent chunks.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">03.</span> Empirical Chunking Evaluation</h3>' +
+                    '<p>Evaluating different chunk sizes, overlaps, and semantic boundaries across fixed-size, recursive, semantic, and structural strategies instead of relying on default parameters.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">04.</span> Hybrid Semantic + Exact Token Search</h3>' +
+                    '<p>Supporting both semantic conceptual understanding and keyword-sensitive exact token matching for queries containing APIs, UTR numbers, and KYC terms.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">05.</span> Resilient Embedding Generation</h3>' +
+                    '<p>Ensuring embedding generation reliability across Hugging Face endpoint variations, cold starts, response formats, retries, and transient failures.</p>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3><span class="ynw-prose-num">06.</span> Strict Grounding &amp; RPC Fallbacks</h3>' +
+                    '<p>Enforcing strict factual boundaries on Gemini while designing automated fallback search paths when specialized Supabase RPC functions return sparse results.</p>' +
+                  '</div>' +
+                '</div>' +
+              '</section>' +
+
+              '<!-- Chapter 06: The Outcome -->' +
+              '<section class="ynw-chapter">' +
+                '<div class="ynw-chapter-header">' +
+                  '<span class="ynw-chapter-num">06 // THE OUTCOME</span>' +
+                  '<h2 class="ynw-chapter-title">Delivered Capabilities &amp; System Validation</h2>' +
+                  '<p class="ynw-chapter-sub">Production capabilities, validation metrics, and open-source implementation.</p>' +
+                '</div>' +
+                '<div class="ynw-twocol-grid">' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Production Deliverables</h3>' +
+                    '<ul class="rag-list">' +
+                      '<li>Natural-language merchant support with sub-second retrieval.</li>' +
+                      '<li>Intelligent retrieval routing across FAQs, PDFs, web content, and topics.</li>' +
+                      '<li>Hybrid semantic and keyword search.</li>' +
+                      '<li>Gemini-generated answers strictly grounded in retrieved context.</li>' +
+                      '<li>Source citations with expandable content previews and similarity scores.</li>' +
+                      '<li>Mobile-responsive chat UI with loading states and copy-to-clipboard.</li>' +
+                      '<li>Reproducible scraping, chunking, embedding, and Supabase database workflow.</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '<div class="ynw-prose-card">' +
+                    '<h3>Validation &amp; Verification</h3>' +
+                    '<ul class="rag-list">' +
+                      '<li><strong>ESLint:</strong> Completed with 1 unused-variable warning and 0 errors.</li>' +
+                      '<li><strong>TypeScript:</strong> Full type-check completed successfully.</li>' +
+                      '<li><strong>Build Status:</strong> Production build reached the Next.js compile stage (noted isolated execution environment font fetch constraint).</li>' +
+                      '<li><strong>Test Suite:</strong> No dedicated automated unit/integration test suite included in repository.</li>' +
+                    '</ul>' +
+                    '<div style="margin-top: 20px;">' +
+                      '<a href="https://github.com/HarVkr/jiopay-rag-chatbot" target="_blank" rel="noopener noreferrer" class="ynw-detail-link-btn ynw-detail-link-btn--primary" style="display:inline-flex;">' +
+                        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>' +
+                        '<span>View on GitHub &nearr;</span>' +
+                      '</a>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>' +
+              '</section>' +
 
             '</div>' +
 
@@ -473,64 +588,43 @@
 
           '</div>' +
         '</div>';
-    }
   }
 
   function initRagBindings(portal, reel, openFilmDetail, REEL_DATA, closeFilmDetail) {
-    var isThinkingReel = reel.reelKey === 'b';
-
     // Interactive trace demo for Build reel
     var traceBtn = portal.querySelector('#rag-trace-trigger');
     var traceLog = portal.querySelector('#rag-trace-output');
     if (traceBtn && traceLog) {
       traceBtn.addEventListener('click', function() {
-        traceLog.innerHTML = '<span class="rag-trace-accent">[PROCESSING] Decomposing query and querying Qdrant cluster...</span>';
+        traceLog.innerHTML = '<span class="rag-trace-accent">[PROCESSING] Classifying query and routing through hybrid search pipeline...</span>';
         setTimeout(function() {
           traceLog.innerHTML =
-            '[TRACE 0.00s] Incoming query received: "How does the system handle high concurrency..."<br>' +
-            '[TRACE +38ms] Generated HyDE hypothetical passage embedding (1536 dims).<br>' +
-            '[TRACE +79ms] Qdrant HNSW vector search fetched 30 dense candidates.<br>' +
-            '[TRACE +94ms] BM25 inverted index retrieved 30 sparse keyword candidates.<br>' +
-            '[TRACE +128ms] Reciprocal Rank Fusion merged 46 unique candidate passages.<br>' +
-            '[TRACE +215ms] Cohere Cross-Encoder reranked top 5 chunks (<span class="rag-trace-highlight">relevance score: 0.968</span>).<br>' +
-            '[TRACE +330ms] <span class="rag-trace-highlight">Response streaming initiated &bull; Latency: 330ms</span>';
-        }, 400);
+            '[TRACE 0.00s] Incoming query received: "What is the settlement timeline and KYC documentation required..."<br>' +
+            '[TRACE +18ms] RAGSearchRouter classified query &bull; Topics: [Settlements, KYC, Collect Links] &bull; Mode: Hybrid Search<br>' +
+            '[TRACE +46ms] In-memory cache checked (miss) -> Generated 384-dim embedding via all-MiniLM-L6-v2.<br>' +
+            '[TRACE +94ms] Supabase RPC hybrid search executed across chunks (Cosine Vector + BM25 Full-Text).<br>' +
+            '[TRACE +138ms] Retrieved top 12 chunks -> ranked and filtered by similarity threshold (<span class="rag-trace-highlight">top score: 0.942</span>).<br>' +
+            '[TRACE +185ms] Context window constructed with 4 grounded document excerpts and source citations.<br>' +
+            '[TRACE +320ms] <span class="rag-trace-highlight">Google Gemini 2.5 Flash synthesized grounded response with 3 transparent citations &bull; Latency: 320ms</span>';
+        }, 350);
       });
     }
 
     // Next button bindings
-    if (isThinkingReel) {
-      var nextSwiggy = portal.querySelector('#rag-next-swiggy');
-      if (nextSwiggy) {
-        nextSwiggy.addEventListener('click', function() {
-          closeFilmDetail();
+    var nextRevify = portal.querySelector('#rag-next-revify');
+    if (nextRevify) {
+      nextRevify.addEventListener('click', function() {
+        closeFilmDetail();
+        setTimeout(function() {
+          reel.goTo(0);
           setTimeout(function() {
-            reel.goTo(0);
-            setTimeout(function() {
-              var frames = reel.scene.querySelectorAll('.ynw-frame');
-              if (frames[0]) {
-                openFilmDetail(reel, 1, frames[1], REEL_DATA[1]);
-              }
-            }, 550);
-          }, 450);
-        });
-      }
-    } else {
-      var nextRevify = portal.querySelector('#rag-next-revify');
-      if (nextRevify) {
-        nextRevify.addEventListener('click', function() {
-          closeFilmDetail();
-          setTimeout(function() {
-            reel.goTo(0);
-            setTimeout(function() {
-              var frames = reel.scene.querySelectorAll('.ynw-frame');
-              if (frames[0]) {
-                openFilmDetail(reel, 1, frames[1], REEL_DATA[1]);
-              }
-            }, 550);
-          }, 450);
-        });
-      }
+            var frames = reel.scene.querySelectorAll('.ynw-frame');
+            if (frames[0]) {
+              openFilmDetail(reel, 1, frames[1], REEL_DATA[1]);
+            }
+          }, 550);
+        }, 450);
+      });
     }
   }
 
@@ -539,4 +633,3 @@
   window.initRagBindings = initRagBindings;
 
 })();
-

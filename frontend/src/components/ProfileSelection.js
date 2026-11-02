@@ -3,7 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PROFILES } from "@/config/profiles";
-import { FilmGrain, Vignette } from "@/components/Atmosphere";
+import {
+  CinematicScanlines,
+  FilmGrain,
+  FilmSprocketRails,
+  NetflixVolumetricAurora,
+  ProjectorMotes,
+  Vignette,
+} from "@/components/Atmosphere";
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -68,7 +75,7 @@ function VisualProfessional() {
         </linearGradient>
         <radialGradient id="nodeGlow" cx="0.5" cy="0.5" r="0.5">
           <stop offset="0" stopColor="#D33B4C" stopOpacity="0.5" />
-          <stop offset="1" stopColor="#D33B4C" stopOpacity="0" />
+          <stop offset="1" stopColor="#D33B4C" stopOpacity="0.8" />
         </radialGradient>
       </defs>
       <g stroke="rgba(231,226,223,0.12)" strokeWidth="1">
@@ -173,10 +180,14 @@ export default function ProfileSelection() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: reduce ? 0.2 : 0.6 } }}
       exit={{ opacity: 0, transition: { duration: 0.35 } }}
-      className="relative min-h-screen bg-obsidian"
+      className="relative min-h-screen bg-obsidian text-paper overflow-x-hidden"
       data-testid="profiles-screen"
     >
       <FilmGrain />
+      <CinematicScanlines />
+      <NetflixVolumetricAurora />
+      <ProjectorMotes />
+      <FilmSprocketRails />
 
       <button
         type="button"

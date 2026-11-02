@@ -3,7 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import IntroAnimation from "@/components/intro/IntroAnimation";
 import IdentityReveal from "@/components/intro/IdentityReveal";
-import { AmbientGlow, FilmGrain } from "@/components/Atmosphere";
+import {
+  CinematicScanlines,
+  FilmGrain,
+  FilmSprocketRails,
+  NetflixVolumetricAurora,
+  ProjectorMotes,
+} from "@/components/Atmosphere";
 
 const SEEN_KEY = "harshal:intro-seen";
 
@@ -43,13 +49,16 @@ export default function EntryExperience() {
 
   return (
     <motion.main
-      className="relative min-h-screen overflow-hidden bg-obsidian"
+      className="relative min-h-screen overflow-hidden bg-obsidian text-paper"
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
       data-testid="entry-experience"
     >
-      <AmbientGlow className="left-1/2 top-1/2 h-[110vmin] w-[110vmin] -translate-x-1/2 -translate-y-1/2" />
       <FilmGrain />
+      <CinematicScanlines />
+      <NetflixVolumetricAurora />
+      <ProjectorMotes />
+      <FilmSprocketRails />
 
       <AnimatePresence mode="wait">
         {stage === "hello" ? (

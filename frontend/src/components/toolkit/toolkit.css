@@ -744,11 +744,17 @@
 }
 
 .tk-strip-icon {
-  width: 15px;
-  height: 15px;
-  fill: currentColor;
-  opacity: 0.92;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
   flex-shrink: 0;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s ease;
+}
+
+.tk-strip-cell:hover .tk-strip-icon,
+.tk-lang-chip:hover .tk-strip-icon {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 6px currentColor);
 }
 
 /* ---- credits: applied work ---- */
