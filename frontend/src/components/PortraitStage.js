@@ -10,8 +10,9 @@ import {
   X,
 } from "lucide-react";
 
-const VIDEO_SRC = "/Introduction-Video-Export-5.mp4";
-const PREVIEW_LENGTH = 15; // seconds of the video that loop in the preview
+const PREVIEW_VIDEO_SRC = "/Introduction-Video-12-secs.mp4";
+const TRAILER_VIDEO_SRC = "/Introduction-Video-Export-5.mp4";
+const PREVIEW_LENGTH = 12; // seconds of the video that loop in the preview
 
 // Netflix-style edge fade. The mask makes the video's edges transparent, so it
 // dissolves into whatever is behind it (obsidian, the crimson glow, film grain)
@@ -153,7 +154,7 @@ export default function PortraitStage({ profile }) {
             <video
               ref={trailerRef}
               className="h-full w-full cursor-pointer bg-black object-contain"
-              src={VIDEO_SRC}
+              src={TRAILER_VIDEO_SRC}
               playsInline
               preload="auto"
               onClick={toggleTrailerPlayback}
@@ -242,7 +243,7 @@ export default function PortraitStage({ profile }) {
             <video
               ref={previewRef}
               className="h-full w-full object-cover object-center"
-              src={VIDEO_SRC}
+              src={PREVIEW_VIDEO_SRC}
               autoPlay
               loop
               muted
