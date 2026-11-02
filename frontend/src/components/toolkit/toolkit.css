@@ -50,6 +50,10 @@
   margin-bottom: 8px;
 }
 
+.tk-accent {
+  color: var(--accent-primary, #b51f32);
+}
+
 .tk-subtitle {
   font-family: 'Clash Display', sans-serif;
   font-size: clamp(17px, 2vw, 22px);

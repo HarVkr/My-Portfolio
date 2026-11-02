@@ -172,7 +172,7 @@ export default function Toolkit() {
       <div className="tk-beam tk-beam--escape" aria-hidden="true" />
 
       <div className="tk-header">
-        <h2>THE TOOLKIT</h2>
+        <h2>THE TOOLKIT<span className="tk-accent">.</span></h2>
         <p className="tk-subtitle">The how behind the what I create.</p>
         <p className="tk-desc">
           A collection of technologies, tools and creative capabilities that

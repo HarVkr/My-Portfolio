@@ -80,11 +80,11 @@ export default function YourNextWatch() {
     >
       <div className="ynw-container">
         <header className="ynw-header">
-          <p className="ynw-eyebrow">Interactive Portfolio Cinema</p>
-          <h2>YOUR NEXT WATCH</h2>
+          <h2>
+            YOUR NEXT WATCH<span className="ynw-accent">.</span>
+          </h2>
           <p className="ynw-subtitle">
-            Two reels. Six projects. Drag, scroll or use arrow keys to rotate
-            the cylinders. Click any frame to inspect the deep-dive.
+            Drag, scroll or use arrow keys to rotate the cylinders. Click any frame to deep-dive.
           </p>
 
           <button
