@@ -80,8 +80,9 @@
 .hello-path {
   fill: transparent;
   fill-opacity: 0;
+  fill-rule: evenodd;
   stroke: var(--paper);
-  stroke-width: 2.6;
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: fill-opacity 0.75s ease, stroke-opacity 0.75s ease;
@@ -89,6 +90,7 @@
 .hello-svg.is-filled .hello-path {
   fill: var(--paper);
   fill-opacity: 1;
+  fill-rule: evenodd;
   stroke-opacity: 0;
 }
 @keyframes hello-draw {

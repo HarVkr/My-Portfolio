@@ -89,6 +89,7 @@ export default function IntroAnimation({ onComplete }) {
             ref={(el) => (refs.current[i] = el)}
             d={d}
             className="hello-path"
+            fillRule="evenodd"
             style={getStyle(i)}
           />
         ))}
