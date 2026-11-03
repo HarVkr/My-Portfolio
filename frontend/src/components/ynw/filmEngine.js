@@ -368,6 +368,10 @@ export function createFilmExperience(rootOrConfig, maybeReelsData) {
       document.body.appendChild(backdrop);
     }
     backdrop.classList.add("is-active");
+    backdrop.onclick = (e) => {
+      e.preventDefault();
+      closeFilmDetail();
+    };
 
     const portal = document.createElement("div");
     portal.className = "ynw-expansion-portal";
@@ -389,6 +393,18 @@ export function createFilmExperience(rootOrConfig, maybeReelsData) {
       portalPerfsHTML(true, "35MM // 5219");
     document.body.appendChild(portal);
     currentExpandedPortal = portal;
+
+    // Delegated click & tap handling for Back to Watchlist / close buttons inside the portal
+    portal.addEventListener("click", (e) => {
+      const closeTarget = e.target.closest(
+        "[data-ynw-close], #ynw-detail-close-btn, .ynw-detail-back-btn, .ynw-detail-footer-btn"
+      );
+      if (closeTarget) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeFilmDetail();
+      }
+    });
 
     void portal.offsetWidth;
 

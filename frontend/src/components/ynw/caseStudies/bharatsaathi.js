@@ -178,7 +178,7 @@
       '<div class="ynw-detail-container">' +
         '<div class="ynw-detail-bar">' +
           '<div class="ynw-detail-actions">' +
-            '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" aria-label="Back to Watchlist">' +
+            '<button class="ynw-detail-back-btn" id="ynw-detail-close-btn" data-ynw-close aria-label="Back to Watchlist">' +
               '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
               '<span>Back to Watchlist</span>' +
               '<span class="ynw-detail-kbd">ESC</span>' +
